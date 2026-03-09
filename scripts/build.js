@@ -76,22 +76,28 @@ async function main() {
                     }
 
                     // --- テンプレート自動判定 ---
+                    // --- 強化版：テンプレート自動判定ロジック ---
                     let tempName = 'default.html';
                     const types = data.types || [];
                     const name = data.name || "";
 
-                    if (types.includes('ramen_restaurant') || /ラーメン|らーめん|中華そば/.test(name)) {
+                    // 判定用ヘルパー
+                    const hasType = (t) => types.includes(t);
+                    const hasName = (re) => re.test(name);
+
+                    if (hasType('ramen_restaurant') || hasName(/ラーメン|らーめん|中華そば|担々麺|つけ麺|麺屋|拉麺/)) {
                         tempName = 'ramen.html';
-                    } else if (types.includes('cafe') || /カフェ|喫茶|スイーツ/.test(name)) {
+                    } else if (hasType('cafe') || hasType('bakery') || hasName(/カフェ|喫茶|スイーツ|デザート|パンケーキ|珈琲|コーヒー|焙煎/)) {
                         tempName = 'cafe.html';
-                    } else if (types.includes('bar') || /居酒屋|酒場|バル/.test(name)) {
+                    } else if (hasType('bar') || hasType('night_club') || hasName(/居酒屋|酒場|バル|飲み処|串カツ|焼鳥|個室居酒屋|ダイニング/)) {
                         tempName = 'izakaya.html';
-                    } else if (/和食|寿司|すし|割烹/.test(name)) {
+                    } else if (hasType('sushi_restaurant') || hasName(/和食|寿司|すし|割烹|日本料理|懐石|そば|蕎麦|うどん|天ぷら/)) {
                         tempName = 'wahoku.html';
-                    } else if (/食堂|定食|めし/.test(name)) {
+                    } else if (hasName(/食堂|定食|めし|キッチン|亭|ごはん/)) {
                         tempName = 'shokudo.html';
                     }
 
+                    // テンプレートファイルの存在確認
                     const templatePath = path.join(rootDir, 'template', tempName);
                     let finalPath = templatePath;
                     if (!await fs.pathExists(templatePath)) {
@@ -99,7 +105,6 @@ async function main() {
                     }
 
                     const templateHtml = await fs.readFile(finalPath, 'utf-8');
-
                     const paymentUrl = `${STRIPE_LINK}?client_reference_id=${data.place_id}`;
                     const html = templateHtml
                         .replace(/{{NAME}}/g, data.name || '')
