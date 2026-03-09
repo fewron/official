@@ -114,7 +114,31 @@ async function main() {
                     name: data.name,
                     fileName: fileName
                 });
+                for (const place of searchRes.data.results) {
+                    console.log(`--- 調査中: ${place.name} ---`);
+                    console.log(`Place ID: ${place.place_id}`);
+                    console.log(`Website登録状況: ${place.website ? 'あり' : 'なし'}`);
 
+                    // 強制的に詳細を取得してみる
+                    const details = await axios.get(`https://maps.googleapis.com/maps/api/place/details/json`, {
+                        params: {
+                            place_id: place.place_id,
+                            fields: 'name,formatted_address,formatted_phone_number,place_id,types,rating,user_ratings_total,website',
+                            key: API_KEY,
+                            language: 'ja'
+                        }
+                    });
+
+                    const data = details.data.result;
+                    if (!data) {
+                        console.log(`❌ 詳細データが取得できませんでした (Status: ${details.data.status})`);
+                        continue;
+                    }
+
+                    console.log(`詳細取得後のURL: ${data.website}`);
+                    // ここで一旦、全てのフィルタを無視して生成を試みる
+                    await generateHtml(data, query);
+                }
                 // CSV保存（決済ステータス列を追加）
                 const targetUrl = `${DOMAIN}/shops/${fileName}`;
                 const csvLine = `"${data.name}","${data.formatted_phone_number || 'N/A'}","${targetUrl}","${query}","未決済"\n`;
