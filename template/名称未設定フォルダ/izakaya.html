@@ -1,0 +1,136 @@
+const axios = require('axios');
+const fs = require('fs-extra');
+const path = require('path');
+require('dotenv').config();
+
+const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+const JSON_PATH = './data/places.json';
+const CSV_PATH = './manage.csv';
+const DOMAIN = 'https://fewron.jp';
+
+// --- 【改造ポイント】エリアと業種の定義 ---
+const AREAS = ['吹田', '江坂', '摂津', '岡山市', '倉敷市', '岡山 問屋町'];
+const GENRES = ['居酒屋', '和食', 'ラーメン', '食堂', 'カフェ'];
+
+// 全ての組み合わせを生成
+const SEARCH_QUERIES = AREAS.flatMap(area => GENRES.map(genre => `${area} ${genre}`));
+
+async function main() {
+    try {
+        if (!API_KEY) return console.error('❌ APIキーが設定されていません');
+
+        await fs.ensureDir('./data');
+        await fs.ensureDir('./shops');
+
+        let savedPlaces = [];
+        if (await fs.pathExists(JSON_PATH)) {
+            savedPlaces = await fs.readJson(JSON_PATH);
+        }
+
+        const currentYear = new Date().getFullYear();
+        const chainBlacklist = [
+            'マクドナルド', 'サイゼリヤ', 'ガスト', '吉野家', 'すき家', '松屋',
+            'くら寿司', 'スシロー', 'はま寿司', '丸亀製麺', 'ミスタードーナツ',
+            'スターバックス', 'ドトール', 'コメダ珈琲', '餃子の王将', '天下一品',
+            '鳥貴族', '王将', 'モスバーガー', 'ケンタッキー', 'CoCo壱番屋', '大戸屋', 'やよい軒'
+        ];
+
+        // --- 【改造ポイント】二重ループで全エリア・全業種を回す ---
+        for (const query of SEARCH_QUERIES) {
+            console.log(`🔎 ターゲット検索中: ${query}`);
+            
+            const searchRes = await axios.get(`https://maps.googleapis.com/maps/api/place/textsearch/json`, {
+                params: { query: query, key: API_KEY, language: 'ja' }
+            });
+
+            if (!searchRes.data.results) continue;
+
+            for (const place of searchRes.data.results) {
+                const placeName = place.name || "";
+
+                // 1. 基本フィルタ（重複・サイトあり・チェーン）
+                if (savedPlaces.some(p => p.place_id === place.place_id)) continue;
+                if (place.website) continue;
+                if (chainBlacklist.some(keyword => placeName.includes(keyword))) continue;
+
+                // 2. 「〇〇店」等の多店舗展開スキップ
+                if (placeName.endsWith('店') || placeName.includes('支店') || placeName.includes('直営')) {
+                    const exceptions = ['酒店', '商店', '工務店', '精肉店', '鮮魚店'];
+                    if (!exceptions.some(ex => placeName.endsWith(ex))) continue;
+                }
+
+                // 3. 詳細情報を取得（Place Details）
+                const details = await axios.get(`https://maps.googleapis.com/maps/api/place/details/json`, {
+                    params: {
+                        place_id: place.place_id,
+                        fields: 'name,formatted_address,formatted_phone_number,place_id,types,website',
+                        key: API_KEY,
+                        language: 'ja'
+                    }
+                });
+
+                const data = details.data.result;
+                if (!data || data.website) continue;
+
+                // 4. テンプレート選択（業種に最適化）
+                let tempName = 'default.html';
+                const types = data.types || [];
+                const finalName = data.name || "";
+
+                if (types.includes('cafe') || finalName.includes('カフェ') || finalName.includes('Cafe') || finalName.includes('喫茶')) {
+                    tempName = 'cafe.html';
+                } else if (types.includes('ramen_restaurant') || finalName.includes('ラーメン') || finalName.includes('らーめん') || finalName.includes('麺')) {
+                    tempName = 'ramen.html';
+                } else if (types.includes('bar') || finalName.includes('居酒屋') || finalName.includes('バル') || finalName.includes('酒場')) {
+                    tempName = 'izakaya.html';
+                } else if (finalName.includes('食堂') || finalName.includes('めし処') || finalName.includes('御食事処')) {
+                    tempName = 'shokudo.html';
+                } else if (finalName.includes('和食') || finalName.includes('寿司') || finalName.includes('割烹')) {
+                    tempName = 'wahoku.html';
+                }
+
+                const template = await fs.readFile(path.join('template', tempName), 'utf-8');
+
+                // 5. HTML生成
+                const html = template
+                    .replace(/{{NAME}}/g, data.name)
+                    .replace(/{{ADDRESS}}/g, data.formatted_address)
+                    .replace(/{{PHONE}}/g, data.formatted_phone_number || '情報なし')
+                    .replace(/{{YEAR}}/g, currentYear);
+
+                const shortId = data.place_id.substring(0, 8);
+                const fileName = `${shortId}.html`;
+
+                await fs.writeFile(`./shops/${fileName}`, html);
+
+                // 6. 履歴とCSV保存
+                savedPlaces.push({
+                    place_id: data.place_id,
+                    name: data.name,
+                    phone: data.formatted_phone_number,
+                    fileName: fileName
+                });
+
+                const targetUrl = `${DOMAIN}/shops/${fileName}`;
+                // CSVにはどの検索でヒットしたかも残すと管理しやすい
+                const csvLine = `"${data.name}","${data.formatted_phone_number || 'N/A'}","${targetUrl}","${query}"\n`;
+
+                if (!await fs.pathExists(CSV_PATH)) {
+                    await fs.writeFile(CSV_PATH, '店名,電話番号,発行URL,取得元エリア業種\n');
+                }
+                await fs.appendFile(CSV_PATH, csvLine);
+
+                console.log(`✅ 新規追加: ${data.name} (from ${query})`);
+            }
+        }
+
+        await fs.writeJson(JSON_PATH, savedPlaces, { spaces: 2 });
+        console.log('--- 全ての検索と生成が完了しました ---');
+
+    } catch (err) {
+        console.error('エラー:', err.message);
+        process.exit(1);
+    }
+}
+
+main();

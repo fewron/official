@@ -104,6 +104,8 @@ async function main() {
                     const html = templateHtml
                         .replace(/{{NAME}}/g, data.name || '')
                         .replace(/{{ADDRESS}}/g, data.formatted_address || '')
+                        // 💡 ここに下の1行を追加！
+                        .replace(/{{MAP_QUERY}}/g, encodeURIComponent(data.formatted_address || data.name))
                         .replace(/{{PHONE}}/g, data.formatted_phone_number || '情報なし')
                         .replace(/{{RATING}}/g, data.rating || 'ー')
                         .replace(/{{REVIEWS}}/g, data.user_ratings_total || '0')
