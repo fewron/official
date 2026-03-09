@@ -32,7 +32,8 @@ async function main() {
             'マクドナルド', 'サイゼリヤ', 'ガスト', '吉野家', 'すき家', '松屋',
             'くら寿司', 'スシロー', 'はま寿司', '丸亀製麺', 'ミスタードーナツ',
             'スターバックス', 'ドトール', 'コメダ珈琲', '餃子の王将', '天下一品',
-            '鳥貴族', '王将', 'モスバーガー', 'ケンタッキー', 'CoCo壱番屋', '大戸屋', 'やよい軒'
+            '鳥貴族', '王将', 'モスバーガー', 'ケンタッキー', 'CoCo壱番屋', '大戸屋', 'やよい軒',
+            'JR', '牛角', 'ココス', 'ローソン', 'セブンイレブン', 'ファミリーマート', 'コスモス'
         ];
 
         // --- 【改造ポイント】二重ループで全エリア・全業種を回す ---
@@ -73,20 +74,31 @@ async function main() {
                 if (!data || data.website) continue;
 
                 // 4. テンプレート選択（業種に最適化）
+                // build.js の 70行目あたり：テンプレート選択ロジック
+
                 let tempName = 'default.html';
                 const types = data.types || [];
                 const finalName = data.name || "";
 
-                if (types.includes('cafe') || finalName.includes('カフェ') || finalName.includes('Cafe') || finalName.includes('喫茶')) {
-                    tempName = 'cafe.html';
-                } else if (types.includes('ramen_restaurant') || finalName.includes('ラーメン') || finalName.includes('らーめん') || finalName.includes('麺')) {
+                // 1. 最優先：ラーメン（「麺」や「中華そば」もカバー）
+                if (types.includes('ramen_restaurant') || /ラーメン|らーめん|中華そば|麺/.test(finalName)) {
                     tempName = 'ramen.html';
-                } else if (types.includes('bar') || finalName.includes('居酒屋') || finalName.includes('バル') || finalName.includes('酒場')) {
+                }
+                // 2. カフェ
+                else if (types.includes('cafe') || /カフェ|Cafe|喫茶/.test(finalName)) {
+                    tempName = 'cafe.html';
+                }
+                // 3. 居酒屋・バー
+                else if (types.includes('bar') || /居酒屋|バル|酒場/.test(finalName)) {
                     tempName = 'izakaya.html';
-                } else if (finalName.includes('食堂') || finalName.includes('めし処') || finalName.includes('御食事処')) {
-                    tempName = 'shokudo.html';
-                } else if (finalName.includes('和食') || finalName.includes('寿司') || finalName.includes('割烹')) {
+                }
+                // 4. 和食・寿司
+                else if (finalName.includes('和食') || finalName.includes('寿司') || finalName.includes('割烹')) {
                     tempName = 'wahoku.html';
+                }
+                // 5. 食堂
+                else if (finalName.includes('食堂') || finalName.includes('めし処') || finalName.includes('御食事処')) {
+                    tempName = 'shokudo.html';
                 }
 
                 const template = await fs.readFile(path.join('template', tempName), 'utf-8');
