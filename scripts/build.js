@@ -10,7 +10,7 @@ const DOMAIN = 'https://fewron.jp';
 const STRIPE_LINK = 'https://buy.stripe.com/eVq6oH4Wi4MLbjb3A93Je00'; // Stripeリンク
 
 // エリアと業種（既存の設定を維持）
-const AREAS = ['吹田', '江坂', '摂津', '岡山市', '倉敷市', '岡山 問屋町'];
+const AREAS = ['吹田', '江坂', '摂津', '岡山市', '石川', '熊本'];
 const GENRES = ['居酒屋', '和食', 'ラーメン', '食堂', 'カフェ'];
 const SEARCH_QUERIES = AREAS.flatMap(area => GENRES.map(genre => `${area} ${genre}`));
 
