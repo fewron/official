@@ -1,0 +1,1682 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>すまいリー食堂 | 食堂・定食</title>
+  <meta name="description" content="すまいリー食堂（日本、〒710-0826 岡山県倉敷市老松町３丁目５−１３ スマイリービル 1階 102）。ご予約・お問い合わせはお電話にて。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #fdf9f2;
+      color: #2d1f0e;
+      overflow-x: hidden;
+      max-width: 100vw
+    }
+
+    :root {
+      --brown: #5c3a1e;
+      --brown-lt: #7a5030;
+      --brown-pale: #f5ece0;
+      --red: #c0392b;
+      --red-lt: #e74c3c;
+      --mustard: #d4902a;
+      --mustard-lt: #e8a83a;
+      --mustard-pale: #fdf3e3;
+      --cream: #fdf9f2;
+      --cream-dk: #f5ece0;
+      --cream-deep: #e8ddd0;
+      --ink: #2d1f0e;
+      --gray: #7a6a58;
+      --green: #4a7a4a;
+      --green-lt: #5a9a5a;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit
+    }
+
+    img {
+      display: block;
+      max-width: 100%
+    }
+
+    /* WARM PAPER TEXTURE */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      opacity: .7
+    }
+
+    /* CHALK BOARD PATTERN (for specials section) */
+    .chalkboard {
+      background: linear-gradient(135deg, #2a3a2a 0%, #1e2e1e 50%, #253025 100%);
+      position: relative;
+      overflow: hidden
+    }
+
+    .chalkboard::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+      pointer-events: none
+    }
+
+    .chalkboard::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 8px solid rgba(255, 255, 255, .06);
+      box-shadow: inset 0 0 30px rgba(0, 0, 0, .3);
+      pointer-events: none
+    }
+
+    /* HANDWRITTEN BORDER (CSS only) */
+    .hand-border {
+      border: 2px solid var(--brown);
+      position: relative
+    }
+
+    .hand-border::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 1px dashed rgba(92, 58, 30, .25)
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-5px)
+      }
+    }
+
+    @keyframes steam {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scaleX(1)
+      }
+
+      30% {
+        opacity: .7
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-24px) scaleX(1.3)
+      }
+    }
+
+    @keyframes pulse-warm {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(192, 57, 43, .4)
+      }
+
+      50% {
+        box-shadow: 0 0 0 12px rgba(192, 57, 43, 0)
+      }
+    }
+
+    @keyframes ticker {
+      from {
+        transform: translateX(0)
+      }
+
+      to {
+        transform: translateX(-50%)
+      }
+    }
+
+    @keyframes wobble {
+
+      0%,
+      100% {
+        transform: rotate(-1deg)
+      }
+
+      50% {
+        transform: rotate(1deg)
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .85s ease, transform .85s ease
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none
+    }
+
+    .reveal.d1 {
+      transition-delay: .1s
+    }
+
+    .reveal.d2 {
+      transition-delay: .22s
+    }
+
+    .reveal.d3 {
+      transition-delay: .34s
+    }
+
+    /* STEAM EFFECT (decorative) */
+    .steam-wrap {
+      position: relative;
+      display: inline-block
+    }
+
+    .steam {
+      position: absolute;
+      bottom: 100%;
+      width: 6px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, .5);
+      animation: steam 2.2s ease-in-out infinite
+    }
+
+    .steam:nth-child(1) {
+      left: 25%;
+      animation-delay: 0s;
+      height: 18px
+    }
+
+    .steam:nth-child(2) {
+      left: 50%;
+      animation-delay: .4s;
+      height: 24px
+    }
+
+    .steam:nth-child(3) {
+      left: 72%;
+      animation-delay: .8s;
+      height: 16px
+    }
+
+    /* NAV */
+    #nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 58px;
+      transition: all .4s
+    }
+
+    #nav.scrolled {
+      background: rgba(253, 249, 242, .97);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--brown);
+      box-shadow: 0 2px 12px rgba(44, 31, 14, .1)
+    }
+
+    .nav-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 18px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .nav-logo-stamp {
+      width: 36px;
+      height: 36px;
+      background: var(--red);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Klee One', cursive;
+      font-size: .75rem;
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: .02em;
+      line-height: 1.2;
+      text-align: center;
+      transform: rotate(-2deg);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, .15)
+    }
+
+    .nav-logo-name {
+      font-family: 'Klee One', cursive;
+      font-size: 1.1rem;
+      letter-spacing: .1em;
+      color: var(--brown);
+      font-weight: 600
+    }
+
+    .nav-tel {
+      background: var(--red);
+      color: #fff;
+      padding: 7px 16px;
+      border-radius: 4px;
+      font-size: .75rem;
+      letter-spacing: .06em;
+      font-weight: 700;
+      transition: all .3s;
+      font-family: 'Noto Sans JP', sans-serif;
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, .15)
+    }
+
+    .nav-tel:hover {
+      background: var(--red-lt);
+      transform: translateY(-1px)
+    }
+
+    /* DEMO BAR */
+    #demo-bar {
+      position: fixed;
+      top: 58px;
+      left: 0;
+      right: 0;
+      z-index: 99;
+      background: rgba(44, 31, 14, .9);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(212, 144, 42, .3);
+      padding: 6px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap
+    }
+
+    .demo-label {
+      font-size: .67rem;
+      color: rgba(255, 255, 255, .5);
+      letter-spacing: .05em
+    }
+
+    .demo-price {
+      font-size: .7rem;
+      color: var(--mustard-lt);
+      letter-spacing: .07em
+    }
+
+    .demo-price strong {
+      font-weight: 700
+    }
+
+    .demo-link {
+      font-size: .68rem;
+      color: var(--mustard-lt);
+      border: 1px solid rgba(212, 144, 42, .5);
+      padding: 3px 10px;
+      border-radius: 3px;
+      letter-spacing: .06em;
+      transition: all .3s
+    }
+
+    .demo-link:hover {
+      background: var(--mustard);
+      color: #fff
+    }
+
+    /* POPUP */
+    #popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 31, 14, .7);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeUp .4s ease;
+      backdrop-filter: blur(3px)
+    }
+
+    #popup {
+      background: var(--cream);
+      max-width: 400px;
+      width: 100%;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(44, 31, 14, .3);
+      border: 2px solid var(--brown)
+    }
+
+    .popup-top {
+      background: var(--brown);
+      padding: 22px 24px 18px;
+      text-align: center;
+      position: relative
+    }
+
+    .popup-top::before,
+    .popup-top::after {
+      content: '🍱';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      opacity: .6
+    }
+
+    .popup-top::before {
+      left: 14px
+    }
+
+    .popup-top::after {
+      right: 14px
+    }
+
+    .popup-top h2 {
+      font-family: 'Klee One', cursive;
+      font-size: 1.05rem;
+      color: #fff;
+      letter-spacing: .1em;
+      line-height: 1.65
+    }
+
+    .popup-body {
+      padding: 22px 24px 26px
+    }
+
+    .popup-stat {
+      background: var(--mustard-pale);
+      border: 2px solid var(--mustard);
+      border-radius: 4px;
+      padding: 14px;
+      margin-bottom: 16px;
+      text-align: center
+    }
+
+    .popup-stat strong {
+      font-family: 'Klee One', cursive;
+      font-size: 1.9rem;
+      color: var(--red);
+      display: block;
+      line-height: 1.1
+    }
+
+    .popup-stat span {
+      font-size: .75rem;
+      color: var(--gray);
+      letter-spacing: .06em
+    }
+
+    .popup-text {
+      font-size: .82rem;
+      color: var(--brown-lt);
+      line-height: 2.1;
+      letter-spacing: .05em;
+      margin-bottom: 20px
+    }
+
+    .popup-text strong {
+      color: var(--red)
+    }
+
+    .popup-btn-primary {
+      background: var(--red);
+      color: #fff;
+      padding: 14px;
+      border-radius: 4px;
+      font-family: 'Klee One', cursive;
+      font-size: 1rem;
+      letter-spacing: .1em;
+      text-align: center;
+      display: block;
+      transition: all .3s;
+      margin-bottom: 8px;
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, .15)
+    }
+
+    .popup-btn-primary:hover {
+      background: var(--red-lt);
+      transform: translateY(-1px)
+    }
+
+    .popup-btn-close {
+      background: none;
+      border: 1px solid var(--cream-deep);
+      color: var(--gray);
+      padding: 10px;
+      border-radius: 4px;
+      font-size: .78rem;
+      letter-spacing: .06em;
+      cursor: pointer;
+      font-family: 'Noto Sans JP', sans-serif;
+      width: 100%;
+      transition: all .3s
+    }
+
+    .popup-btn-close:hover {
+      border-color: var(--brown)
+    }
+
+    /* TICKER */
+    #ticker {
+      background: var(--brown);
+      overflow: hidden;
+      height: 34px;
+      margin-top: 90px
+    }
+
+    .ticker-track {
+      display: flex;
+      gap: 3.5rem;
+      animation: ticker 28s linear infinite;
+      white-space: nowrap;
+      padding: 0 2rem;
+      height: 100%;
+      align-items: center
+    }
+
+    .ticker-item {
+      font-size: .7rem;
+      letter-spacing: .14em;
+      color: var(--mustard-lt);
+      flex-shrink: 0;
+      font-family: 'Klee One', cursive
+    }
+
+    .ticker-sep {
+      color: rgba(255, 255, 255, .4);
+      margin: 0 .3rem
+    }
+
+    /* HERO */
+    #hero {
+      position: relative;
+      height: 100svh;
+      min-height: 580px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(175deg, rgba(44, 31, 14, .35) 0%, rgba(44, 31, 14, .1) 40%, rgba(44, 31, 14, .88) 100%)
+    }
+
+    /* Retro stamp decoration */
+    .hero-stamp {
+      position: absolute;
+      top: 20%;
+      right: 5%;
+      z-index: 3;
+      transform: rotate(8deg);
+      opacity: .85
+    }
+
+    .hero-stamp-inner {
+      background: rgba(192, 57, 43, .9);
+      border: 3px solid rgba(255, 255, 255, .8);
+      padding: 10px 14px;
+      text-align: center
+    }
+
+    .hero-stamp-text {
+      font-family: 'Klee One', cursive;
+      font-size: .7rem;
+      color: #fff;
+      letter-spacing: .1em;
+      line-height: 1.6
+    }
+
+    .hero-stamp-text strong {
+      font-size: 1.1rem;
+      display: block;
+      line-height: 1.2
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 22px 10vh;
+      width: 100%
+    }
+
+    .hero-eyebrow {
+      font-family: 'Klee One', cursive;
+      font-size: .68rem;
+      letter-spacing: .4em;
+      color: var(--mustard-lt);
+      margin-bottom: 14px;
+      animation: fadeUp .85s ease .1s both
+    }
+
+    .hero-title {
+      font-family: 'Klee One', cursive;
+      font-size: clamp(2.6rem, 9vw, 5.5rem);
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 10px;
+      animation: fadeUp .85s ease .26s both;
+      letter-spacing: .06em;
+      font-weight: 600;
+      text-shadow: 2px 3px 8px rgba(0, 0, 0, .3)
+    }
+
+    .hero-tagline {
+      font-size: .88rem;
+      letter-spacing: .18em;
+      color: rgba(255, 255, 255, .7);
+      margin-bottom: 8px;
+      animation: fadeUp .85s ease .4s both
+    }
+
+    .hero-sub {
+      font-family: 'Klee One', cursive;
+      font-size: .8rem;
+      color: rgba(255, 255, 255, .5);
+      letter-spacing: .1em;
+      margin-bottom: 26px;
+      animation: fadeUp .85s ease .5s both
+    }
+
+    .hero-cta {
+      animation: fadeUp .85s ease .62s both
+    }
+
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--red);
+      color: #fff;
+      padding: 15px 30px;
+      border-radius: 4px;
+      font-family: 'Klee One', cursive;
+      font-size: .98rem;
+      letter-spacing: .12em;
+      transition: all .3s;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, .2);
+      animation: pulse-warm 2.8s infinite
+    }
+
+    .hero-btn:hover {
+      background: var(--red-lt);
+      transform: translateY(-2px);
+      box-shadow: 4px 5px 0 rgba(0, 0, 0, .2)
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 26px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      animation: float 2.2s ease-in-out infinite;
+      opacity: .45
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 28px;
+      background: rgba(255, 255, 255, .5)
+    }
+
+    .scroll-txt {
+      font-family: 'Klee One', cursive;
+      font-size: .5rem;
+      letter-spacing: .38em;
+      color: #fff
+    }
+
+    /* HOOK */
+    #hook {
+      background: var(--mustard);
+      padding: 28px 24px;
+      text-align: center
+    }
+
+    .hook-text {
+      font-family: 'Klee One', cursive;
+      font-size: clamp(.88rem, 2.5vw, 1.05rem);
+      color: #fff;
+      letter-spacing: .14em;
+      line-height: 2
+    }
+
+    .hook-text em {
+      font-style: normal;
+      color: var(--brown);
+      font-weight: 600;
+      background: rgba(255, 255, 255, .25);
+      padding: 0 6px;
+      border-radius: 2px
+    }
+
+    /* STORY (about owner) */
+    #story {
+      padding: 72px 24px;
+      background: var(--cream)
+    }
+
+    .story-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 52px;
+      align-items: center
+    }
+
+    @media(max-width:600px) {
+      .story-inner {
+        grid-template-columns: 1fr;
+        gap: 36px
+      }
+    }
+
+    .sec-eyebrow {
+      font-family: 'Klee One', cursive;
+      font-size: .65rem;
+      letter-spacing: .45em;
+      color: var(--mustard);
+      margin-bottom: 10px
+    }
+
+    .sec-title {
+      font-family: 'Klee One', cursive;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      letter-spacing: .1em;
+      color: var(--brown);
+      font-weight: 600;
+      line-height: 1.35
+    }
+
+    .sec-rule {
+      display: block;
+      width: 36px;
+      height: 3px;
+      background: var(--red);
+      margin: 14px 0 18px;
+      border-radius: 2px
+    }
+
+    .story-body {
+      font-size: .87rem;
+      color: var(--brown-lt);
+      line-height: 2.5;
+      letter-spacing: .06em
+    }
+
+    .story-sign {
+      margin-top: 22px;
+      font-family: 'Klee One', cursive;
+      font-size: 1.1rem;
+      color: var(--brown);
+      letter-spacing: .1em
+    }
+
+    .story-sign small {
+      font-size: .72rem;
+      color: var(--gray);
+      letter-spacing: .08em;
+      display: block;
+      margin-bottom: 4px
+    }
+
+    .story-img {
+      position: relative;
+      padding-top: 115%;
+      border-radius: 6px;
+      overflow: hidden
+    }
+
+    .story-img img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .img-notice {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, .5);
+      padding: 4px 10px;
+      font-size: .58rem;
+      color: rgba(255, 255, 255, .7);
+      text-align: center;
+      letter-spacing: .05em
+    }
+
+    /* Paper tape corner deco */
+    .story-img::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 24px;
+      height: 24px;
+      background: rgba(212, 144, 42, .5);
+      transform: rotate(45deg);
+      z-index: 2
+    }
+
+    /* DAILY SPECIALS — Chalkboard */
+    #specials {
+      padding: 72px 24px
+    }
+
+    .specials-inner {
+      max-width: 820px;
+      margin: 0 auto
+    }
+
+    .sec-hd {
+      text-align: center;
+      margin-bottom: 44px
+    }
+
+    .sec-rule-center {
+      display: block;
+      width: 36px;
+      height: 3px;
+      background: var(--red);
+      margin: 14px auto 0;
+      border-radius: 2px
+    }
+
+    .chalk-board {
+      background: linear-gradient(140deg, #253020 0%, #1e2a1e 60%, #2a3525 100%);
+      border-radius: 6px;
+      padding: 36px 28px;
+      border: 4px solid #3a4a38;
+      box-shadow: inset 0 0 30px rgba(0, 0, 0, .25), 4px 4px 0 rgba(0, 0, 0, .15);
+      position: relative;
+      overflow: hidden
+    }
+
+    .chalk-board::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      pointer-events: none
+    }
+
+    .chalk-title {
+      font-family: 'Klee One', cursive;
+      font-size: 1.3rem;
+      color: rgba(255, 255, 255, .85);
+      text-align: center;
+      letter-spacing: .2em;
+      margin-bottom: 8px;
+      text-shadow: 0 0 8px rgba(255, 255, 255, .1)
+    }
+
+    .chalk-title-sub {
+      font-size: .65rem;
+      color: rgba(255, 255, 255, .4);
+      letter-spacing: .35em;
+      text-align: center;
+      margin-bottom: 24px
+    }
+
+    .chalk-rule {
+      width: 100%;
+      height: 1px;
+      background: rgba(255, 255, 255, .15);
+      margin-bottom: 24px
+    }
+
+    .chalk-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px
+    }
+
+    .chalk-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, .1)
+    }
+
+    .chalk-item:last-child {
+      border-bottom: none
+    }
+
+    .chalk-item-name {
+      font-family: 'Klee One', cursive;
+      font-size: .9rem;
+      color: rgba(255, 255, 255, .8);
+      letter-spacing: .08em
+    }
+
+    .chalk-item-name span {
+      font-size: .65rem;
+      color: rgba(255, 255, 255, .4);
+      margin-left: 6px
+    }
+
+    .chalk-item-price {
+      font-family: 'Klee One', cursive;
+      font-size: 1rem;
+      color: var(--mustard-lt);
+      white-space: nowrap;
+      margin-left: 10px
+    }
+
+    .chalk-note {
+      margin-top: 20px;
+      font-size: .68rem;
+      color: rgba(255, 255, 255, .35);
+      letter-spacing: .1em;
+      text-align: center;
+      font-family: 'Klee One', cursive
+    }
+
+    /* MENU */
+    #menu {
+      padding: 72px 24px;
+      background: var(--cream-dk)
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      max-width: 920px;
+      margin: 0 auto
+    }
+
+    .menu-card {
+      background: var(--cream);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--cream-deep);
+      transition: all .4s;
+      box-shadow: 2px 2px 0 rgba(92, 58, 30, .06)
+    }
+
+    .menu-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 4px 8px 20px rgba(92, 58, 30, .14)
+    }
+
+    .menu-card-img {
+      height: 190px;
+      overflow: hidden;
+      position: relative
+    }
+
+    .menu-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .6s
+    }
+
+    .menu-card:hover .menu-card-img img {
+      transform: scale(1.06)
+    }
+
+    .menu-img-notice {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, .48);
+      padding: 4px 8px;
+      font-size: .57rem;
+      color: rgba(255, 255, 255, .7);
+      text-align: center;
+      letter-spacing: .04em
+    }
+
+    .menu-tag {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--red);
+      color: #fff;
+      font-size: .6rem;
+      padding: 3px 9px;
+      border-radius: 2px;
+      letter-spacing: .07em;
+      font-weight: 700;
+      font-family: 'Klee One', cursive;
+      box-shadow: 1px 1px 0 rgba(0, 0, 0, .2)
+    }
+
+    .menu-card-body {
+      padding: 14px 16px 18px
+    }
+
+    .menu-card-name {
+      font-family: 'Klee One', cursive;
+      font-size: .98rem;
+      color: var(--brown);
+      margin-bottom: 5px;
+      letter-spacing: .08em;
+      font-weight: 600
+    }
+
+    .menu-card-desc {
+      font-size: .76rem;
+      color: var(--gray);
+      line-height: 1.9;
+      letter-spacing: .04em;
+      margin-bottom: 10px
+    }
+
+    .menu-card-price {
+      font-family: 'Klee One', cursive;
+      font-size: 1.05rem;
+      color: var(--red);
+      font-weight: 600
+    }
+
+    .menu-card-price small {
+      font-size: .65rem;
+      color: var(--gray);
+      font-weight: 400;
+      margin-left: 4px
+    }
+
+    .menu-cta {
+      text-align: center;
+      margin-top: 36px
+    }
+
+    .reserve-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--red);
+      color: #fff;
+      padding: 14px 34px;
+      border-radius: 4px;
+      font-family: 'Klee One', cursive;
+      font-size: .95rem;
+      letter-spacing: .1em;
+      transition: all .3s;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, .14)
+    }
+
+    .reserve-btn:hover {
+      background: var(--red-lt);
+      transform: translateY(-1px);
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, .14)
+    }
+
+    /* GALLERY */
+    #gallery {
+      padding: 72px 24px;
+      background: var(--cream)
+    }
+
+    .gal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      max-width: 880px;
+      margin: 0 auto
+    }
+
+    .gal-item {
+      overflow: hidden;
+      border-radius: 4px;
+      position: relative
+    }
+
+    .gal-item:nth-child(1) {
+      grid-column: 1/-1;
+      height: 260px
+    }
+
+    .gal-item:nth-child(2),
+    .gal-item:nth-child(3) {
+      height: 190px
+    }
+
+    .gal-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .7s
+    }
+
+    .gal-item:hover img {
+      transform: scale(1.05)
+    }
+
+    .gal-notice {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, .5);
+      padding: 4px 10px;
+      font-size: .57rem;
+      color: rgba(255, 255, 255, .7);
+      text-align: center;
+      letter-spacing: .04em
+    }
+
+    /* INFO */
+    #info {
+      padding: 72px 24px;
+      background: var(--cream-dk)
+    }
+
+    .info-inner {
+      max-width: 640px;
+      margin: 0 auto
+    }
+
+    .info-table {
+      border: 1px solid var(--cream-deep);
+      border-radius: 4px;
+      overflow: hidden;
+      background: var(--cream)
+    }
+
+    .info-row {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--cream-deep)
+    }
+
+    .info-row:last-child {
+      border-bottom: none
+    }
+
+    .info-label {
+      background: var(--brown-pale);
+      font-family: 'Klee One', cursive;
+      width: 80px;
+      flex-shrink: 0;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      color: var(--brown);
+      padding: 14px 12px;
+      display: flex;
+      align-items: flex-start;
+      font-weight: 600
+    }
+
+    .info-val {
+      font-size: .84rem;
+      color: var(--brown-lt);
+      line-height: 2;
+      letter-spacing: .04em;
+      padding: 14px 16px
+    }
+
+    .info-val a {
+      color: var(--red);
+      font-weight: 600
+    }
+
+    .map-wrap {
+      margin-top: 20px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 2px solid var(--cream-deep)
+    }
+
+    .map-wrap iframe {
+      width: 100%;
+      height: 240px;
+      border: none;
+      display: block
+    }
+
+    .info-cta {
+      text-align: center;
+      margin-top: 28px
+    }
+
+    .info-cta-label {
+      font-family: 'Klee One', cursive;
+      font-size: .7rem;
+      letter-spacing: .3em;
+      color: var(--mustard);
+      margin-bottom: 12px
+    }
+
+    .tel-big {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--red);
+      color: #fff;
+      padding: 16px 38px;
+      border-radius: 4px;
+      font-family: 'Klee One', cursive;
+      font-size: 1.05rem;
+      letter-spacing: .12em;
+      transition: all .3s;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, .14);
+      animation: pulse-warm 2.8s infinite
+    }
+
+    .tel-big:hover {
+      background: var(--red-lt);
+      transform: translateY(-1px)
+    }
+
+    /* FEWRON */
+    #fewron-bar {
+      background: var(--brown);
+      padding: 18px 24px;
+      text-align: center
+    }
+
+    .fewron-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px
+    }
+
+    .fewron-text {
+      font-size: .75rem;
+      color: rgba(255, 255, 255, .55);
+      letter-spacing: .07em
+    }
+
+    .fewron-price {
+      font-size: .9rem;
+      color: var(--mustard-lt);
+      font-weight: 700;
+      font-family: 'Klee One', cursive
+    }
+
+    .fewron-btn {
+      background: var(--mustard);
+      color: #fff;
+      padding: 9px 22px;
+      border-radius: 4px;
+      font-size: .78rem;
+      letter-spacing: .1em;
+      font-weight: 700;
+      font-family: 'Klee One', cursive;
+      transition: all .3s;
+      white-space: nowrap;
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, .12)
+    }
+
+    .fewron-btn:hover {
+      background: var(--mustard-lt);
+      transform: translateY(-1px)
+    }
+
+    /* FLOAT TEL */
+    #float-tel {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 90;
+      white-space: nowrap
+    }
+
+    .float-tel-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--red);
+      color: #fff;
+      padding: 13px 26px;
+      border-radius: 4px;
+      font-family: 'Klee One', cursive;
+      font-size: .9rem;
+      letter-spacing: .1em;
+      font-weight: 600;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, .2);
+      animation: pulse-warm 2.8s infinite;
+      transition: transform .3s
+    }
+
+    .float-tel-btn:hover {
+      transform: translateX(-50%) translateY(-2px)
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--ink);
+      padding: 36px 24px;
+      text-align: center
+    }
+
+    .footer-stamp {
+      display: inline-block;
+      background: var(--red);
+      padding: 6px 16px;
+      border-radius: 2px;
+      transform: rotate(-1deg);
+      margin-bottom: 14px;
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, .2)
+    }
+
+    .footer-stamp span {
+      font-family: 'Klee One', cursive;
+      font-size: .72rem;
+      color: #fff;
+      letter-spacing: .1em
+    }
+
+    .footer-name {
+      font-family: 'Klee One', cursive;
+      font-size: 1rem;
+      letter-spacing: .2em;
+      color: rgba(253, 249, 242, .55);
+      margin-bottom: 8px
+    }
+
+    .footer-copy {
+      font-size: .62rem;
+      color: rgba(255, 255, 255, .2);
+      letter-spacing: .1em
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- POPUP -->
+  <div id="popup-overlay">
+    <div id="popup">
+      <div class="popup-top">
+        <h2>ホームページがないと<br />毎月これだけ損しています</h2>
+      </div>
+      <div class="popup-body">
+        <div class="popup-stat">
+          <strong>月約30人</strong>
+          <span>のお客様を逃している可能性があります</span>
+        </div>
+        <p class="popup-text">「近くの食堂」「定食
+          ランチ」でスマホ検索する人が急増中。ホームページがなければ、あなたのお店は見つけてもらえません。<br /><br />Fewronなら<strong>月々4,980円</strong>でお店専用サイト完成。<strong>初期費用・追加費用は一切なし</strong>です。
+        </p>
+        <a href="https://fewron.jp" target="_blank" class="popup-btn-primary">詳しく見る → fewron.jp</a>
+        <button class="popup-btn-close"
+          onclick="document.getElementById('popup-overlay').style.display='none'">後で見る</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <div class="nav-logo-stamp">定<br />食</div>
+        <span class="nav-logo-name">すまいリー食堂</span>
+      </div>
+      <a href="tel:086-424-0006" class="nav-tel">☎ 086-424-0006</a>
+    </div>
+  </nav>
+
+  <!-- DEMO BAR -->
+  <div id="demo-bar">
+    <span class="demo-label">🛠 デモサイトです</span>
+    <span class="demo-price"><strong>月々4,980円</strong>で本物のサイトに</span>
+    <a href="https://fewron.jp" target="_blank" class="demo-link">詳細を見る →</a>
+  </div>
+
+  <!-- TICKER -->
+  <div id="ticker">
+    <div class="ticker-track">
+      <span class="ticker-item">🍚 本日の定食 好評提供中</span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-item">☎ 086-424-0006</span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-item">🥢 毎日手作りの家庭料理</span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-item">すまいリー食堂</span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-item">🍚 本日の定食 好評提供中</span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-item">☎ 086-424-0006</span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-item">🥢 毎日手作りの家庭料理</span>
+      <span class="ticker-sep">◆</span>
+      <span class="ticker-item">すまいリー食堂</span>
+      <span class="ticker-sep">◆</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=1400&q=85" alt="定食" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-stamp">
+      <div class="hero-stamp-inner">
+        <div class="hero-stamp-text">
+          <strong>創業<br />30年</strong>
+          変わらぬ味
+        </div>
+      </div>
+    </div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">── 家庭の味・定食 ──</p>
+      <h1 class="hero-title">すまいリー食堂</h1>
+      <p class="hero-tagline">毎日食べたくなる、あたたかいごはん</p>
+      <p class="hero-sub">地元に愛されて、今日も厨房から湯気が立ちます</p>
+      <div class="hero-cta">
+        <a href="tel:086-424-0006" class="hero-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
+          </svg>
+          お電話はこちら
+        </a>
+      </div>
+    </div>
+    <div class="scroll-cue">
+      <div class="scroll-line"></div>
+      <span class="scroll-txt">SCROLL</span>
+    </div>
+  </section>
+
+  <!-- HOOK -->
+  <section id="hook">
+    <p class="hook-text reveal">変わらないレシピ、変わらない笑顔。<em>すまいリー食堂</em> の料理は、毎日ここで働くみなさんのお腹と心を満たします。</p>
+  </section>
+
+  <!-- STORY -->
+  <section id="story">
+    <div class="story-inner">
+      <div class="reveal">
+        <p class="sec-eyebrow">── お店について ──</p>
+        <h2 class="sec-title">地元に根ざした<br />地元の味</h2>
+        <span class="sec-rule"></span>
+        <p class="story-body">
+          この街で長年、朝から厨房に立ち続けています。「野菜をたくさん食べてほしい」「体が温まるものを出したい」——そんな思いから生まれたメニューが並びます。お腹いっぱい、心もあたたかく。毎日来てもらえるお店でありたいと思っています。
+        </p>
+        <div class="story-sign">
+          <small>店主より</small>
+          すまいリー食堂 店主
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div class="story-img">
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=85" alt="厨房" />
+          <div class="img-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAILY SPECIALS -->
+  <section id="specials">
+    <div class="specials-inner">
+      <div class="sec-hd reveal">
+        <p class="sec-eyebrow">── TODAY'S MENU ──</p>
+        <h2 class="sec-title" style="color:var(--brown)">本日のメニュー</h2>
+        <span class="sec-rule-center"></span>
+      </div>
+      <div class="chalk-board reveal" style="margin-top:36px">
+        <p class="chalk-title">📋 本日の定食・一品料理</p>
+        <p class="chalk-title-sub">— TODAY'S SPECIAL —</p>
+        <div class="chalk-rule"></div>
+        <div class="chalk-items">
+          <div class="chalk-item">
+            <span class="chalk-item-name">本日の定食 <span>ご飯・味噌汁・小鉢付</span></span>
+            <span class="chalk-item-price">¥850</span>
+          </div>
+          <div class="chalk-item">
+            <span class="chalk-item-name">焼き魚定食 <span>塩焼き・漬物付</span></span>
+            <span class="chalk-item-price">¥900</span>
+          </div>
+          <div class="chalk-item">
+            <span class="chalk-item-name">肉じゃが定食</span>
+            <span class="chalk-item-price">¥780</span>
+          </div>
+          <div class="chalk-item">
+            <span class="chalk-item-name">チキン南蛮 <span>タルタルソース</span></span>
+            <span class="chalk-item-price">¥950</span>
+          </div>
+          <div class="chalk-item">
+            <span class="chalk-item-name">冷やっこ <span>一品</span></span>
+            <span class="chalk-item-price">¥200</span>
+          </div>
+          <div class="chalk-item">
+            <span class="chalk-item-name">本日のスープ</span>
+            <span class="chalk-item-price">¥200</span>
+          </div>
+        </div>
+        <p class="chalk-note">※ メニューは仕入れ状況により変わります。お気軽にお問い合わせください。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section id="menu">
+    <div style="max-width:920px;margin:0 auto">
+      <div class="sec-hd reveal">
+        <p class="sec-eyebrow">── REGULAR MENU ──</p>
+        <h2 class="sec-title" style="color:var(--brown)">定番メニュー</h2>
+        <span class="sec-rule-center"></span>
+      </div>
+      <div class="menu-grid" style="margin-top:40px">
+        <div class="menu-card reveal d1">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=85" alt="定食" />
+            <div class="menu-tag">人気No.1</div>
+            <div class="menu-img-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+          </div>
+          <div class="menu-card-body">
+            <p class="menu-card-name">唐揚げ定食</p>
+            <p class="menu-card-desc">ジューシーな自家製唐揚げにご飯・味噌汁・お新香が付いた大人気の定食。</p>
+            <p class="menu-card-price">¥880 <small>税込</small></p>
+          </div>
+        </div>
+        <div class="menu-card reveal d2">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=600&q=85" alt="魚定食" />
+            <div class="menu-img-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+          </div>
+          <div class="menu-card-body">
+            <p class="menu-card-name">焼き魚定食</p>
+            <p class="menu-card-desc">その日の新鮮な魚を香ばしく焼き上げて。ご飯が進む、体に優しい一膳。</p>
+            <p class="menu-card-price">¥900 <small>税込</small></p>
+          </div>
+        </div>
+        <div class="menu-card reveal d3">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1607301405390-d831c242f59b?w=600&q=85" alt="煮物" />
+            <div class="menu-img-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+          </div>
+          <div class="menu-card-body">
+            <p class="menu-card-name">煮物盛り合わせ定食</p>
+            <p class="menu-card-desc">丁寧に煮込んだ野菜たっぷりの煮物。体の芯からあたたまる一品です。</p>
+            <p class="menu-card-price">¥820 <small>税込</small></p>
+          </div>
+        </div>
+      </div>
+      <div class="menu-cta reveal">
+        <a href="tel:086-424-0006" class="reserve-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
+          </svg>
+          お問い合わせはお電話で
+        </a>
+        <p style="margin-top:10px;font-size:.72rem;color:var(--gray);letter-spacing:.08em">テイクアウト・仕出しのご相談もお気軽に</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery">
+    <div style="max-width:880px;margin:0 auto">
+      <div class="sec-hd reveal">
+        <p class="sec-eyebrow">── GALLERY ──</p>
+        <h2 class="sec-title" style="color:var(--brown)">店内・料理</h2>
+        <span class="sec-rule-center"></span>
+      </div>
+      <div class="gal-grid reveal" style="margin-top:40px">
+        <div class="gal-item"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=85"
+            alt="店内" />
+          <div class="gal-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+        </div>
+        <div class="gal-item"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=700&q=85"
+            alt="定食" />
+          <div class="gal-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+        </div>
+        <div class="gal-item"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=85"
+            alt="厨房" />
+          <div class="gal-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INFO -->
+  <section id="info">
+    <div class="info-inner">
+      <div class="sec-hd reveal" style="margin-bottom:36px">
+        <p class="sec-eyebrow">── ACCESS ──</p>
+        <h2 class="sec-title" style="color:var(--brown)">店舗情報</h2>
+        <span class="sec-rule-center"></span>
+      </div>
+      <div class="reveal">
+        <div class="info-table">
+          <div class="info-row"><span class="info-label">店名</span><span class="info-val">すまいリー食堂</span></div>
+          <div class="info-row"><span class="info-label">住所</span><span class="info-val">日本、〒710-0826 岡山県倉敷市老松町３丁目５−１３ スマイリービル 1階 102</span></div>
+          <div class="info-row"><span class="info-label">電話</span><span class="info-val"><a
+                href="tel:086-424-0006">086-424-0006</a></span></div>
+          <div class="info-row"><span class="info-label">お問合せ</span><span class="info-val">お電話にてお気軽にどうぞ</span></div>
+        </div>
+        <div class="map-wrap">
+          <iframe
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY&q=すまいリー食堂"
+            allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="info-cta">
+          <p class="info-cta-label">── お電話はこちら ──</p>
+          <a href="tel:086-424-0006" class="tel-big">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
+            </svg>
+            086-424-0006
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEWRON BANNER -->
+  <div id="fewron-bar">
+    <div class="fewron-inner">
+      <p class="fewron-text">🛠 デモサイト。ウェブサイトがないと月約30人のお客様を逃す可能性があります。</p>
+      <span class="fewron-price">月々4,980円・初期費用なし</span>
+      <a href="https://fewron.jp" target="_blank" class="fewron-btn">詳細を見る →</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-stamp"><span>すまいリー食堂</span></div>
+    <p class="footer-name">すまいリー食堂</p>
+    <p class="footer-copy">© 2026 すまいリー食堂. All rights reserved. | Powered by <a href="https://fewron.jp"
+        style="color:var(--mustard-lt)">Fewron</a></p>
+  </footer>
+
+  <!-- FLOAT TEL -->
+  <div id="float-tel">
+    <a href="tel:086-424-0006" class="float-tel-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
+      </svg>
+      お電話はこちら &nbsp;086-424-0006
+    </a>
+  </div>
+
+  <script>
+    (function () {
+      var nav = document.getElementById('nav');
+      window.addEventListener('scroll', function () { nav.classList.toggle('scrolled', scrollY > 60) });
+      var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('visible') }) }, { threshold: .12 });
+      document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el) });
+      setTimeout(function () {
+        var p = document.getElementById('popup-overlay');
+        if (p) p.style.display = 'flex';
+      }, 10000);
+    })();
+  </script>
+</body>
+
+</html>

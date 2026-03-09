@@ -1,0 +1,39 @@
+name: Fewron Auto Build and Deploy
+
+on:
+  push:
+    branches:
+      - main  # mainにpushされたら動く
+  workflow_dispatch: # ボタン一つで手動実行も可能にする
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Search and Build Script
+        env:
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+        run: node scripts/build.js
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Auto-update: New shops from Okayama & Osaka" || echo "No changes to commit"
+          git push origin main
