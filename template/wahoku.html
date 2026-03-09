@@ -2,1386 +2,1405 @@
 <html lang="ja">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>{{NAME}} | 和食・日本料理</title>
-  <meta name="description" content="{{NAME}}（{{ADDRESS}}）。ご予約・お問い合わせはお電話にて。" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;600;700;800&family=Noto+Serif+JP:wght@300;400;600&display=swap"
-    rel="stylesheet" />
-  <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0
-    }
-
-    html {
-      scroll-behavior: smooth;
-      overflow-x: hidden
-    }
-
-    body {
-      font-family: 'Noto Serif JP', serif;
-      background: #f5f0e8;
-      color: #1a0a00;
-      overflow-x: hidden;
-      max-width: 100vw
-    }
-
-    :root {
-      --crimson: #8E0000;
-      --crimson-lt: #b31b1b;
-      --crimson-pale: #f9ede8;
-      --navy: #1a2240;
-      --ink: #1a0a00;
-      --gold: #9a7b2e;
-      --gold-lt: #c9a84c;
-      --gold-pale: #f5eddb;
-      --washi: #f5f0e8;
-      --washi-dk: #ede5d5;
-      --washi-deep: #d4c9b4;
-      --white: #fdfaf6;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit
-    }
-
-    img {
-      display: block;
-      max-width: 100%
-    }
-
-    /* WASHI TEXTURE */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      opacity: .6
-    }
-
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px)
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0)
-      }
-    }
-
-    @keyframes brushIn {
-      from {
-        opacity: 0;
-        transform: scaleX(0)
-      }
-
-      to {
-        opacity: 1;
-        transform: scaleX(1)
-      }
-    }
-
-    @keyframes float {
-
-      0%,
-      100% {
-        transform: translateY(0)
-      }
-
-      50% {
-        transform: translateY(-6px)
-      }
-    }
-
-    @keyframes pulse {
-
-      0%,
-      100% {
-        box-shadow: 0 0 0 0 rgba(142, 0, 0, .4)
-      }
-
-      50% {
-        box-shadow: 0 0 0 12px rgba(142, 0, 0, 0)
-      }
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%)
-      }
-
-      to {
-        transform: translateX(0)
-      }
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity .9s ease, transform .9s ease
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: none
-    }
-
-    .reveal.d1 {
-      transition-delay: .1s
-    }
-
-    .reveal.d2 {
-      transition-delay: .22s
-    }
-
-    .reveal.d3 {
-      transition-delay: .34s
-    }
-
-    /* NAV */
-    #nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      height: 60px;
-      transition: all .4s
-    }
-
-    #nav.scrolled {
-      background: rgba(26, 10, 0, .94);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(154, 123, 46, .3)
-    }
-
-    .nav-inner {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 0 20px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between
-    }
-
-    .nav-logo {
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: 1.15rem;
-      letter-spacing: .35em;
-      color: #fdfaf6;
-      font-weight: 700
-    }
-
-    .nav-logo span {
-      color: var(--gold-lt);
-      margin-right: .2em
-    }
-
-    .nav-tel {
-      background: var(--crimson);
-      color: #fff;
-      padding: 8px 18px;
-      border-radius: 2px;
-      font-size: .78rem;
-      letter-spacing: .1em;
-      font-family: 'Noto Serif JP', serif;
-      transition: background .3s
-    }
-
-    .nav-tel:hover {
-      background: var(--crimson-lt)
-    }
-
-    /* POPUP */
-    #popup-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, .7);
-      z-index: 999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      animation: fadeUp .4s ease
-    }
-
-    #popup {
-      background: var(--white);
-      max-width: 420px;
-      width: 100%;
-      border-radius: 4px;
-      overflow: hidden;
-      box-shadow: 0 40px 80px rgba(0, 0, 0, .35);
-      position: relative
-    }
-
-    .popup-top {
-      background: var(--crimson);
-      padding: 24px 28px 20px;
-      text-align: center
-    }
-
-    .popup-icon {
-      font-size: 2.4rem;
-      margin-bottom: 8px
-    }
-
-    .popup-top h2 {
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: 1.2rem;
-      color: #fff;
-      letter-spacing: .12em;
-      line-height: 1.5
-    }
-
-    .popup-body {
-      padding: 24px 28px 28px
-    }
-
-    .popup-stat {
-      background: var(--crimson-pale);
-      border-left: 4px solid var(--crimson);
-      padding: 14px 18px;
-      margin-bottom: 18px;
-      border-radius: 0 4px 4px 0
-    }
-
-    .popup-stat strong {
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: 1.7rem;
-      color: var(--crimson);
-      display: block;
-      line-height: 1.1
-    }
-
-    .popup-stat span {
-      font-size: .8rem;
-      color: #666;
-      letter-spacing: .06em
-    }
-
-    .popup-text {
-      font-size: .84rem;
-      color: #444;
-      line-height: 1.9;
-      letter-spacing: .05em;
-      margin-bottom: 20px
-    }
-
-    .popup-cta-row {
-      display: flex;
-      gap: 10px;
-      flex-direction: column
-    }
-
-    .popup-btn-primary {
-      background: var(--crimson);
-      color: #fff;
-      padding: 14px;
-      border-radius: 2px;
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: .95rem;
-      letter-spacing: .1em;
-      text-align: center;
-      transition: background .3s;
-      display: block
-    }
-
-    .popup-btn-primary:hover {
-      background: var(--crimson-lt)
-    }
-
-    .popup-btn-close {
-      background: none;
-      border: 1px solid #ccc;
-      color: #888;
-      padding: 10px;
-      border-radius: 2px;
-      font-size: .8rem;
-      letter-spacing: .08em;
-      cursor: pointer;
-      font-family: 'Noto Serif JP', serif;
-      width: 100%
-    }
-
-    .popup-btn-close:hover {
-      border-color: #999;
-      color: #555
-    }
-
-    /* HERO */
-    #hero {
-      position: relative;
-      height: 100svh;
-      min-height: 580px;
-      display: flex;
-      align-items: flex-end;
-      overflow: hidden
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0
-    }
-
-    .hero-bg img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 35%
-    }
-
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(160deg, rgba(26, 10, 0, .3) 0%, rgba(26, 10, 0, .15) 40%, rgba(26, 10, 0, .82) 100%)
-    }
-
-    /* Vertical red accent line */
-    .hero-accent {
-      position: absolute;
-      top: 15%;
-      right: 10%;
-      width: 1px;
-      height: 55%;
-      background: linear-gradient(to bottom, transparent, var(--crimson), transparent);
-      opacity: .7
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      padding: 0 24px 10vh;
-      width: 100%
-    }
-
-    .hero-eyebrow {
-      font-size: .62rem;
-      letter-spacing: .55em;
-      color: var(--gold-lt);
-      margin-bottom: 16px;
-      animation: fadeUp .9s ease .1s both
-    }
-
-    /* Vertical title style */
-    .hero-title-wrap {
-      display: flex;
-      gap: 12px;
-      align-items: flex-end;
-      margin-bottom: 16px;
-      animation: fadeUp .9s ease .28s both
-    }
-
-    .hero-title {
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: clamp(2.8rem, 9vw, 5.5rem);
-      letter-spacing: .08em;
-      color: #fdfaf6;
-      font-weight: 800;
-      line-height: 1
-    }
-
-    .hero-title-sub {
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: clamp(.9rem, 2.5vw, 1.2rem);
-      letter-spacing: .28em;
-      color: rgba(255, 255, 255, .65);
-      padding-bottom: .4em;
-      line-height: 1.6;
-      writing-mode: vertical-rl
-    }
-
-    .hero-tagline {
-      font-size: .85rem;
-      letter-spacing: .22em;
-      color: rgba(255, 255, 255, .65);
-      margin-bottom: 28px;
-      animation: fadeUp .9s ease .44s both
-    }
-
-    .hero-cta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      animation: fadeUp .9s ease .6s both
-    }
-
-    .hero-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--crimson);
-      color: #fff;
-      padding: 15px 32px;
-      border-radius: 2px;
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: .95rem;
-      letter-spacing: .12em;
-      transition: transform .3s, box-shadow .3s;
-      animation: pulse 2.8s infinite
-    }
-
-    .hero-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 36px rgba(142, 0, 0, .45)
-    }
-
-    .scroll-cue {
-      position: absolute;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      animation: float 2.4s ease-in-out infinite;
-      opacity: .5
-    }
-
-    .scroll-line {
-      width: 1px;
-      height: 32px;
-      background: rgba(255, 255, 255, .5)
-    }
-
-    .scroll-txt {
-      font-size: .5rem;
-      letter-spacing: .4em;
-      color: #fff
-    }
-
-    /* HOOK */
-    #hook {
-      background: var(--crimson);
-      padding: 32px 24px;
-      text-align: center;
-      position: relative;
-      overflow: hidden
-    }
-
-    #hook::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: .1;
-      background: repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(255, 255, 255, .3) 30px, rgba(255, 255, 255, .3) 31px),
-        repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(255, 255, 255, .3) 30px, rgba(255, 255, 255, .3) 31px)
-    }
-
-    .hook-text {
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: clamp(.9rem, 2.5vw, 1.1rem);
-      color: #fff;
-      letter-spacing: .15em;
-      line-height: 2;
-      position: relative
-    }
-
-    .hook-text em {
-      font-style: normal;
-      color: var(--gold-lt);
-      font-weight: 700
-    }
-
-    /* TICKER */
-    #ticker {
-      background: var(--ink);
-      overflow: hidden;
-      height: 32px;
-      position: relative
-    }
-
-    .ticker-track {
-      display: flex;
-      gap: 4rem;
-      animation: ticker 30s linear infinite;
-      white-space: nowrap;
-      padding: 0 2rem;
-      height: 100%;
-      align-items: center
-    }
-
-    @keyframes ticker {
-      from {
-        transform: translateX(0)
-      }
-
-      to {
-        transform: translateX(-50%)
-      }
-    }
-
-    .ticker-item {
-      font-size: .68rem;
-      letter-spacing: .18em;
-      color: var(--gold-lt);
-      flex-shrink: 0
-    }
-
-    /* CONCEPT */
-    #concept {
-      padding: 80px 24px;
-      background: var(--washi);
-      position: relative;
-      z-index: 1
-    }
-
-    .concept-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 56px;
-      align-items: center
-    }
-
-    @media(max-width:640px) {
-      .concept-inner {
-        grid-template-columns: 1fr;
-        gap: 40px
-      }
-    }
-
-    .sec-eyebrow {
-      font-size: .6rem;
-      letter-spacing: .5em;
-      color: var(--crimson);
-      margin-bottom: 10px
-    }
-
-    .sec-title {
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: clamp(1.6rem, 4.5vw, 2.4rem);
-      letter-spacing: .2em;
-      color: var(--ink)
-    }
-
-    .sec-rule {
-      display: block;
-      width: 36px;
-      height: 2px;
-      background: var(--crimson);
-      margin: 16px 0 22px;
-      transform-origin: left;
-      animation: brushIn .8s ease .4s both
-    }
-
-    .concept-body {
-      font-size: .87rem;
-      color: #4a3828;
-      line-height: 2.4;
-      letter-spacing: .07em
-    }
-
-    .concept-season {
-      display: flex;
-      gap: 10px;
-      margin-top: 28px
-    }
-
-    .c-pill {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 1px solid var(--crimson);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: 1rem;
-      color: var(--crimson);
-      transition: all .3s;
-      cursor: default
-    }
-
-    .c-pill:hover {
-      background: var(--crimson);
-      color: #fff
-    }
-
-    .concept-img {
-      position: relative;
-      padding-top: 130%;
-      border-radius: 0;
-      overflow: hidden
-    }
-
-    .concept-img img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover
-    }
-
-    .concept-img-frame {
-      position: absolute;
-      inset: 12px;
-      border: 1px solid rgba(142, 0, 0, .2);
-      pointer-events: none
-    }
-
-    /* Traditional corner ornament */
-    .concept-img::after {
-      content: '◈';
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      color: rgba(142, 0, 0, .3);
-      font-size: .9rem
-    }
-
-    /* MENU */
-    #menu {
-      padding: 80px 24px;
-      background: var(--ink)
-    }
-
-    .menu-hd {
-      text-align: center;
-      margin-bottom: 52px
-    }
-
-    .menu-hd .sec-title {
-      color: var(--washi)
-    }
-
-    .menu-hd .sec-rule {
-      margin: 16px auto 0
-    }
-
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px;
-      max-width: 960px;
-      margin: 0 auto
-    }
-
-    .menu-card {
-      background: var(--washi-dk);
-      border: 1px solid rgba(154, 123, 46, .2);
-      overflow: hidden;
-      transition: transform .4s, box-shadow .4s
-    }
-
-    .menu-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, .3)
-    }
-
-    .menu-card-img {
-      height: 200px;
-      overflow: hidden;
-      position: relative
-    }
-
-    .menu-card-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform .6s
-    }
-
-    .menu-card:hover .menu-card-img img {
-      transform: scale(1.07)
-    }
-
-    /* Image overlay notice */
-    .img-notice {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0, 0, 0, .55);
-      padding: 4px 8px;
-      font-size: .58rem;
-      color: rgba(255, 255, 255, .7);
-      letter-spacing: .05em;
-      text-align: center
-    }
-
-    .menu-card-body {
-      padding: 18px 20px 22px
-    }
-
-    .menu-card-name {
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: .95rem;
-      letter-spacing: .14em;
-      color: var(--ink);
-      margin-bottom: 6px
-    }
-
-    .menu-card-rule {
-      width: 20px;
-      height: 1px;
-      background: var(--crimson);
-      margin-bottom: 10px;
-      opacity: .6
-    }
-
-    .menu-card-desc {
-      font-size: .78rem;
-      color: #5a4030;
-      line-height: 1.9;
-      letter-spacing: .05em
-    }
-
-    .menu-card-price {
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: .95rem;
-      color: var(--gold);
-      margin-top: 10px;
-      font-weight: 700
-    }
-
-    .menu-cta {
-      text-align: center;
-      margin-top: 44px
-    }
-
-    .reserve-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--crimson);
-      color: #fff;
-      padding: 16px 40px;
-      border-radius: 2px;
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: .95rem;
-      letter-spacing: .15em;
-      transition: all .3s
-    }
-
-    .reserve-btn:hover {
-      background: var(--crimson-lt);
-      transform: translateY(-2px)
-    }
-
-    /* GALLERY */
-    #gallery {
-      padding: 80px 24px;
-      background: var(--washi-dk)
-    }
-
-    .gal-hd {
-      text-align: center;
-      margin-bottom: 44px
-    }
-
-    .gal-hd .sec-title {
-      color: var(--ink)
-    }
-
-    .gal-hd .sec-rule {
-      margin: 16px auto 0
-    }
-
-    .gal-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: auto;
-      gap: 10px;
-      max-width: 900px;
-      margin: 0 auto
-    }
-
-    .gal-item {
-      overflow: hidden;
-      position: relative
-    }
-
-    .gal-item:nth-child(1) {
-      grid-column: 1/-1;
-      height: 280px
-    }
-
-    .gal-item:nth-child(2),
-    .gal-item:nth-child(3) {
-      height: 200px
-    }
-
-    .gal-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform .7s
-    }
-
-    .gal-item:hover img {
-      transform: scale(1.05)
-    }
-
-    .gal-notice {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0, 0, 0, .5);
-      padding: 4px 10px;
-      font-size: .58rem;
-      color: rgba(255, 255, 255, .7);
-      text-align: center;
-      letter-spacing: .05em
-    }
-
-    /* INFO */
-    #info {
-      padding: 80px 24px;
-      background: var(--white)
-    }
-
-    .info-inner {
-      max-width: 640px;
-      margin: 0 auto
-    }
-
-    .info-hd {
-      text-align: center;
-      margin-bottom: 44px
-    }
-
-    .info-hd .sec-title {
-      color: var(--ink)
-    }
-
-    .info-hd .sec-rule {
-      margin: 16px auto 0
-    }
-
-    .info-row {
-      display: flex;
-      gap: 20px;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--washi-deep)
-    }
-
-    .info-row:first-child {
-      border-top: 1px solid var(--washi-deep)
-    }
-
-    .info-label {
-      font-family: 'Shippori Mincho B1', serif;
-      width: 68px;
-      flex-shrink: 0;
-      font-size: .72rem;
-      letter-spacing: .2em;
-      color: var(--crimson);
-      padding-top: 2px
-    }
-
-    .info-val {
-      font-size: .84rem;
-      color: #4a3828;
-      line-height: 2;
-      letter-spacing: .05em
-    }
-
-    .info-val a {
-      color: var(--crimson);
-      font-weight: 600
-    }
-
-    .map-wrap {
-      margin-top: 28px;
-      border-radius: 2px;
-      overflow: hidden;
-      border: 1px solid var(--washi-deep)
-    }
-
-    .map-wrap iframe {
-      width: 100%;
-      height: 260px;
-      border: none;
-      display: block
-    }
-
-    .info-cta {
-      text-align: center;
-      margin-top: 36px
-    }
-
-    .info-cta-label {
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: .72rem;
-      letter-spacing: .3em;
-      color: var(--gold);
-      margin-bottom: 14px
-    }
-
-    .tel-big {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--crimson);
-      color: #fff;
-      padding: 18px 44px;
-      border-radius: 2px;
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: 1.05rem;
-      letter-spacing: .15em;
-      transition: all .3s;
-      animation: pulse 2.8s infinite
-    }
-
-    .tel-big:hover {
-      background: var(--crimson-lt);
-      transform: translateY(-2px)
-    }
-
-    /* FEWRON BANNER */
-    #fewron-bar {
-      background: linear-gradient(135deg, #1a2240 0%, #0f1628 100%);
-      padding: 18px 24px;
-      text-align: center;
-      border-top: 2px solid var(--gold-lt)
-    }
-
-    .fewron-inner {
-      max-width: 700px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 12px
-    }
-
-    .fewron-text {
-      font-size: .78rem;
-      color: rgba(255, 255, 255, .7);
-      letter-spacing: .08em
-    }
-
-    .fewron-price {
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: .95rem;
-      color: var(--gold-lt);
-      font-weight: 700
-    }
-
-    .fewron-btn {
-      background: var(--gold-lt);
-      color: var(--ink);
-      padding: 9px 22px;
-      border-radius: 2px;
-      font-size: .78rem;
-      letter-spacing: .1em;
-      font-family: 'Shippori Mincho B1', serif;
-      font-weight: 700;
-      transition: all .3s;
-      white-space: nowrap
-    }
-
-    .fewron-btn:hover {
-      background: #fff;
-      transform: translateY(-1px)
-    }
-
-    /* FLOAT TEL */
-    #float-tel {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 90;
-      white-space: nowrap
-    }
-
-    .float-tel-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--crimson);
-      color: #fff;
-      padding: 14px 28px;
-      border-radius: 40px;
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: .9rem;
-      letter-spacing: .1em;
-      box-shadow: 0 8px 30px rgba(142, 0, 0, .45);
-      animation: pulse 2.8s infinite;
-      transition: transform .3s
-    }
-
-    .float-tel-btn:hover {
-      transform: translateX(-50%) translateY(-2px)
-    }
-
-    .float-tel-btn svg {
-      flex-shrink: 0
-    }
-
-    /* FOOTER */
-    footer {
-      background: var(--ink);
-      padding: 40px 24px;
-      text-align: center
-    }
-
-    .footer-ornament {
-      color: var(--gold-lt);
-      letter-spacing: .4em;
-      margin-bottom: 12px;
-      font-size: .9rem
-    }
-
-    .footer-name {
-      font-family: 'Shippori Mincho B1', serif;
-      font-size: 1rem;
-      letter-spacing: .3em;
-      color: rgba(255, 255, 255, .7);
-      margin-bottom: 8px
-    }
-
-    .footer-copy {
-      font-size: .65rem;
-      color: rgba(255, 255, 255, .3);
-      letter-spacing: .1em
-    }
-
-    /* DEMO MARK */
-    #demo-mark {
-      position: fixed;
-      top: 64px;
-      left: 0;
-      right: 0;
-      z-index: 99;
-      background: rgba(26, 34, 64, .9);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(201, 168, 76, .3);
-      padding: 6px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap
-    }
-
-    .demo-label {
-      font-size: .68rem;
-      color: rgba(255, 255, 255, .6);
-      letter-spacing: .06em
-    }
-
-    .demo-price {
-      font-size: .72rem;
-      color: var(--gold-lt);
-      letter-spacing: .08em
-    }
-
-    .demo-price strong {
-      font-weight: 700
-    }
-
-    .demo-link {
-      font-size: .72rem;
-      color: var(--gold-lt);
-      border: 1px solid var(--gold-lt);
-      padding: 3px 10px;
-      border-radius: 2px;
-      letter-spacing: .06em;
-      transition: all .3s
-    }
-
-    .demo-link:hover {
-      background: var(--gold-lt);
-      color: var(--ink)
-    }
-  </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{{NAME}} | 和食・日本料理</title>
+    <meta name="description" content="{{NAME}}（{{ADDRESS}}）。ご予約・お問い合わせはお電話にて。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;600;700;800&family=Noto+Serif+JP:wght@300;400;600&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden
+        }
+
+        body {
+            font-family: 'Noto Serif JP', serif;
+            background: #f5f0e8;
+            color: #1a0a00;
+            overflow-x: hidden;
+            max-width: 100vw
+        }
+
+        :root {
+            --crimson: #8E0000;
+            --crimson-lt: #b31b1b;
+            --crimson-pale: #f9ede8;
+            --navy: #1a2240;
+            --ink: #1a0a00;
+            --gold: #9a7b2e;
+            --gold-lt: #c9a84c;
+            --gold-pale: #f5eddb;
+            --washi: #f5f0e8;
+            --washi-dk: #ede5d5;
+            --washi-deep: #d4c9b4;
+            --white: #fdfaf6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit
+        }
+
+        img {
+            display: block;
+            max-width: 100%
+        }
+
+        /* WASHI TEXTURE */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: .6
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes brushIn {
+            from {
+                opacity: 0;
+                transform: scaleX(0)
+            }
+
+            to {
+                opacity: 1;
+                transform: scaleX(1)
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-6px)
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(142, 0, 0, .4)
+            }
+
+            50% {
+                box-shadow: 0 0 0 12px rgba(142, 0, 0, 0)
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%)
+            }
+
+            to {
+                transform: translateX(0)
+            }
+        }
+
+        .reveal {
+            opacity: 1;
+            transform: none;
+            transition: opacity .9s ease, transform .9s ease
+        }
+
+        .js-ready .reveal {
+            opacity: 0;
+            transform: translateY(24px)
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none
+        }
+
+        .reveal.d1 {
+            transition-delay: .1s
+        }
+
+        .reveal.d2 {
+            transition-delay: .22s
+        }
+
+        .reveal.d3 {
+            transition-delay: .34s
+        }
+
+        /* NAV */
+        #nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 60px;
+            transition: all .4s
+        }
+
+        #nav.scrolled {
+            background: rgba(26, 10, 0, .94);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(154, 123, 46, .3)
+        }
+
+        .nav-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .nav-logo {
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: 1.15rem;
+            letter-spacing: .35em;
+            color: #fdfaf6;
+            font-weight: 700
+        }
+
+        .nav-logo span {
+            color: var(--gold-lt);
+            margin-right: .2em
+        }
+
+        .nav-tel {
+            background: var(--crimson);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 2px;
+            font-size: .78rem;
+            letter-spacing: .1em;
+            font-family: 'Noto Serif JP', serif;
+            transition: background .3s
+        }
+
+        .nav-tel:hover {
+            background: var(--crimson-lt)
+        }
+
+        /* POPUP */
+        #popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeUp .4s ease
+        }
+
+        #popup {
+            background: var(--white);
+            max-width: 420px;
+            width: 100%;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, .35);
+            position: relative
+        }
+
+        .popup-top {
+            background: var(--crimson);
+            padding: 24px 28px 20px;
+            text-align: center
+        }
+
+        .popup-icon {
+            font-size: 2.4rem;
+            margin-bottom: 8px
+        }
+
+        .popup-top h2 {
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: 1.2rem;
+            color: #fff;
+            letter-spacing: .12em;
+            line-height: 1.5
+        }
+
+        .popup-body {
+            padding: 24px 28px 28px
+        }
+
+        .popup-stat {
+            background: var(--crimson-pale);
+            border-left: 4px solid var(--crimson);
+            padding: 14px 18px;
+            margin-bottom: 18px;
+            border-radius: 0 4px 4px 0
+        }
+
+        .popup-stat strong {
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: 1.7rem;
+            color: var(--crimson);
+            display: block;
+            line-height: 1.1
+        }
+
+        .popup-stat span {
+            font-size: .8rem;
+            color: #666;
+            letter-spacing: .06em
+        }
+
+        .popup-text {
+            font-size: .84rem;
+            color: #444;
+            line-height: 1.9;
+            letter-spacing: .05em;
+            margin-bottom: 20px
+        }
+
+        .popup-cta-row {
+            display: flex;
+            gap: 10px;
+            flex-direction: column
+        }
+
+        .popup-btn-primary {
+            background: var(--crimson);
+            color: #fff;
+            padding: 14px;
+            border-radius: 2px;
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: .95rem;
+            letter-spacing: .1em;
+            text-align: center;
+            transition: background .3s;
+            display: block
+        }
+
+        .popup-btn-primary:hover {
+            background: var(--crimson-lt)
+        }
+
+        .popup-btn-close {
+            background: none;
+            border: 1px solid #ccc;
+            color: #888;
+            padding: 10px;
+            border-radius: 2px;
+            font-size: .8rem;
+            letter-spacing: .08em;
+            cursor: pointer;
+            font-family: 'Noto Serif JP', serif;
+            width: 100%
+        }
+
+        .popup-btn-close:hover {
+            border-color: #999;
+            color: #555
+        }
+
+        /* HERO */
+        #hero {
+            position: relative;
+            height: 100svh;
+            min-height: 580px;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 35%
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(160deg, rgba(26, 10, 0, .3) 0%, rgba(26, 10, 0, .15) 40%, rgba(26, 10, 0, .82) 100%)
+        }
+
+        /* Vertical red accent line */
+        .hero-accent {
+            position: absolute;
+            top: 15%;
+            right: 10%;
+            width: 1px;
+            height: 55%;
+            background: linear-gradient(to bottom, transparent, var(--crimson), transparent);
+            opacity: .7
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 24px 10vh;
+            width: 100%
+        }
+
+        .hero-eyebrow {
+            font-size: .62rem;
+            letter-spacing: .55em;
+            color: var(--gold-lt);
+            margin-bottom: 16px;
+            animation: fadeUp .9s ease .1s both
+        }
+
+        /* Vertical title style */
+        .hero-title-wrap {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            margin-bottom: 16px;
+            animation: fadeUp .9s ease .28s both
+        }
+
+        .hero-title {
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: clamp(2.8rem, 9vw, 5.5rem);
+            letter-spacing: .08em;
+            color: #fdfaf6;
+            font-weight: 800;
+            line-height: 1
+        }
+
+        .hero-title-sub {
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: clamp(.9rem, 2.5vw, 1.2rem);
+            letter-spacing: .28em;
+            color: rgba(255, 255, 255, .65);
+            padding-bottom: .4em;
+            line-height: 1.6;
+            writing-mode: vertical-rl
+        }
+
+        .hero-tagline {
+            font-size: .85rem;
+            letter-spacing: .22em;
+            color: rgba(255, 255, 255, .65);
+            margin-bottom: 28px;
+            animation: fadeUp .9s ease .44s both
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            animation: fadeUp .9s ease .6s both
+        }
+
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--crimson);
+            color: #fff;
+            padding: 15px 32px;
+            border-radius: 2px;
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: .95rem;
+            letter-spacing: .12em;
+            transition: transform .3s, box-shadow .3s;
+            animation: pulse 2.8s infinite
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 36px rgba(142, 0, 0, .45)
+        }
+
+        .scroll-cue {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            animation: float 2.4s ease-in-out infinite;
+            opacity: .5
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 32px;
+            background: rgba(255, 255, 255, .5)
+        }
+
+        .scroll-txt {
+            font-size: .5rem;
+            letter-spacing: .4em;
+            color: #fff
+        }
+
+        /* HOOK */
+        #hook {
+            background: var(--crimson);
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        #hook::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: .1;
+            background: repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(255, 255, 255, .3) 30px, rgba(255, 255, 255, .3) 31px),
+                repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(255, 255, 255, .3) 30px, rgba(255, 255, 255, .3) 31px)
+        }
+
+        .hook-text {
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: clamp(.9rem, 2.5vw, 1.1rem);
+            color: #fff;
+            letter-spacing: .15em;
+            line-height: 2;
+            position: relative
+        }
+
+        .hook-text em {
+            font-style: normal;
+            color: var(--gold-lt);
+            font-weight: 700
+        }
+
+        /* TICKER */
+        #ticker {
+            background: var(--ink);
+            overflow: hidden;
+            height: 32px;
+            position: relative
+        }
+
+        .ticker-track {
+            display: flex;
+            gap: 4rem;
+            animation: ticker 30s linear infinite;
+            white-space: nowrap;
+            padding: 0 2rem;
+            height: 100%;
+            align-items: center
+        }
+
+        @keyframes ticker {
+            from {
+                transform: translateX(0)
+            }
+
+            to {
+                transform: translateX(-50%)
+            }
+        }
+
+        .ticker-item {
+            font-size: .68rem;
+            letter-spacing: .18em;
+            color: var(--gold-lt);
+            flex-shrink: 0
+        }
+
+        /* CONCEPT */
+        #concept {
+            padding: 80px 24px;
+            background: var(--washi);
+            position: relative;
+            z-index: 1
+        }
+
+        .concept-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 56px;
+            align-items: center
+        }
+
+        @media(max-width:640px) {
+            .concept-inner {
+                grid-template-columns: 1fr;
+                gap: 40px
+            }
+        }
+
+        .sec-eyebrow {
+            font-size: .6rem;
+            letter-spacing: .5em;
+            color: var(--crimson);
+            margin-bottom: 10px
+        }
+
+        .sec-title {
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+            letter-spacing: .2em;
+            color: var(--ink)
+        }
+
+        .sec-rule {
+            display: block;
+            width: 36px;
+            height: 2px;
+            background: var(--crimson);
+            margin: 16px 0 22px;
+            transform-origin: left;
+            animation: brushIn .8s ease .4s both
+        }
+
+        .concept-body {
+            font-size: .87rem;
+            color: #4a3828;
+            line-height: 2.4;
+            letter-spacing: .07em
+        }
+
+        .concept-season {
+            display: flex;
+            gap: 10px;
+            margin-top: 28px
+        }
+
+        .c-pill {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid var(--crimson);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: 1rem;
+            color: var(--crimson);
+            transition: all .3s;
+            cursor: default
+        }
+
+        .c-pill:hover {
+            background: var(--crimson);
+            color: #fff
+        }
+
+        .concept-img {
+            position: relative;
+            padding-top: 130%;
+            border-radius: 0;
+            overflow: hidden
+        }
+
+        .concept-img img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .concept-img-frame {
+            position: absolute;
+            inset: 12px;
+            border: 1px solid rgba(142, 0, 0, .2);
+            pointer-events: none
+        }
+
+        /* Traditional corner ornament */
+        .concept-img::after {
+            content: '◈';
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            color: rgba(142, 0, 0, .3);
+            font-size: .9rem
+        }
+
+        /* MENU */
+        #menu {
+            padding: 80px 24px;
+            background: var(--ink)
+        }
+
+        .menu-hd {
+            text-align: center;
+            margin-bottom: 52px
+        }
+
+        .menu-hd .sec-title {
+            color: var(--washi)
+        }
+
+        .menu-hd .sec-rule {
+            margin: 16px auto 0
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            max-width: 960px;
+            margin: 0 auto
+        }
+
+        .menu-card {
+            background: var(--washi-dk);
+            border: 1px solid rgba(154, 123, 46, .2);
+            overflow: hidden;
+            transition: transform .4s, box-shadow .4s
+        }
+
+        .menu-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .3)
+        }
+
+        .menu-card-img {
+            height: 200px;
+            overflow: hidden;
+            position: relative
+        }
+
+        .menu-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .6s
+        }
+
+        .menu-card:hover .menu-card-img img {
+            transform: scale(1.07)
+        }
+
+        /* Image overlay notice */
+        .img-notice {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, .55);
+            padding: 4px 8px;
+            font-size: .58rem;
+            color: rgba(255, 255, 255, .7);
+            letter-spacing: .05em;
+            text-align: center
+        }
+
+        .menu-card-body {
+            padding: 18px 20px 22px
+        }
+
+        .menu-card-name {
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: .95rem;
+            letter-spacing: .14em;
+            color: var(--ink);
+            margin-bottom: 6px
+        }
+
+        .menu-card-rule {
+            width: 20px;
+            height: 1px;
+            background: var(--crimson);
+            margin-bottom: 10px;
+            opacity: .6
+        }
+
+        .menu-card-desc {
+            font-size: .78rem;
+            color: #5a4030;
+            line-height: 1.9;
+            letter-spacing: .05em
+        }
+
+        .menu-card-price {
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: .95rem;
+            color: var(--gold);
+            margin-top: 10px;
+            font-weight: 700
+        }
+
+        .menu-cta {
+            text-align: center;
+            margin-top: 44px
+        }
+
+        .reserve-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--crimson);
+            color: #fff;
+            padding: 16px 40px;
+            border-radius: 2px;
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: .95rem;
+            letter-spacing: .15em;
+            transition: all .3s
+        }
+
+        .reserve-btn:hover {
+            background: var(--crimson-lt);
+            transform: translateY(-2px)
+        }
+
+        /* GALLERY */
+        #gallery {
+            padding: 80px 24px;
+            background: var(--washi-dk)
+        }
+
+        .gal-hd {
+            text-align: center;
+            margin-bottom: 44px
+        }
+
+        .gal-hd .sec-title {
+            color: var(--ink)
+        }
+
+        .gal-hd .sec-rule {
+            margin: 16px auto 0
+        }
+
+        .gal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: auto;
+            gap: 10px;
+            max-width: 900px;
+            margin: 0 auto
+        }
+
+        .gal-item {
+            overflow: hidden;
+            position: relative
+        }
+
+        .gal-item:nth-child(1) {
+            grid-column: 1/-1;
+            height: 280px
+        }
+
+        .gal-item:nth-child(2),
+        .gal-item:nth-child(3) {
+            height: 200px
+        }
+
+        .gal-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .7s
+        }
+
+        .gal-item:hover img {
+            transform: scale(1.05)
+        }
+
+        .gal-notice {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, .5);
+            padding: 4px 10px;
+            font-size: .58rem;
+            color: rgba(255, 255, 255, .7);
+            text-align: center;
+            letter-spacing: .05em
+        }
+
+        /* INFO */
+        #info {
+            padding: 80px 24px;
+            background: var(--white)
+        }
+
+        .info-inner {
+            max-width: 640px;
+            margin: 0 auto
+        }
+
+        .info-hd {
+            text-align: center;
+            margin-bottom: 44px
+        }
+
+        .info-hd .sec-title {
+            color: var(--ink)
+        }
+
+        .info-hd .sec-rule {
+            margin: 16px auto 0
+        }
+
+        .info-row {
+            display: flex;
+            gap: 20px;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--washi-deep)
+        }
+
+        .info-row:first-child {
+            border-top: 1px solid var(--washi-deep)
+        }
+
+        .info-label {
+            font-family: 'Shippori Mincho B1', serif;
+            width: 68px;
+            flex-shrink: 0;
+            font-size: .72rem;
+            letter-spacing: .2em;
+            color: var(--crimson);
+            padding-top: 2px
+        }
+
+        .info-val {
+            font-size: .84rem;
+            color: #4a3828;
+            line-height: 2;
+            letter-spacing: .05em
+        }
+
+        .info-val a {
+            color: var(--crimson);
+            font-weight: 600
+        }
+
+        .map-wrap {
+            margin-top: 28px;
+            border-radius: 2px;
+            overflow: hidden;
+            border: 1px solid var(--washi-deep)
+        }
+
+        .map-wrap iframe {
+            width: 100%;
+            height: 260px;
+            border: none;
+            display: block
+        }
+
+        .info-cta {
+            text-align: center;
+            margin-top: 36px
+        }
+
+        .info-cta-label {
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: .72rem;
+            letter-spacing: .3em;
+            color: var(--gold);
+            margin-bottom: 14px
+        }
+
+        .tel-big {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--crimson);
+            color: #fff;
+            padding: 18px 44px;
+            border-radius: 2px;
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: 1.05rem;
+            letter-spacing: .15em;
+            transition: all .3s;
+            animation: pulse 2.8s infinite
+        }
+
+        .tel-big:hover {
+            background: var(--crimson-lt);
+            transform: translateY(-2px)
+        }
+
+        /* FEWRON BANNER */
+        #fewron-bar {
+            background: linear-gradient(135deg, #1a2240 0%, #0f1628 100%);
+            padding: 18px 24px;
+            text-align: center;
+            border-top: 2px solid var(--gold-lt)
+        }
+
+        .fewron-inner {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 12px
+        }
+
+        .fewron-text {
+            font-size: .78rem;
+            color: rgba(255, 255, 255, .7);
+            letter-spacing: .08em
+        }
+
+        .fewron-price {
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: .95rem;
+            color: var(--gold-lt);
+            font-weight: 700
+        }
+
+        .fewron-btn {
+            background: var(--gold-lt);
+            color: var(--ink);
+            padding: 9px 22px;
+            border-radius: 2px;
+            font-size: .78rem;
+            letter-spacing: .1em;
+            font-family: 'Shippori Mincho B1', serif;
+            font-weight: 700;
+            transition: all .3s;
+            white-space: nowrap
+        }
+
+        .fewron-btn:hover {
+            background: #fff;
+            transform: translateY(-1px)
+        }
+
+        /* FLOAT TEL */
+        #float-tel {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 90;
+            white-space: nowrap
+        }
+
+        .float-tel-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--crimson);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: .9rem;
+            letter-spacing: .1em;
+            box-shadow: 0 8px 30px rgba(142, 0, 0, .45);
+            animation: pulse 2.8s infinite;
+            transition: transform .3s
+        }
+
+        .float-tel-btn:hover {
+            transform: translateX(-50%) translateY(-2px)
+        }
+
+        .float-tel-btn svg {
+            flex-shrink: 0
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--ink);
+            padding: 40px 24px;
+            text-align: center
+        }
+
+        .footer-ornament {
+            color: var(--gold-lt);
+            letter-spacing: .4em;
+            margin-bottom: 12px;
+            font-size: .9rem
+        }
+
+        .footer-name {
+            font-family: 'Shippori Mincho B1', serif;
+            font-size: 1rem;
+            letter-spacing: .3em;
+            color: rgba(255, 255, 255, .7);
+            margin-bottom: 8px
+        }
+
+        .footer-copy {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .3);
+            letter-spacing: .1em
+        }
+
+        /* DEMO MARK */
+        #demo-mark {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            background: rgba(26, 34, 64, .9);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(201, 168, 76, .3);
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .demo-label {
+            font-size: .68rem;
+            color: rgba(255, 255, 255, .6);
+            letter-spacing: .06em
+        }
+
+        .demo-price {
+            font-size: .72rem;
+            color: var(--gold-lt);
+            letter-spacing: .08em
+        }
+
+        .demo-price strong {
+            font-weight: 700
+        }
+
+        .demo-link {
+            font-size: .72rem;
+            color: var(--gold-lt);
+            border: 1px solid var(--gold-lt);
+            padding: 3px 10px;
+            border-radius: 2px;
+            letter-spacing: .06em;
+            transition: all .3s
+        }
+
+        .demo-link:hover {
+            background: var(--gold-lt);
+            color: var(--ink)
+        }
+    </style>
 </head>
 
 <body>
 
-  <!-- POPUP -->
-  <div id="popup-overlay">
-    <div id="popup">
-      <div class="popup-top">
-        <div class="popup-icon">🍶</div>
-        <h2>ホームページがないと、<br />こんなに損をしています</h2>
-      </div>
-      <div class="popup-body">
-        <div class="popup-stat">
-          <strong>月約30人</strong>
-          <span>のお客様を逃している可能性があります</span>
+    <!-- POPUP -->
+    <div id="popup-overlay" class="fewron-demo">
+        <div id="popup">
+            <div class="popup-top">
+                <div class="popup-icon">🍶</div>
+                <h2>ホームページがないと、<br />こんなに損をしています</h2>
+            </div>
+            <div class="popup-body">
+                <div class="popup-stat">
+                    <strong>月約30人</strong>
+                    <span>のお客様を逃している可能性があります</span>
+                </div>
+                <p class="popup-text">
+                    今やお店を探す方の<strong>87%がスマホで検索</strong>します。ホームページがないお店は、せっかく来てくれるはずのお客様に見つけてもらえません。<br /><br />Fewronなら<strong>月々4,980円</strong>で、あなたのお店専用サイトをご用意。初期費用・追加料金一切なし。
+                </p>
+                <div class="popup-cta-row">
+                    <a href="{{PAYMENT_URL}}" target="_blank" class="popup-btn-primary">詳しく見る → fewron.jp</a>
+                    <a href="{{PAYMENT_URL}}" target="_blank" class="popup-btn-primary"
+                        style="background:var(--gold);color:#fff">🔓 決済して有効化する</a>
+                    <button class="popup-btn-close"
+                        onclick="document.getElementById('popup-overlay').style.display='none'">後で見る</button>
+                </div>
+            </div>
         </div>
-        <p class="popup-text">
-          今やお店を探す方の<strong>87%がスマホで検索</strong>します。ホームページがないお店は、せっかく来てくれるはずのお客様に見つけてもらえません。<br /><br />Fewronなら<strong>月々4,980円</strong>で、あなたのお店専用サイトをご用意。初期費用・追加料金一切なし。
-        </p>
-        <div class="popup-cta-row">
-          <a href="https://fewron.jp" target="_blank" class="popup-btn-primary">詳しく見る → fewron.jp</a>
-          <button class="popup-btn-close"
-            onclick="document.getElementById('popup-overlay').style.display='none'">後で見る</button>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <!-- DEMO MARK -->
-  <div id="demo-mark">
-    <span class="demo-label">🛠 デモサイトです</span>
-    <span class="demo-price"><strong>月々4,980円</strong>で本物のサイトに</span>
-    <a href="https://fewron.jp" target="_blank" class="demo-link">詳細を見る →</a>
-  </div>
-
-  <!-- NAV -->
-  <nav id="nav">
-    <div class="nav-inner">
-      <div class="nav-logo"><span>◈</span>{{NAME}}</div>
-      <a href="tel:{{PHONE}}" class="nav-tel">☎ {{PHONE}}</a>
+    <!-- DEMO MARK -->
+    <div id="demo-mark" class="fewron-demo">
+        <span class="demo-label">🛠 デモサイトです</span>
+        <span class="demo-price"><strong>月々4,980円</strong>で本物のサイトに</span>
+        <a href="{{PAYMENT_URL}}" target="_blank" class="demo-link">詳細を見る →</a>
+        <a href="{{PAYMENT_URL}}" target="_blank" class="demo-link"
+            style="background:var(--gold-lt);color:var(--ink);border-color:var(--gold-lt)">🔓 決済して有効化</a>
     </div>
-  </nav>
 
-  <!-- TICKER -->
-  <div id="ticker" style="margin-top:98px">
-    <div class="ticker-track">
-      <span class="ticker-item">🍱 旬の素材を丁寧に</span>
-      <span class="ticker-item">〽 ご予約は {{PHONE}} まで</span>
-      <span class="ticker-item">🍶 季節のおもてなし</span>
-      <span class="ticker-item">◈ {{NAME}}</span>
-      <span class="ticker-item">🍱 旬の素材を丁寧に</span>
-      <span class="ticker-item">〽 ご予約は {{PHONE}} まで</span>
-      <span class="ticker-item">🍶 季節のおもてなし</span>
-      <span class="ticker-item">◈ {{NAME}}</span>
-    </div>
-  </div>
+    <!-- NAV -->
+    <nav id="nav">
+        <div class="nav-inner">
+            <div class="nav-logo"><span>◈</span>{{NAME}}</div>
+            <a href="tel:{{PHONE}}" class="nav-tel">☎ {{PHONE}}</a>
+        </div>
+    </nav>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-bg">
-      <img src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=1400&q=85" alt="和食" />
-      <div class="hero-overlay"></div>
+    <!-- TICKER -->
+    <div id="ticker" style="margin-top:98px">
+        <div class="ticker-track">
+            <span class="ticker-item">🍱 旬の素材を丁寧に</span>
+            <span class="ticker-item">〽 ご予約は {{PHONE}} まで</span>
+            <span class="ticker-item">🍶 季節のおもてなし</span>
+            <span class="ticker-item">◈ {{NAME}}</span>
+            <span class="ticker-item">🍱 旬の素材を丁寧に</span>
+            <span class="ticker-item">〽 ご予約は {{PHONE}} まで</span>
+            <span class="ticker-item">🍶 季節のおもてなし</span>
+            <span class="ticker-item">◈ {{NAME}}</span>
+        </div>
     </div>
-    <div class="hero-accent"></div>
-    <div class="hero-content">
-      <p class="hero-eyebrow">── JAPANESE CUISINE ──</p>
-      <div class="hero-title-wrap">
-        <h1 class="hero-title">{{NAME}}</h1>
-        <p class="hero-title-sub">日本料理<br />ご予約承り中</p>
-      </div>
-      <p class="hero-tagline">素材と向き合い、季節を皿に</p>
-      <div class="hero-cta">
-        <a href="tel:{{PHONE}}" class="hero-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
-          </svg>
-          ご予約はこちら
-        </a>
-      </div>
-    </div>
-    <div class="scroll-cue">
-      <div class="scroll-line"></div>
-      <span class="scroll-txt">SCROLL</span>
-    </div>
-  </section>
 
-  <!-- HOOK -->
-  <section id="hook">
-    <p class="hook-text reveal">素材の声を聞き、四季の恵みを皿の上に表現する。<br /><em>{{NAME}}</em> の料理は、日々の丁寧な仕事から生まれています。</p>
-  </section>
+    <!-- HERO -->
+    <section id="hero">
+        <div class="hero-bg">
+            <img src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=1400&q=85" alt="和食" />
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-accent"></div>
+        <div class="hero-content">
+            <p class="hero-eyebrow">── JAPANESE CUISINE ──</p>
+            <div class="hero-title-wrap">
+                <h1 class="hero-title">{{NAME}}</h1>
+                <p class="hero-title-sub">日本料理<br />ご予約承り中</p>
+            </div>
+            <p class="hero-tagline">素材と向き合い、季節を皿に</p>
+            <div class="hero-cta">
+                <a href="tel:{{PHONE}}" class="hero-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
+                    </svg>
+                    ご予約はこちら
+                </a>
+            </div>
+        </div>
+        <div class="scroll-cue">
+            <div class="scroll-line"></div>
+            <span class="scroll-txt">SCROLL</span>
+        </div>
+    </section>
 
-  <!-- CONCEPT -->
-  <section id="concept">
-    <div class="concept-inner">
-      <div class="reveal">
-        <p class="sec-eyebrow">── CONCEPT ──</p>
-        <h2 class="sec-title">一皿に込める<br />四季の心</h2>
-        <span class="sec-rule"></span>
-        <p class="concept-body">旬の食材だけが持つ、みずみずしい旨みと香り。丁寧に仕込まれた出汁が、それらをひとつの世界へとまとめあげます。派手さより深み、量より質を大切にしたひと皿をお届けします。</p>
-        <div class="concept-season">
-          <span class="c-pill">春</span><span class="c-pill">夏</span><span class="c-pill">秋</span><span
-            class="c-pill">冬</span>
+    <!-- HOOK -->
+    <section id="hook">
+        <p class="hook-text reveal">素材の声を聞き、四季の恵みを皿の上に表現する。<br /><em>{{NAME}}</em> の料理は、日々の丁寧な仕事から生まれています。</p>
+    </section>
+
+    <!-- CONCEPT -->
+    <section id="concept">
+        <div class="concept-inner">
+            <div class="reveal">
+                <p class="sec-eyebrow">── CONCEPT ──</p>
+                <h2 class="sec-title">一皿に込める<br />四季の心</h2>
+                <span class="sec-rule"></span>
+                <p class="concept-body">
+                    旬の食材だけが持つ、みずみずしい旨みと香り。丁寧に仕込まれた出汁が、それらをひとつの世界へとまとめあげます。派手さより深み、量より質を大切にしたひと皿をお届けします。</p>
+                <div class="concept-season">
+                    <span class="c-pill">春</span><span class="c-pill">夏</span><span class="c-pill">秋</span><span
+                        class="c-pill">冬</span>
+                </div>
+            </div>
+            <div class="reveal d2">
+                <div class="concept-img">
+                    <img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=700&q=85" alt="料理イメージ" />
+                    <div class="concept-img-frame"></div>
+                    <div class="img-notice fewron-demo">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="reveal d2">
-        <div class="concept-img">
-          <img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=700&q=85" alt="料理イメージ" />
-          <div class="concept-img-frame"></div>
-          <div class="img-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+    </section>
+
+    <!-- MENU -->
+    <section id="menu">
+        <div style="max-width:960px;margin:0 auto">
+            <div class="menu-hd reveal">
+                <p class="sec-eyebrow" style="color:var(--gold-lt)">── MENU ──</p>
+                <h2 class="sec-title" style="color:var(--washi)">お品書き</h2>
+                <span class="sec-rule"
+                    style="background:var(--gold-lt);margin:16px auto 0;display:block;width:36px;height:2px"></span>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-card reveal d1">
+                    <div class="menu-card-img">
+                        <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=85" alt="懐石コース" />
+                        <div class="img-notice fewron-demo">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+                    </div>
+                    <div class="menu-card-body">
+                        <p class="menu-card-name">旬の懐石コース</p>
+                        <div class="menu-card-rule"></div>
+                        <p class="menu-card-desc">季節の食材を使った全8品の本格懐石コース。前日までのご予約にて承ります。</p>
+                        <p class="menu-card-price">¥12,000〜</p>
+                    </div>
+                </div>
+                <div class="menu-card reveal d2">
+                    <div class="menu-card-img">
+                        <img src="https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=600&q=85" alt="御膳" />
+                        <div class="img-notice fewron-demo">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+                    </div>
+                    <div class="menu-card-body">
+                        <p class="menu-card-name">昼の御膳</p>
+                        <div class="menu-card-rule"></div>
+                        <p class="menu-card-desc">刺身・焼き物・煮物・ご飯・汁物・香の物の全6品をお楽しみください。</p>
+                        <p class="menu-card-price">¥3,800</p>
+                    </div>
+                </div>
+                <div class="menu-card reveal d3">
+                    <div class="menu-card-img">
+                        <img src="https://images.unsplash.com/photo-1559410545-0bdcd187e0a6?w=600&q=85" alt="おまかせ" />
+                        <div class="img-notice fewron-demo">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+                    </div>
+                    <div class="menu-card-body">
+                        <p class="menu-card-name">板前おまかせ</p>
+                        <div class="menu-card-rule"></div>
+                        <p class="menu-card-desc">その日の食材で板前が腕を振るう、一夜限りの特別コース。</p>
+                        <p class="menu-card-price">¥18,000〜</p>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-cta reveal">
+                <a href="tel:{{PHONE}}" class="reserve-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
+                    </svg>
+                    ご予約はお電話で
+                </a>
+                <p style="margin-top:10px;font-size:.7rem;color:rgba(255,255,255,.3);letter-spacing:.08em">
+                    コースはお一日前までのご予約にて承ります</p>
+            </div>
         </div>
-      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+        <div style="max-width:900px;margin:0 auto">
+            <div class="gal-hd reveal">
+                <p class="sec-eyebrow">── GALLERY ──</p>
+                <h2 class="sec-title">店内・料理</h2>
+                <span class="sec-rule"
+                    style="margin:16px auto 0;display:block;width:36px;height:2px;background:var(--crimson)"></span>
+            </div>
+            <div class="gal-grid reveal">
+                <div class="gal-item"><img
+                        src="https://images.unsplash.com/photo-1514190051997-0f6f39ca5cde?w=1200&q=85" alt="店内" />
+                    <div class="gal-notice fewron-demo">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+                </div>
+                <div class="gal-item"><img src="https://images.unsplash.com/photo-1607301405390-d831c242f59b?w=700&q=85"
+                        alt="料理" />
+                    <div class="gal-notice fewron-demo">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+                </div>
+                <div class="gal-item"><img src="https://images.unsplash.com/photo-1560963689-b5682b6440f8?w=700&q=85"
+                        alt="和食" />
+                    <div class="gal-notice fewron-demo">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INFO -->
+    <section id="info">
+        <div class="info-inner">
+            <div class="info-hd reveal">
+                <p class="sec-eyebrow">── ACCESS ──</p>
+                <h2 class="sec-title">店舗情報</h2>
+                <span class="sec-rule"
+                    style="margin:16px auto 0;display:block;width:36px;height:2px;background:var(--crimson)"></span>
+            </div>
+            <div class="reveal">
+                <div class="info-row"><span class="info-label">店名</span><span class="info-val">{{NAME}}</span></div>
+                <div class="info-row"><span class="info-label">住所</span><span class="info-val">{{ADDRESS}}</span></div>
+                <div class="info-row"><span class="info-label">電話</span><span class="info-val"><a
+                            href="tel:{{PHONE}}">{{PHONE}}</a></span></div>
+                <div class="info-row"><span class="info-label">予約</span><span class="info-val">お電話にてご予約ください</span></div>
+                <div class="map-wrap">
+                    <iframe
+                        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY&q={{NAME}}"
+                        allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="info-cta">
+                    <p class="info-cta-label">── ご予約・お問い合わせ ──</p>
+                    <a href="tel:{{PHONE}}" class="tel-big">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
+                        </svg>
+                        {{PHONE}}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEWRON BANNER -->
+    <div id="fewron-bar" class="fewron-demo">
+        <div class="fewron-inner">
+            <p class="fewron-text">🛠 このサイトはデモです。ウェブサイトがないお店は月約30人のお客様を逃している可能性があります。</p>
+            <span class="fewron-price">月々4,980円・初期費用なし</span>
+            <a href="{{PAYMENT_URL}}" target="_blank" class="fewron-btn">詳細を見る →</a>
+            <a href="{{PAYMENT_URL}}" target="_blank" class="fewron-btn"
+                style="background:var(--gold-lt);color:var(--ink)">🔓 決済して有効化</a>
+        </div>
     </div>
-  </section>
 
-  <!-- MENU -->
-  <section id="menu">
-    <div style="max-width:960px;margin:0 auto">
-      <div class="menu-hd reveal">
-        <p class="sec-eyebrow" style="color:var(--gold-lt)">── MENU ──</p>
-        <h2 class="sec-title" style="color:var(--washi)">お品書き</h2>
-        <span class="sec-rule"
-          style="background:var(--gold-lt);margin:16px auto 0;display:block;width:36px;height:2px"></span>
-      </div>
-      <div class="menu-grid">
-        <div class="menu-card reveal d1">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=85" alt="懐石コース" />
-            <div class="img-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
-          </div>
-          <div class="menu-card-body">
-            <p class="menu-card-name">旬の懐石コース</p>
-            <div class="menu-card-rule"></div>
-            <p class="menu-card-desc">季節の食材を使った全8品の本格懐石コース。前日までのご予約にて承ります。</p>
-            <p class="menu-card-price">¥12,000〜</p>
-          </div>
-        </div>
-        <div class="menu-card reveal d2">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=600&q=85" alt="御膳" />
-            <div class="img-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
-          </div>
-          <div class="menu-card-body">
-            <p class="menu-card-name">昼の御膳</p>
-            <div class="menu-card-rule"></div>
-            <p class="menu-card-desc">刺身・焼き物・煮物・ご飯・汁物・香の物の全6品をお楽しみください。</p>
-            <p class="menu-card-price">¥3,800</p>
-          </div>
-        </div>
-        <div class="menu-card reveal d3">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1559410545-0bdcd187e0a6?w=600&q=85" alt="おまかせ" />
-            <div class="img-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
-          </div>
-          <div class="menu-card-body">
-            <p class="menu-card-name">板前おまかせ</p>
-            <div class="menu-card-rule"></div>
-            <p class="menu-card-desc">その日の食材で板前が腕を振るう、一夜限りの特別コース。</p>
-            <p class="menu-card-price">¥18,000〜</p>
-          </div>
-        </div>
-      </div>
-      <div class="menu-cta reveal">
-        <a href="tel:{{PHONE}}" class="reserve-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
-          </svg>
-          ご予約はお電話で
-        </a>
-        <p style="margin-top:10px;font-size:.7rem;color:rgba(255,255,255,.3);letter-spacing:.08em">コースはお一日前までのご予約にて承ります
-        </p>
-      </div>
-    </div>
-  </section>
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-ornament">◈ ◈ ◈</div>
+        <p class="footer-name">{{NAME}}</p>
+        <p class="footer-copy">© 2026 {{NAME}}. All rights reserved. | Powered by <a href="{{PAYMENT_URL}}"
+                style="color:var(--gold-lt)">Fewron</a></p>
+    </footer>
 
-  <!-- GALLERY -->
-  <section id="gallery">
-    <div style="max-width:900px;margin:0 auto">
-      <div class="gal-hd reveal">
-        <p class="sec-eyebrow">── GALLERY ──</p>
-        <h2 class="sec-title">店内・料理</h2>
-        <span class="sec-rule"
-          style="margin:16px auto 0;display:block;width:36px;height:2px;background:var(--crimson)"></span>
-      </div>
-      <div class="gal-grid reveal">
-        <div class="gal-item"><img src="https://images.unsplash.com/photo-1514190051997-0f6f39ca5cde?w=1200&q=85"
-            alt="店内" />
-          <div class="gal-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
-        </div>
-        <div class="gal-item"><img src="https://images.unsplash.com/photo-1607301405390-d831c242f59b?w=700&q=85"
-            alt="料理" />
-          <div class="gal-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
-        </div>
-        <div class="gal-item"><img src="https://images.unsplash.com/photo-1560963689-b5682b6440f8?w=700&q=85"
-            alt="和食" />
-          <div class="gal-notice">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- INFO -->
-  <section id="info">
-    <div class="info-inner">
-      <div class="info-hd reveal">
-        <p class="sec-eyebrow">── ACCESS ──</p>
-        <h2 class="sec-title">店舗情報</h2>
-        <span class="sec-rule"
-          style="margin:16px auto 0;display:block;width:36px;height:2px;background:var(--crimson)"></span>
-      </div>
-      <div class="reveal">
-        <div class="info-row"><span class="info-label">店名</span><span class="info-val">{{NAME}}</span></div>
-        <div class="info-row"><span class="info-label">住所</span><span class="info-val">{{ADDRESS}}</span></div>
-        <div class="info-row"><span class="info-label">電話</span><span class="info-val"><a
-              href="tel:{{PHONE}}">{{PHONE}}</a></span></div>
-        <div class="info-row"><span class="info-label">予約</span><span class="info-val">お電話にてご予約ください</span></div>
-        <div class="map-wrap">
-          <iframe
-            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY&q={{NAME}}"
-            allowfullscreen loading="lazy"></iframe>
-        </div>
-        <div class="info-cta">
-          <p class="info-cta-label">── ご予約・お問い合わせ ──</p>
-          <a href="tel:{{PHONE}}" class="tel-big">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
+    <!-- FLOAT TEL -->
+    <div id="float-tel">
+        <a href="tel:{{PHONE}}" class="float-tel-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
             </svg>
-            {{PHONE}}
-          </a>
-        </div>
-      </div>
+            今すぐ電話する &nbsp;{{PHONE}}
+        </a>
     </div>
-  </section>
 
-  <!-- FEWRON BANNER -->
-  <div id="fewron-bar">
-    <div class="fewron-inner">
-      <p class="fewron-text">🛠 このサイトはデモです。ウェブサイトがないお店は月約30人のお客様を逃している可能性があります。</p>
-      <span class="fewron-price">月々4,980円・初期費用なし</span>
-      <a href="https://fewron.jp" target="_blank" class="fewron-btn">詳細を見る →</a>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-ornament">◈ ◈ ◈</div>
-    <p class="footer-name">{{NAME}}</p>
-    <p class="footer-copy">© 2026 {{NAME}}. All rights reserved. | Powered by <a href="https://fewron.jp"
-        style="color:var(--gold-lt)">Fewron</a></p>
-  </footer>
-
-  <!-- FLOAT TEL -->
-  <div id="float-tel">
-    <a href="tel:{{PHONE}}" class="float-tel-btn">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path
-          d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
-      </svg>
-      今すぐ電話する &nbsp;{{PHONE}}
-    </a>
-  </div>
-
-  <script>
-    (function () {
-      var nav = document.getElementById('nav');
-      window.addEventListener('scroll', function () { nav.classList.toggle('scrolled', scrollY > 60) });
-      var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('visible') }) }, { threshold: .12 });
-      document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el) });
-      // Show popup after 2s
-      setTimeout(function () {
-        var p = document.getElementById('popup-overlay');
-        if (p) p.style.display = 'flex';
-      }, 10000);
-    })();
-  </script>
+    <script>
+        var isPaid = {{ IS_PAID }};
+        (function () {
+            document.documentElement.classList.add('js-ready');
+            var nav = document.getElementById('nav');
+            window.addEventListener('scroll', function () { nav.classList.toggle('scrolled', scrollY > 60) });
+            var io = new IntersectionObserver(function (es) {
+                es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('visible') });
+            }, { threshold: .12 });
+            document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el) });
+            if (isPaid === true) {
+                document.querySelectorAll('.fewron-demo').forEach(function (el) { el.remove() });
+            } else {
+                setTimeout(function () {
+                    var p = document.getElementById('popup-overlay');
+                    if (p) p.style.display = 'flex';
+                }, 7000);
+            }
+        })();
+    </script>
 </body>
 
 </html>
