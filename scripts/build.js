@@ -16,8 +16,8 @@ const SEARCH_QUERIES = AREAS.flatMap(area => GENRES.map(genre => `${area} ${genr
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function main() {
-    let generatedCount = 0; // 💡 生成件数カウンター
-    const MAX_GENERATE = 10; // 💡 最大10件
+    let generatedCount = 0;
+    const MAX_GENERATE = 10;
 
     try {
         if (!API_KEY) return console.error('❌ APIキーが設定されていません');
@@ -35,7 +35,7 @@ async function main() {
         const currentYear = new Date().getFullYear();
 
         for (const query of SEARCH_QUERIES) {
-            if (generatedCount >= MAX_GENERATE) break; // 💡 10件超えたら検索ループを抜ける
+            if (generatedCount >= MAX_GENERATE) break;
 
             console.log(`🔎 検索中: ${query}`);
             const searchRes = await axios.get(`https://maps.googleapis.com/maps/api/place/textsearch/json`, {
@@ -45,7 +45,7 @@ async function main() {
             if (!searchRes.data.results || searchRes.data.results.length === 0) continue;
 
             for (const place of searchRes.data.results) {
-                if (generatedCount >= MAX_GENERATE) break; // 💡 10件超えたら店舗ループを抜ける
+                if (generatedCount >= MAX_GENERATE) break;
                 if (savedPlaces.some(p => p.place_id === place.place_id)) continue;
 
                 console.log(`--- 調査中: ${place.name} ---`);
@@ -64,24 +64,24 @@ async function main() {
                     const data = details.data.result;
                     if (!data) continue;
 
-                    // 💡 Instagram判定ロジックの追加
+                    // --- Instagram判定 & URL保持 ---
+                    let instaUrl = 'なし';
                     if (data.website) {
                         const isInstagram = data.website.includes('instagram.com');
                         if (isInstagram) {
-                            console.log(`  📸 インスタ発見！(サイトなしと判定して続行)`);
+                            instaUrl = data.website;
+                            console.log(`  📸 インスタ発見！: ${instaUrl}`);
                         } else {
                             console.log(`  ⏩ スキップ: 公式サイトあり (${data.website})`);
                             continue;
                         }
                     }
 
-                    // --- テンプレート自動判定 ---
                     // --- 強化版：テンプレート自動判定ロジック ---
                     let tempName = 'default.html';
                     const types = data.types || [];
                     const name = data.name || "";
 
-                    // 判定用ヘルパー
                     const hasType = (t) => types.includes(t);
                     const hasName = (re) => re.test(name);
 
@@ -97,7 +97,6 @@ async function main() {
                         tempName = 'shokudo.html';
                     }
 
-                    // テンプレートファイルの存在確認
                     const templatePath = path.join(rootDir, 'template', tempName);
                     let finalPath = templatePath;
                     if (!await fs.pathExists(templatePath)) {
@@ -109,7 +108,6 @@ async function main() {
                     const html = templateHtml
                         .replace(/{{NAME}}/g, data.name || '')
                         .replace(/{{ADDRESS}}/g, data.formatted_address || '')
-                        // 💡 ここに下の1行を追加！
                         .replace(/{{MAP_QUERY}}/g, encodeURIComponent(data.formatted_address || data.name))
                         .replace(/{{PHONE}}/g, data.formatted_phone_number || '情報なし')
                         .replace(/{{RATING}}/g, data.rating || 'ー')
@@ -125,15 +123,17 @@ async function main() {
                     savedPlaces.push({ place_id: data.place_id, name: data.name, fileName: fileName });
 
                     const targetUrl = `${DOMAIN}/shops/${fileName}`;
-                    const csvLine = `"${data.name}","${data.formatted_phone_number || 'N/A'}","${targetUrl}","${query}","未決済"\n`;
+
+                    // --- CSV書き出しの修正 (インスタURLを追加) ---
+                    const csvLine = `"${data.name}","${data.formatted_phone_number || 'N/A'}","${instaUrl}","${targetUrl}","${query}","未決済"\n`;
                     const absCsvPath = path.join(rootDir, CSV_PATH);
                     if (!await fs.pathExists(absCsvPath)) {
-                        await fs.writeFile(absCsvPath, '店名,電話番号,発行URL,取得元エリア業種,決済ステータス\n');
+                        await fs.writeFile(absCsvPath, '店名,電話番号,インスタURL,発行URL,取得元エリア業種,決済ステータス\n');
                     }
                     await fs.appendFile(absCsvPath, csvLine);
 
                     console.log(`  ✅ 生成完了 (${tempName}): ${fileName}`);
-                    generatedCount++; // 💡 生成に成功したらカウントアップ
+                    generatedCount++;
 
                 } catch (innerErr) {
                     console.error(`  ❌ 個別エラー: ${innerErr.message}`);
