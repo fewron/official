@@ -3,7 +3,16 @@ const fs = require('fs-extra');
 const path = require('path');
 require('dotenv').config();
 
-const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+// ==========================================
+// 設定エリア
+// ==========================================
+
+// 1. 収集用APIキー（.envから読み込み / 制限なし or IP制限）
+const COLLECT_KEY = process.env.GOOGLE_MAPS_API_KEY;
+
+// 2. 表示用APIキー（HTMLに埋め込む用 / HTTPリファラー制限をかけたもの）
+const PUBLIC_MAP_KEY = "AIzaSyDddJPdf5Iv6ytS7cBLj-uwWi7-oDteyhg";
+
 const JSON_PATH = './data/places.json';
 const CSV_PATH = './manage.csv';
 const DOMAIN = 'https://fewron.jp';
@@ -20,7 +29,7 @@ async function main() {
     const MAX_GENERATE = 10;
 
     try {
-        if (!API_KEY) return console.error('❌ APIキーが設定されていません');
+        if (!COLLECT_KEY) return console.error('❌ 収集用APIキーが設定されていません');
 
         const rootDir = process.cwd();
         await fs.ensureDir(path.join(rootDir, 'data'));
@@ -39,7 +48,7 @@ async function main() {
 
             console.log(`🔎 検索中: ${query}`);
             const searchRes = await axios.get(`https://maps.googleapis.com/maps/api/place/textsearch/json`, {
-                params: { query: query, key: API_KEY, language: 'ja' }
+                params: { query: query, key: COLLECT_KEY, language: 'ja' }
             });
 
             if (!searchRes.data.results || searchRes.data.results.length === 0) continue;
@@ -56,7 +65,7 @@ async function main() {
                         params: {
                             place_id: place.place_id,
                             fields: 'name,formatted_address,formatted_phone_number,place_id,types,rating,user_ratings_total,website',
-                            key: API_KEY,
+                            key: COLLECT_KEY,
                             language: 'ja'
                         }
                     });
@@ -64,28 +73,30 @@ async function main() {
                     const data = details.data.result;
                     if (!data) continue;
 
-                    // --- Instagram判定 & URL保持 ---
+                    // --- サイト判定 & URL保持 ---
                     let instaUrl = 'なし';
+                    let tabelogUrl = 'なし';
+
                     if (data.website) {
-                        const isInstagram = data.website.includes('instagram.com');
-                        if (isInstagram) {
-                            instaUrl = data.website;
-                            console.log(`  📸 インスタ発見！: ${instaUrl}`);
+                        const ws = data.website;
+                        if (ws.includes('instagram.com')) {
+                            instaUrl = ws;
+                        } else if (ws.includes('tabelog.com')) {
+                            tabelogUrl = ws;
                         } else {
-                            console.log(`  ⏩ スキップ: 公式サイトあり (${data.website})`);
+                            console.log(`  ⏩ スキップ: 公式サイトあり (${ws})`);
                             continue;
                         }
                     }
 
-                    // --- 強化版：テンプレート自動判定ロジック ---
+                    // --- テンプレート自動判定 ---
                     let tempName = 'default.html';
                     const types = data.types || [];
                     const name = data.name || "";
-
                     const hasType = (t) => types.includes(t);
                     const hasName = (re) => re.test(name);
 
-                    if (hasType('ramen_restaurant') || hasName(/ラーメン|らーめん|中華そば|担々麺|つけ麺|麺屋|拉麺/)) {
+                    if (hasType('ramen_restaurant') || hasName(/ラーメン|らーめん|中華そば|担々麺|麺|つけ麺|麺屋|拉麺/)) {
                         tempName = 'ramen.html';
                     } else if (hasType('cafe') || hasType('bakery') || hasName(/カフェ|喫茶|スイーツ|デザート|パンケーキ|珈琲|コーヒー|焙煎/)) {
                         tempName = 'cafe.html';
@@ -105,10 +116,13 @@ async function main() {
 
                     const templateHtml = await fs.readFile(finalPath, 'utf-8');
                     const paymentUrl = `${STRIPE_LINK}?client_reference_id=${data.place_id}`;
+
+                    // --- HTML内の置換（APIキーの埋め込み含む） ---
                     const html = templateHtml
                         .replace(/{{NAME}}/g, data.name || '')
                         .replace(/{{ADDRESS}}/g, data.formatted_address || '')
                         .replace(/{{MAP_QUERY}}/g, encodeURIComponent(data.formatted_address || data.name))
+                        .replace(/{{GOOGLE_MAPS_API_KEY}}/g, PUBLIC_MAP_KEY) // 💡 表示用キーを埋める
                         .replace(/{{PHONE}}/g, data.formatted_phone_number || '情報なし')
                         .replace(/{{RATING}}/g, data.rating || 'ー')
                         .replace(/{{REVIEWS}}/g, data.user_ratings_total || '0')
@@ -121,14 +135,16 @@ async function main() {
                     await fs.writeFile(path.join(rootDir, 'shops', fileName), html);
 
                     savedPlaces.push({ place_id: data.place_id, name: data.name, fileName: fileName });
-
                     const targetUrl = `${DOMAIN}/shops/${fileName}`;
 
-                    // --- CSV書き出しの修正 (インスタURLを追加) ---
-                    const csvLine = `"${data.name}","${data.formatted_phone_number || 'N/A'}","${instaUrl}","${targetUrl}","${query}","未決済"\n`;
+                    // --- 営業メッセージ作成 ---
+                    const message = `${data.name}様 突然のご連絡失礼いたします。Fewronの横山恒正です。現在、${data.name}様の情報を拝見し、インターネットからの集客を最大化するための「${data.name}様専用のホームページ」を独自に作成いたしました。 ▼${data.name}様専用ページ ${targetUrl} こちらの写真等はデモ画像ですが、月4,980円のみ、初期費用、変更費用全て0円で、食べログ等では表現しきれない「お店の雰囲気」を全面に出したデザインに変更し、自動運用してまいります。 現在、地域の数店舗限定で無料提供しておりますので、ぜひ一度ご確認いただけますと幸いです。ご興味がございましたら折り返しご連絡いただけると幸いです。`;
+
+                    // --- CSV書き出し ---
+                    const csvLine = `"${data.name}","${data.formatted_phone_number || 'N/A'}","${instaUrl}","${tabelogUrl}","${targetUrl}","${message}","${query}","未決済"\n`;
                     const absCsvPath = path.join(rootDir, CSV_PATH);
                     if (!await fs.pathExists(absCsvPath)) {
-                        await fs.writeFile(absCsvPath, '店名,電話番号,インスタURL,発行URL,取得元エリア業種,決済ステータス\n');
+                        await fs.writeFile(absCsvPath, '店名,電話番号,インスタURL,食べログURL,発行URL,営業メッセージ,取得元エリア業種,決済ステータス\n');
                     }
                     await fs.appendFile(absCsvPath, csvLine);
 
