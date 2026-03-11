@@ -122,7 +122,7 @@ async function main() {
                     const hasType = (t) => types.includes(t);
                     const hasName = (re) => re.test(name);
 
-                    if (hasType('ramen_restaurant') || hasName(/ラーメン|らーめん|中華そば|担々麺|つけ麺|麺屋|拉麺/)) {
+                    if (hasType('ramen_restaurant') || hasName(/ラーメン|らーめん|中華そば|中華蕎麦|担々麺|つけ麺|麺屋|拉麺/)) {
                         tempName = 'ramen.html';
                     } else if (hasType('cafe') || hasType('bakery') || hasName(/カフェ|喫茶|スイーツ|デザート|パンケーキ|珈琲|コーヒー|焙煎/)) {
                         tempName = 'cafe.html';
@@ -163,7 +163,7 @@ async function main() {
                     const targetUrl = `${DOMAIN}/shops/${fileName}`;
 
                     // --- 営業メッセージ作成 ---
-                    const message = `${data.name}様 突然のご連絡失礼いたします。Fewronの横山恒正です。現在、${data.name}様の情報を拝見し、インターネットからの集客を最大化するための「${data.name}様専用のホームページ」を独自に作成いたしました。 ▼${data.name}様専用ページ ${targetUrl} こちらの写真等はデモ画像ですが、月4,980円のみ、初期費用、変更費用全て0円で、食べログ等では表現しきれない「お店の雰囲気」を全面に出したデザインに変更し、自動運用してまいります。 現在、地域の数店舗限定で無料提供しておりますので、ぜひ一度ご確認いただけますと幸いです。ご興味がございましたら折り返しご連絡いただけると幸いです。`;
+                    const message = `${data.name}様 突然のご連絡失礼いたします。Fewronの横山恒正です。現在、${data.name}様の情報を拝見し、インターネットからの集客を最大化するための「${data.name}様専用のホームページ」を独自に作成いたしました。 ▼${data.name}様専用ページ ${targetUrl} こちらの写真等はデモ画像ですが、月4,980円のみ、初期費用、変更費用全て0円で、食べログ等では表現しきれない「お店の雰囲気」を全面に出したデザインに変更し、自動運用してまいります。変更等はinstagramのDMやLINEなどから受け付けております。現在、地域の数店舗限定で無料提供しておりますので、ぜひ一度ご確認いただけますと幸いです。ご興味がございましたら折り返しご連絡いただけると幸いです。`;
 
                     const csvLine = `"${data.name}","${data.formatted_phone_number || 'N/A'}","${instaUrl}","${tabelogUrl}","${targetUrl}","${message}","${query}","未決済"\n`;
                     const absCsvPath = path.join(rootDir, CSV_PATH);

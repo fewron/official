@@ -1,0 +1,1442 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Beco's Grill Bar | 居酒屋</title>
+    <meta name="description" content="Beco's Grill Bar（日本、〒400-0032 山梨県甲府市中央１丁目６−１１ 芳野ビル 1階）。ご予約・お問い合わせはお電話にて。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Yomogi&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden
+        }
+
+        body {
+            font-family: 'Zen Maru Gothic', sans-serif;
+            background: #1a0e00;
+            color: #fff3e0;
+            overflow-x: hidden;
+            max-width: 100vw
+        }
+
+        :root {
+            --orange: #FF6B00;
+            --orange-lt: #FF8C00;
+            --orange-pale: #fff3e0;
+            --yellow: #FFD700;
+            --yellow-lt: #FFE44D;
+            --red: #E03030;
+            --red-lt: #FF4444;
+            --dark: #1a0e00;
+            --dark2: #251500;
+            --dark3: #321a00;
+            --warm: #fff3e0;
+            --warm-mid: #f5d9a8;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit
+        }
+
+        img {
+            display: block;
+            max-width: 100%
+        }
+
+        /* IZAKAYA GLOW EFFECT */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(255, 107, 0, .08) 0%, transparent 70%)
+        }
+
+        /* LANTERN ORNAMENTS (CSS only) */
+        .lantern {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0
+        }
+
+        .lantern-top {
+            width: 8px;
+            height: 6px;
+            background: var(--yellow);
+            border-radius: 50% 50% 0 0
+        }
+
+        .lantern-body {
+            width: 24px;
+            height: 38px;
+            background: linear-gradient(180deg, var(--red) 0%, var(--orange) 50%, var(--red) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 12px rgba(255, 107, 0, .6)
+        }
+
+        .lantern-body span {
+            font-size: .55rem;
+            color: #fff;
+            font-family: 'Yomogi', cursive;
+            writing-mode: vertical-rl
+        }
+
+        .lantern-bot {
+            width: 4px;
+            height: 8px;
+            background: var(--yellow-lt);
+            border-radius: 0 0 50% 50%
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(22px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes swing {
+
+            0%,
+            100% {
+                transform: rotate(-3deg)
+            }
+
+            50% {
+                transform: rotate(3deg)
+            }
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                text-shadow: 0 0 10px rgba(255, 215, 0, .5)
+            }
+
+            50% {
+                text-shadow: 0 0 20px rgba(255, 215, 0, .9), 0 0 40px rgba(255, 107, 0, .4)
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-8px)
+            }
+        }
+
+        @keyframes pulse-warm {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 107, 0, .5)
+            }
+
+            50% {
+                box-shadow: 0 0 0 14px rgba(255, 107, 0, 0)
+            }
+        }
+
+        @keyframes ticker {
+            from {
+                transform: translateX(0)
+            }
+
+            to {
+                transform: translateX(-50%)
+            }
+        }
+
+        @keyframes sway {
+
+            0%,
+            100% {
+                transform: rotate(-4deg) translateY(0)
+            }
+
+            50% {
+                transform: rotate(4deg) translateY(-3px)
+            }
+        }
+
+        .reveal {
+            opacity: 1;
+            transform: none;
+            transition: opacity .85s ease, transform .85s ease
+        }
+
+        .js-ready .reveal {
+            opacity: 0;
+            transform: translateY(24px)
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none
+        }
+
+        .reveal.d1 {
+            transition-delay: .1s
+        }
+
+        .reveal.d2 {
+            transition-delay: .22s
+        }
+
+        .reveal.d3 {
+            transition-delay: .34s
+        }
+
+        /* NAV */
+        #nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 58px;
+            transition: all .4s
+        }
+
+        #nav.scrolled {
+            background: rgba(26, 14, 0, .95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 107, 0, .3)
+        }
+
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .nav-logo {
+            font-family: 'Yomogi', cursive;
+            font-size: 1.2rem;
+            color: var(--yellow);
+            animation: glow 3s ease-in-out infinite
+        }
+
+        .nav-tel {
+            background: var(--orange);
+            color: #fff;
+            padding: 7px 16px;
+            border-radius: 20px;
+            font-size: .76rem;
+            letter-spacing: .08em;
+            font-weight: 700;
+            transition: all .3s
+        }
+
+        .nav-tel:hover {
+            background: var(--orange-lt);
+            transform: scale(1.04)
+        }
+
+        /* DEMO BAR */
+        #demo-bar {
+            position: fixed;
+            top: 58px;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            background: rgba(0, 0, 0, .9);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255, 215, 0, .2);
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .demo-label {
+            font-size: .68rem;
+            color: rgba(255, 255, 255, .5);
+            letter-spacing: .05em
+        }
+
+        .demo-price {
+            font-size: .72rem;
+            color: var(--yellow);
+            letter-spacing: .06em
+        }
+
+        .demo-price strong {
+            font-weight: 700
+        }
+
+        .demo-link {
+            font-size: .7rem;
+            color: var(--yellow);
+            border: 1px solid var(--yellow);
+            padding: 3px 10px;
+            border-radius: 10px;
+            letter-spacing: .06em;
+            transition: all .3s
+        }
+
+        .demo-link:hover {
+            background: var(--yellow);
+            color: var(--dark)
+        }
+
+        /* POPUP */
+        #popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .8);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeUp .4s ease
+        }
+
+        #popup {
+            background: var(--dark2);
+            max-width: 400px;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(255, 107, 0, .3);
+            border: 2px solid rgba(255, 215, 0, .2)
+        }
+
+        .popup-top {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--red) 100%);
+            padding: 22px 24px;
+            text-align: center;
+            position: relative
+        }
+
+        .popup-top::before {
+            content: '🍺';
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            opacity: .7
+        }
+
+        .popup-top::after {
+            content: '🍺';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            opacity: .7
+        }
+
+        .popup-top h2 {
+            font-family: 'Yomogi', cursive;
+            font-size: 1.1rem;
+            color: #fff;
+            letter-spacing: .1em;
+            line-height: 1.6
+        }
+
+        .popup-body {
+            padding: 22px 24px 26px
+        }
+
+        .popup-stat {
+            background: rgba(255, 107, 0, .15);
+            border: 1px solid rgba(255, 107, 0, .3);
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            text-align: center
+        }
+
+        .popup-stat strong {
+            font-family: 'Yomogi', cursive;
+            font-size: 2rem;
+            color: var(--yellow);
+            display: block;
+            line-height: 1.1;
+            animation: glow 2s ease-in-out infinite
+        }
+
+        .popup-stat span {
+            font-size: .75rem;
+            color: rgba(255, 255, 255, .6);
+            letter-spacing: .06em
+        }
+
+        .popup-text {
+            font-size: .82rem;
+            color: rgba(255, 243, 224, .7);
+            line-height: 2;
+            letter-spacing: .05em;
+            margin-bottom: 20px
+        }
+
+        .popup-text strong {
+            color: var(--yellow)
+        }
+
+        .popup-btn-primary {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--red) 100%);
+            color: #fff;
+            padding: 14px;
+            border-radius: 8px;
+            font-family: 'Yomogi', cursive;
+            font-size: 1rem;
+            letter-spacing: .1em;
+            text-align: center;
+            display: block;
+            transition: all .3s;
+            margin-bottom: 8px
+        }
+
+        .popup-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 107, 0, .5)
+        }
+
+        .popup-btn-close {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, .15);
+            color: rgba(255, 255, 255, .4);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: .78rem;
+            cursor: pointer;
+            width: 100%;
+            transition: border-color .3s;
+            font-family: 'Zen Maru Gothic', sans-serif
+        }
+
+        /* TICKER */
+        #ticker {
+            background: var(--orange);
+            overflow: hidden;
+            height: 36px;
+            margin-top: 90px
+        }
+
+        .ticker-track {
+            display: flex;
+            gap: 3rem;
+            animation: ticker 22s linear infinite;
+            white-space: nowrap;
+            padding: 0 2rem;
+            height: 100%;
+            align-items: center
+        }
+
+        .ticker-item {
+            font-size: .72rem;
+            letter-spacing: .12em;
+            color: #fff;
+            flex-shrink: 0;
+            font-weight: 700;
+            font-family: 'Yomogi', cursive
+        }
+
+        .ticker-sep {
+            color: var(--yellow);
+            font-size: 1rem
+        }
+
+        /* HERO */
+        #hero {
+            position: relative;
+            height: 100svh;
+            min-height: 580px;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 35%
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(26, 14, 0, .4) 0%, rgba(26, 14, 0, .15) 40%, rgba(26, 14, 0, .92) 100%)
+        }
+
+        /* Lanterns decoration */
+        .hero-lanterns {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 2
+        }
+
+        .hero-lantern-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: swing 3s ease-in-out infinite
+        }
+
+        .hero-lantern-item:nth-child(2) {
+            animation-delay: .5s
+        }
+
+        .hero-lantern-item:nth-child(3) {
+            animation-delay: 1s
+        }
+
+        .h-lantern-string {
+            width: 1px;
+            height: 20px;
+            background: rgba(255, 215, 0, .4)
+        }
+
+        .h-lantern-body {
+            width: 20px;
+            height: 30px;
+            background: linear-gradient(180deg, var(--red) 0%, var(--orange) 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 107, 0, .6);
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .h-lantern-body span {
+            font-size: .4rem;
+            color: #fff;
+            writing-mode: vertical-rl
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 24px 9vh;
+            width: 100%
+        }
+
+        .hero-eyebrow {
+            font-size: .65rem;
+            letter-spacing: .4em;
+            color: var(--yellow);
+            margin-bottom: 12px;
+            animation: fadeUp .8s ease .1s both
+        }
+
+        .hero-title {
+            font-family: 'Yomogi', cursive;
+            font-size: clamp(2.8rem, 9vw, 5.5rem);
+            color: #fff;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            animation: fadeUp .8s ease .25s both;
+            animation: glow 3s ease-in-out infinite, fadeUp .8s ease .25s both
+        }
+
+        .hero-sub {
+            font-size: .88rem;
+            letter-spacing: .2em;
+            color: rgba(255, 255, 255, .6);
+            margin-bottom: 10px;
+            animation: fadeUp .8s ease .38s both
+        }
+
+        .hero-icons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+            animation: fadeUp .8s ease .5s both;
+            font-size: 1.4rem
+        }
+
+        .hero-cta {
+            animation: fadeUp .8s ease .62s both
+        }
+
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--red) 100%);
+            color: #fff;
+            padding: 15px 32px;
+            border-radius: 30px;
+            font-family: 'Yomogi', cursive;
+            font-size: 1rem;
+            letter-spacing: .1em;
+            transition: all .3s;
+            box-shadow: 0 6px 24px rgba(255, 107, 0, .45);
+            animation: pulse-warm 2.6s infinite
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 36px rgba(255, 107, 0, .55)
+        }
+
+        .scroll-cue {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            animation: bounce 2.2s ease-in-out infinite;
+            opacity: .5
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 28px;
+            background: rgba(255, 255, 255, .5)
+        }
+
+        .scroll-txt {
+            font-size: .5rem;
+            letter-spacing: .38em;
+            color: #fff
+        }
+
+        /* HOOK */
+        #hook {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--red) 100%);
+            padding: 30px 24px;
+            text-align: center
+        }
+
+        .hook-text {
+            font-family: 'Yomogi', cursive;
+            font-size: clamp(.88rem, 2.5vw, 1.1rem);
+            color: #fff;
+            letter-spacing: .12em;
+            line-height: 2
+        }
+
+        .hook-text em {
+            font-style: normal;
+            color: var(--yellow-lt);
+            font-weight: 700
+        }
+
+        /* ATMOSPHERE */
+        #atmosphere {
+            padding: 72px 24px;
+            background: var(--dark2)
+        }
+
+        .atm-inner {
+            max-width: 900px;
+            margin: 0 auto
+        }
+
+        .sec-hd {
+            text-align: center;
+            margin-bottom: 48px
+        }
+
+        .sec-eyebrow {
+            font-size: .62rem;
+            letter-spacing: .45em;
+            color: var(--orange);
+            margin-bottom: 10px
+        }
+
+        .sec-title {
+            font-family: 'Yomogi', cursive;
+            font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+            letter-spacing: .15em;
+            color: var(--warm)
+        }
+
+        .sec-rule {
+            display: block;
+            width: 40px;
+            height: 3px;
+            background: var(--orange);
+            border-radius: 2px;
+            margin: 14px auto 0
+        }
+
+        .atm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 18px
+        }
+
+        .atm-card {
+            background: var(--dark3);
+            border-radius: 12px;
+            padding: 26px 22px;
+            text-align: center;
+            border: 1px solid rgba(255, 107, 0, .15);
+            transition: all .4s
+        }
+
+        .atm-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 107, 0, .4);
+            box-shadow: 0 16px 40px rgba(255, 107, 0, .12)
+        }
+
+        .atm-icon {
+            font-size: 2.6rem;
+            margin-bottom: 14px;
+            display: block;
+            animation: bounce 2s ease-in-out infinite
+        }
+
+        .atm-card:nth-child(2) .atm-icon {
+            animation-delay: .3s
+        }
+
+        .atm-card:nth-child(3) .atm-icon {
+            animation-delay: .6s
+        }
+
+        .atm-title {
+            font-family: 'Yomogi', cursive;
+            font-size: 1rem;
+            color: var(--yellow);
+            margin-bottom: 8px;
+            letter-spacing: .1em
+        }
+
+        .atm-desc {
+            font-size: .79rem;
+            color: rgba(255, 243, 224, .55);
+            line-height: 1.9;
+            letter-spacing: .05em
+        }
+
+        /* MENU */
+        #menu {
+            padding: 72px 24px;
+            background: var(--dark)
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 18px;
+            max-width: 960px;
+            margin: 0 auto
+        }
+
+        .menu-card {
+            background: var(--dark2);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 107, 0, .12);
+            transition: all .4s
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 107, 0, .35);
+            box-shadow: 0 16px 36px rgba(255, 107, 0, .1)
+        }
+
+        .menu-card-img {
+            height: 190px;
+            overflow: hidden;
+            position: relative
+        }
+
+        .menu-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .6s
+        }
+
+        .menu-card:hover .menu-card-img img {
+            transform: scale(1.07)
+        }
+
+        .img-notice {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, .6);
+            padding: 4px 8px;
+            font-size: .57rem;
+            color: rgba(255, 255, 255, .65);
+            text-align: center;
+            letter-spacing: .04em
+        }
+
+        .menu-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--orange);
+            color: #fff;
+            font-size: .6rem;
+            padding: 3px 10px;
+            border-radius: 10px;
+            letter-spacing: .07em;
+            font-weight: 700;
+            font-family: 'Yomogi', cursive
+        }
+
+        .menu-card-body {
+            padding: 16px 18px 20px
+        }
+
+        .menu-card-name {
+            font-family: 'Yomogi', cursive;
+            font-size: .98rem;
+            color: var(--warm);
+            margin-bottom: 6px;
+            letter-spacing: .1em
+        }
+
+        .menu-card-desc {
+            font-size: .76rem;
+            color: rgba(255, 243, 224, .55);
+            line-height: 1.85;
+            letter-spacing: .04em;
+            margin-bottom: 10px
+        }
+
+        .menu-card-price {
+            font-family: 'Yomogi', cursive;
+            font-size: 1.05rem;
+            color: var(--yellow);
+            font-weight: 900
+        }
+
+        .menu-cta {
+            text-align: center;
+            margin-top: 40px
+        }
+
+        .reserve-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--red) 100%);
+            color: #fff;
+            padding: 15px 36px;
+            border-radius: 30px;
+            font-family: 'Yomogi', cursive;
+            font-size: 1rem;
+            letter-spacing: .12em;
+            transition: all .3s;
+            box-shadow: 0 6px 20px rgba(255, 107, 0, .4)
+        }
+
+        .reserve-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(255, 107, 0, .55)
+        }
+
+        /* GALLERY */
+        #gallery {
+            padding: 72px 24px;
+            background: var(--dark3)
+        }
+
+        .gal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-width: 900px;
+            margin: 0 auto
+        }
+
+        .gal-item {
+            overflow: hidden;
+            border-radius: 8px;
+            position: relative
+        }
+
+        .gal-item:nth-child(1) {
+            grid-column: 1/-1;
+            height: 260px
+        }
+
+        .gal-item:nth-child(2),
+        .gal-item:nth-child(3) {
+            height: 190px
+        }
+
+        .gal-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .7s
+        }
+
+        .gal-item:hover img {
+            transform: scale(1.05)
+        }
+
+        .gal-notice {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, .55);
+            padding: 4px 10px;
+            font-size: .57rem;
+            color: rgba(255, 255, 255, .65);
+            text-align: center;
+            letter-spacing: .04em;
+            border-radius: 0 0 8px 8px
+        }
+
+        /* INFO */
+        #info {
+            padding: 72px 24px;
+            background: var(--dark)
+        }
+
+        .info-inner {
+            max-width: 640px;
+            margin: 0 auto
+        }
+
+        .info-row {
+            display: flex;
+            gap: 20px;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .07)
+        }
+
+        .info-row:first-child {
+            border-top: 1px solid rgba(255, 255, 255, .07)
+        }
+
+        .info-label {
+            font-family: 'Yomogi', cursive;
+            width: 68px;
+            flex-shrink: 0;
+            font-size: .72rem;
+            letter-spacing: .15em;
+            color: var(--orange);
+            padding-top: 2px
+        }
+
+        .info-val {
+            font-size: .83rem;
+            color: rgba(255, 243, 224, .65);
+            line-height: 2;
+            letter-spacing: .04em
+        }
+
+        .info-val a {
+            color: var(--yellow)
+        }
+
+        .map-wrap {
+            margin-top: 24px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 107, 0, .2)
+        }
+
+        .map-wrap iframe {
+            width: 100%;
+            height: 240px;
+            border: none;
+            display: block
+        }
+
+        .info-cta {
+            text-align: center;
+            margin-top: 32px
+        }
+
+        .info-cta-label {
+            font-size: .68rem;
+            letter-spacing: .3em;
+            color: var(--orange);
+            margin-bottom: 12px
+        }
+
+        .tel-big {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--red) 100%);
+            color: #fff;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-family: 'Yomogi', cursive;
+            font-size: 1.05rem;
+            letter-spacing: .12em;
+            transition: all .3s;
+            animation: pulse-warm 2.6s infinite
+        }
+
+        .tel-big:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(255, 107, 0, .5)
+        }
+
+        /* FEWRON */
+        #fewron-bar {
+            background: var(--dark2);
+            padding: 18px 24px;
+            text-align: center;
+            border-top: 2px solid var(--orange)
+        }
+
+        .fewron-inner {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 12px
+        }
+
+        .fewron-text {
+            font-size: .76rem;
+            color: rgba(255, 243, 224, .5);
+            letter-spacing: .07em
+        }
+
+        .fewron-price {
+            font-size: .9rem;
+            color: var(--yellow);
+            font-weight: 900;
+            font-family: 'Yomogi', cursive
+        }
+
+        .fewron-btn {
+            background: var(--orange);
+            color: #fff;
+            padding: 9px 22px;
+            border-radius: 20px;
+            font-size: .78rem;
+            letter-spacing: .1em;
+            font-weight: 700;
+            font-family: 'Yomogi', cursive;
+            transition: all .3s;
+            white-space: nowrap
+        }
+
+        .fewron-btn:hover {
+            background: var(--orange-lt);
+            transform: translateY(-1px)
+        }
+
+        /* FLOAT TEL */
+        #float-tel {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 90;
+            white-space: nowrap
+        }
+
+        .float-tel-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--red) 100%);
+            color: #fff;
+            padding: 13px 26px;
+            border-radius: 30px;
+            font-family: 'Yomogi', cursive;
+            font-size: .9rem;
+            letter-spacing: .1em;
+            font-weight: 700;
+            box-shadow: 0 8px 28px rgba(255, 107, 0, .5);
+            animation: pulse-warm 2.6s infinite;
+            transition: transform .3s
+        }
+
+        .float-tel-btn:hover {
+            transform: translateX(-50%) translateY(-2px)
+        }
+
+        /* FOOTER */
+        footer {
+            background: #0f0800;
+            padding: 36px 24px;
+            text-align: center
+        }
+
+        .footer-deco {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            letter-spacing: .5em
+        }
+
+        .footer-name {
+            font-family: 'Yomogi', cursive;
+            font-size: 1.1rem;
+            letter-spacing: .25em;
+            color: rgba(255, 243, 224, .5);
+            margin-bottom: 8px;
+            animation: glow 3s ease-in-out infinite
+        }
+
+        .footer-copy {
+            font-size: .62rem;
+            color: rgba(255, 255, 255, .2);
+            letter-spacing: .1em
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- POPUP -->
+    <div id="popup-overlay" class="fewron-demo">
+        <div id="popup">
+            <div class="popup-top">
+                <h2>ホームページがないと<br />こんなに損しています！🍻</h2>
+            </div>
+            <div class="popup-body">
+                <div class="popup-stat">
+                    <strong>月約30人</strong>
+                    <span>のお客様を逃している可能性があります</span>
+                </div>
+                <p class="popup-text">
+                    スマホで「近くの居酒屋」を探す人が６割。ホームページがなければ、せっかくのお客様に見つけてもらえません。<br /><br />Fewronなら<strong>月々4,980円</strong>で専用サイト完成。<strong>初期費用・追加費用一切なし</strong>。
+                </p>
+                <a href="https://buy.stripe.com/eVq6oH4Wi4MLbjb3A93Je00?client_reference_id=ChIJ22nkwT35G2ARhRebvZULnLk" target="_blank" class="popup-btn-primary">🔥 詳しく見る → fewron.jp</a>
+                <button class="popup-btn-close"
+                    onclick="document.getElementById('popup-overlay').style.display='none'">後で見る</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAV -->
+    <nav id="nav">
+        <div class="nav-inner">
+            <div class="nav-logo">🏮 Beco's Grill Bar</div>
+            <a href="tel:090-4712-3510" class="nav-tel">☎ 090-4712-3510</a>
+        </div>
+    </nav>
+
+    <!-- DEMO BAR -->
+    <div id="demo-bar" class="fewron-demo">
+        <span class="demo-label">🛠 デモサイトです</span>
+        <span class="demo-price"><strong>月々4,980円</strong>で本物のサイトに</span>
+        <a href="https://buy.stripe.com/eVq6oH4Wi4MLbjb3A93Je00?client_reference_id=ChIJ22nkwT35G2ARhRebvZULnLk" target="_blank" class="demo-link">詳細を見る →</a>
+        <a href="https://buy.stripe.com/eVq6oH4Wi4MLbjb3A93Je00?client_reference_id=ChIJ22nkwT35G2ARhRebvZULnLk" target="_blank" class="demo-link"
+            style="background:var(--orange);color:#fff;border-color:var(--orange)">🔓 決済して有効化</a>
+    </div>
+
+    <!-- TICKER -->
+    <div id="ticker">
+        <div class="ticker-track">
+            <span class="ticker-item">🍺 生ビール最高！</span>
+            <span class="ticker-sep">★</span>
+            <span class="ticker-item">☎ ご予約 090-4712-3510</span>
+            <span class="ticker-sep">★</span>
+            <span class="ticker-item">🥩 毎日新鮮食材入荷</span>
+            <span class="ticker-sep">★</span>
+            <span class="ticker-item">Beco's Grill Bar</span>
+            <span class="ticker-sep">★</span>
+            <span class="ticker-item">🍺 生ビール最高！</span>
+            <span class="ticker-sep">★</span>
+            <span class="ticker-item">☎ ご予約 090-4712-3510</span>
+            <span class="ticker-sep">★</span>
+            <span class="ticker-item">🥩 毎日新鮮食材入荷</span>
+            <span class="ticker-sep">★</span>
+            <span class="ticker-item">Beco's Grill Bar</span>
+            <span class="ticker-sep">★</span>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <section id="hero">
+        <div class="hero-bg">
+            <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=1400&q=85" alt="居酒屋" />
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-lanterns">
+            <div class="hero-lantern-item">
+                <div class="h-lantern-string"></div>
+                <div class="h-lantern-body"><span>歓</span></div>
+            </div>
+            <div class="hero-lantern-item">
+                <div class="h-lantern-string"></div>
+                <div class="h-lantern-body"><span>迎</span></div>
+            </div>
+        </div>
+        <div class="hero-content">
+            <p class="hero-eyebrow">── IZAKAYA ──</p>
+            <h1 class="hero-title">Beco's Grill Bar</h1>
+            <p class="hero-sub">毎晩笑顔が集まる場所</p>
+            <div class="hero-icons">🍺 🥩 🍣 🍶 🎵</div>
+            <div class="hero-cta">
+                <a href="tel:090-4712-3510" class="hero-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
+                    </svg>
+                    今すぐ予約する
+                </a>
+            </div>
+        </div>
+        <div class="scroll-cue">
+            <div class="scroll-line"></div>
+            <span class="scroll-txt">SCROLL</span>
+        </div>
+    </section>
+
+    <!-- HOOK -->
+    <section id="hook">
+        <p class="hook-text reveal">仕事終わりの一杯、友人との語らい、大切な記念日。<br /><em>Beco's Grill Bar</em> でいつもの日常をちょっと特別な夜に。</p>
+    </section>
+
+    <!-- ATMOSPHERE -->
+    <section id="atmosphere">
+        <div class="atm-inner">
+            <div class="sec-hd reveal">
+                <p class="sec-eyebrow">── ABOUT ──</p>
+                <h2 class="sec-title">Beco's Grill Bar の魅力</h2>
+                <span class="sec-rule"></span>
+            </div>
+            <div class="atm-grid">
+                <div class="atm-card reveal d1">
+                    <span class="atm-icon">🍺</span>
+                    <p class="atm-title">冷えたジョッキ</p>
+                    <p class="atm-desc">キンキンに冷やしたジョッキで提供する生ビール。一口目の感動をお届けします。</p>
+                </div>
+                <div class="atm-card reveal d2">
+                    <span class="atm-icon">🥩</span>
+                    <p class="atm-title">新鮮な食材</p>
+                    <p class="atm-desc">毎朝市場から直接仕入れた新鮮な食材を、職人が丁寧に調理します。</p>
+                </div>
+                <div class="atm-card reveal d3">
+                    <span class="atm-icon">😄</span>
+                    <p class="atm-title">笑顔のスタッフ</p>
+                    <p class="atm-desc">元気いっぱいのスタッフが皆様をお待ちしています。お気軽にどうぞ！</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MENU -->
+    <section id="menu">
+        <div style="max-width:960px;margin:0 auto">
+            <div class="sec-hd reveal">
+                <p class="sec-eyebrow">── MENU ──</p>
+                <h2 class="sec-title">おすすめメニュー</h2>
+                <span class="sec-rule"></span>
+            </div>
+            <div class="menu-grid" style="margin-top:40px">
+                <div class="menu-card reveal d1">
+                    <div class="menu-card-img">
+                        <img src="https://images.unsplash.com/photo-1529042410759-befb1204b468?w=600&q=85" alt="唐揚げ" />
+                        <div class="menu-tag">人気No.1</div>
+                        <div class="img-notice fewron-demo">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+                    </div>
+                    <div class="menu-card-body">
+                        <p class="menu-card-name">自家製 特製唐揚げ</p>
+                        <p class="menu-card-desc">秘伝タレに漬け込んだジューシーな唐揚げ。サクサクの衣がたまりません！</p>
+                        <p class="menu-card-price">¥680</p>
+                    </div>
+                </div>
+                <div class="menu-card reveal d2">
+                    <div class="menu-card-img">
+                        <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=85" alt="刺身" />
+                        <div class="img-notice fewron-demo">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+                    </div>
+                    <div class="menu-card-body">
+                        <p class="menu-card-name">本日の刺身盛り合わせ</p>
+                        <p class="menu-card-desc">その日最も新鮮な魚介を厳選してご提供。旬の味をお楽しみください。</p>
+                        <p class="menu-card-price">¥1,200〜</p>
+                    </div>
+                </div>
+                <div class="menu-card reveal d3">
+                    <div class="menu-card-img">
+                        <img src="https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=600&q=85" alt="焼き鳥" />
+                        <div class="img-notice fewron-demo">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+                    </div>
+                    <div class="menu-card-body">
+                        <p class="menu-card-name">炭火焼き鳥（5本）</p>
+                        <p class="menu-card-desc">備長炭で丁寧に焼き上げる本格焼き鳥。タレと塩どちらもおすすめ！</p>
+                        <p class="menu-card-price">¥750</p>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-cta reveal">
+                <a href="tel:090-4712-3510" class="reserve-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
+                    </svg>
+                    🍺 今すぐ予約する
+                </a>
+                <p style="margin-top:10px;font-size:.72rem;color:rgba(255,243,224,.35);letter-spacing:.08em">
+                    宴会・貸切のご相談もお気軽に</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+        <div style="max-width:900px;margin:0 auto">
+            <div class="sec-hd reveal">
+                <p class="sec-eyebrow">── GALLERY ──</p>
+                <h2 class="sec-title">店内・料理</h2>
+                <span class="sec-rule"></span>
+            </div>
+            <div class="gal-grid reveal" style="margin-top:40px">
+                <div class="gal-item"><img
+                        src="https://images.unsplash.com/photo-1514190051997-0f6f39ca5cde?w=1200&q=85" alt="店内" />
+                    <div class="gal-notice fewron-demo">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+                </div>
+                <div class="gal-item"><img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=700&q=85"
+                        alt="料理" />
+                    <div class="gal-notice fewron-demo">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+                </div>
+                <div class="gal-item"><img src="https://images.unsplash.com/photo-1529042410759-befb1204b468?w=700&q=85"
+                        alt="唐揚げ" />
+                    <div class="gal-notice fewron-demo">🖼 イメージ画像。画像の入れ替えや文字の指定は無料で行います。</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INFO -->
+    <section id="info">
+        <div class="info-inner">
+            <div class="sec-hd reveal" style="margin-bottom:40px">
+                <p class="sec-eyebrow">── ACCESS ──</p>
+                <h2 class="sec-title">店舗情報</h2>
+                <span class="sec-rule"></span>
+            </div>
+            <div class="reveal">
+                <div class="info-row"><span class="info-label">店名</span><span class="info-val">Beco's Grill Bar</span></div>
+                <div class="info-row"><span class="info-label">住所</span><span class="info-val">日本、〒400-0032 山梨県甲府市中央１丁目６−１１ 芳野ビル 1階</span></div>
+                <div class="info-row"><span class="info-label">電話</span><span class="info-val"><a
+                            href="tel:090-4712-3510">090-4712-3510</a></span></div>
+                <div class="info-row"><span class="info-label">予約</span><span class="info-val">お電話にてご予約ください</span></div>
+                <div class="map-wrap">
+                    <div class="map-wrap">
+                        <iframe width="100%" height="300" style="border:0" loading="lazy" allowfullscreen
+                            src="https://www.google.com/maps/embed/v1/place?key=ここに表示用のAPIキーを書く&q=%E6%97%A5%E6%9C%AC%E3%80%81%E3%80%92400-0032%20%E5%B1%B1%E6%A2%A8%E7%9C%8C%E7%94%B2%E5%BA%9C%E5%B8%82%E4%B8%AD%E5%A4%AE%EF%BC%91%E4%B8%81%E7%9B%AE%EF%BC%96%E2%88%92%EF%BC%91%EF%BC%91%20%E8%8A%B3%E9%87%8E%E3%83%93%E3%83%AB%201%E9%9A%8E">
+                        </iframe>
+                    </div>
+                </div>
+                <div class="info-cta">
+                    <p class="info-cta-label">── ご予約・お問い合わせ ──</p>
+                    <a href="tel:090-4712-3510" class="tel-big">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
+                        </svg>
+                        090-4712-3510
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEWRON BANNER -->
+    <div id="fewron-bar" class="fewron-demo">
+        <div class="fewron-inner">
+            <p class="fewron-text">🛠 デモサイト。ウェブサイトがないと月約30人のお客様を逃す可能性があります。</p>
+            <span class="fewron-price">月々4,980円・初期費用なし</span>
+            <a href="https://buy.stripe.com/eVq6oH4Wi4MLbjb3A93Je00?client_reference_id=ChIJ22nkwT35G2ARhRebvZULnLk" target="_blank" class="fewron-btn">詳細を見る →</a>
+            <a href="https://buy.stripe.com/eVq6oH4Wi4MLbjb3A93Je00?client_reference_id=ChIJ22nkwT35G2ARhRebvZULnLk" target="_blank" class="fewron-btn" style="background:var(--orange);color:#fff">🔓
+                決済して有効化</a>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-deco">🏮 🍺 🏮</div>
+        <p class="footer-name">Beco's Grill Bar</p>
+        <p class="footer-copy">© 2026 Beco's Grill Bar. All rights reserved. | Powered by <a href="https://buy.stripe.com/eVq6oH4Wi4MLbjb3A93Je00?client_reference_id=ChIJ22nkwT35G2ARhRebvZULnLk"
+                style="color:var(--yellow)">Fewron</a></p>
+    </footer>
+
+    <!-- FLOAT TEL -->
+    <div id="float-tel">
+        <a href="tel:090-4712-3510" class="float-tel-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" />
+            </svg>
+            今すぐ予約 &nbsp;090-4712-3510
+        </a>
+    </div>
+
+    <script>
+        var isPaid = {{ IS_PAID }};
+        (function () {
+            document.documentElement.classList.add('js-ready');
+            var nav = document.getElementById('nav');
+            window.addEventListener('scroll', function () { nav.classList.toggle('scrolled', scrollY > 60) });
+            var io = new IntersectionObserver(function (es) {
+                es.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('visible') });
+            }, { threshold: .12 });
+            document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el) });
+            if (isPaid === true) {
+                document.querySelectorAll('.fewron-demo').forEach(function (el) { el.remove() });
+            } else {
+                setTimeout(function () {
+                    var p = document.getElementById('popup-overlay');
+                    if (p) p.style.display = 'flex';
+                }, 7000);
+            }
+        })();
+    </script>
+</body>
+
+</html>
