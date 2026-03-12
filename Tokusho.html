@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>特定商取引法に基づく表記 | Fewron（フューロン）</title>
+<meta name="description" content="Fewron（フューロン）の特定商取引法に基づく表記ページです。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:#FAF7F2;color:#2D2620;overflow-x:hidden}
+:root{
+  --forest:#2D4A3E;--fl:#3D6B5A;
+  --gold:#C9A84C;--gl:#E8C97A;
+  --cream:#FAF7F2;--sand:#F5F0E8;--bdr:#E8DDD0;
+  --br:#5C4430;--brl:#8B6F47;--ink:#1E1A16;
+}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between;background:rgba(250,247,242,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--bdr)}
+.nl{font-family:"Noto Serif JP",serif;font-size:1.4rem;font-weight:700;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px}
+.nm{width:32px;height:32px;background:var(--forest);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--gl);font-size:.9rem;font-weight:700;flex-shrink:0}
+.nb{background:var(--forest);color:var(--cream);padding:10px 22px;border-radius:100px;font-size:.82rem;font-weight:500;text-decoration:none;transition:background .25s}
+.nb:hover{background:var(--fl)}
+
+/* BREADCRUMB */
+.bc{padding:100px 48px 0;max-width:800px;margin:0 auto}
+.bci{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--brl)}
+.bci a{color:var(--brl);text-decoration:none;transition:color .2s}
+.bci a:hover{color:var(--forest)}
+.bc-sep{color:var(--bdr)}
+
+/* PROSE */
+.prose{padding:32px 48px 96px;max-width:800px;margin:0 auto}
+.prose h1{font-family:"Noto Serif JP",serif;font-size:clamp(1.7rem,3vw,2.4rem);font-weight:700;color:var(--ink);margin-bottom:12px;line-height:1.3}
+.prose-date{font-size:.8rem;color:var(--brl);margin-bottom:48px;padding-bottom:24px;border-bottom:1px solid var(--bdr)}
+
+/* Table */
+.law-table{width:100%;border-collapse:collapse;margin-bottom:40px}
+.law-table th,.law-table td{padding:18px 20px;border-bottom:1px solid var(--bdr);vertical-align:top;text-align:left}
+.law-table th{
+  font-family:"Noto Serif JP",serif;
+  font-size:.85rem;font-weight:700;color:var(--ink);
+  background:var(--sand);white-space:nowrap;
+  width:200px;border-right:1px solid var(--bdr);
+}
+.law-table td{font-size:.9rem;line-height:1.85;color:var(--br);font-weight:300}
+.law-table tr:last-child th,.law-table tr:last-child td{border-bottom:none}
+.law-table tr:hover th,.law-table tr:hover td{background:rgba(245,240,232,.5)}
+
+.prose h2{font-family:"Noto Serif JP",serif;font-size:1.05rem;font-weight:700;color:var(--ink);margin:48px 0 16px;display:flex;align-items:center;gap:10px}
+.prose h2::before{content:"";display:block;width:4px;height:18px;background:var(--forest);border-radius:2px;flex-shrink:0}
+.prose p{font-size:.92rem;line-height:1.9;color:var(--br);font-weight:300;margin-bottom:14px}
+.prose ul{padding-left:1.4em;margin-bottom:16px}
+.prose li{font-size:.92rem;line-height:1.85;color:var(--br);font-weight:300;margin-bottom:6px}
+.prose a{color:var(--forest);text-decoration:underline}
+.prose a:hover{color:var(--fl)}
+.prose strong{font-weight:600;color:var(--ink)}
+
+.note-box{background:var(--sand);border:1px solid var(--bdr);border-left:4px solid var(--forest);border-radius:0 10px 10px 0;padding:20px 24px;margin:24px 0}
+.note-box p{margin-bottom:0;font-size:.88rem;color:var(--br)}
+
+.info-tag{display:inline-block;background:rgba(45,74,62,.08);color:var(--forest);font-size:.72rem;font-weight:600;letter-spacing:.06em;padding:3px 10px;border-radius:100px;margin-bottom:8px}
+
+/* FOOTER */
+footer{background:var(--sand);border-top:1px solid var(--bdr);padding:48px 48px 28px}
+.fg{max-width:800px;margin:0 auto 32px;display:flex;flex-direction:column;gap:16px}
+@media(min-width:600px){.fg{flex-direction:row;justify-content:space-between;align-items:flex-start}}
+.fba{font-family:"Noto Serif JP",serif;font-size:1.1rem;font-weight:700;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px}
+.fli{list-style:none;display:flex;flex-wrap:wrap;gap:10px 20px}
+.fli a{font-size:.82rem;color:var(--brl);text-decoration:none;transition:color .2s}
+.fli a:hover{color:var(--forest)}
+.fb2{max-width:800px;margin:0 auto;padding-top:20px;border-top:1px solid var(--bdr);font-size:.75rem;color:#C4A882;text-align:center}
+
+@media(max-width:640px){
+  nav,footer{padding-left:20px;padding-right:20px}
+  .bc,.prose{padding-left:20px;padding-right:20px}
+  .law-table th{width:120px;font-size:.8rem;padding:14px 12px}
+  .law-table td{font-size:.85rem;padding:14px 12px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nl"><div class="nm">f</div>fewron</a>
+  <a href="index.html#cta" class="nb">無料相談</a>
+</nav>
+
+<div class="bc">
+  <div class="bci">
+    <a href="index.html">ホーム</a>
+    <span class="bc-sep">›</span>
+    <span>特定商取引法に基づく表記</span>
+  </div>
+</div>
+
+<div class="prose">
+  <h1>特定商取引法に基づく表記</h1>
+  <div class="prose-date">最終更新日：2025年1月1日</div>
+
+  <table class="law-table">
+    <tbody>
+      <tr>
+        <th>販売事業者名</th>
+        <td>Fewron（フューロン）</td>
+      </tr>
+      <tr>　　　
+        <th>代表者名</th>
+        <td>横山恒正</td>
+      </tr>
+      <tr>
+        <th>所在地</th>
+        <td>
+          <br>
+          <br>
+          <span style="font-size:.82rem;color:var(--brl)">※ 請求があった場合は遅滞なく開示いたします。</span>
+        </td>
+      </tr>
+      <tr>
+        <th>電話番号</th>
+        <td>
+          お問い合わせはメールまたはLINEにてお受けしております。<br>
+          <span style="font-size:.82rem;color:var(--brl)">090-1339-1911</span>
+        </td>
+      </tr>
+      <tr>
+        <th>メールアドレス</th>
+        <td>support@fewron.jp</td>
+      </tr>
+      <tr>
+        <th>販売URL</th>
+        <td><a href="https://fewron.jp">https://fewron.jp</a></td>
+      </tr>
+      <tr>
+        <th>サービス名称</th>
+        <td>Fewron Webサイト制作・運用サービス（梅・竹・松プラン）</td>
+      </tr>
+      <tr>
+        <th>販売価格</th>
+        <td>
+          <div class="info-tag">月額プラン（税込）</div><br>
+          <strong>梅プラン：</strong>月額 1,980円（税込）<br>
+          <strong>竹プラン：</strong>月額 4,980円（税込）<br>
+          <strong>松プラン：</strong>月額 14,800円（税込）<br><br>
+          <div class="info-tag">追加オプション（税込）</div><br>
+          <strong>追加ページ作成：</strong>3,300円 / ページ<br>
+          <strong>多言語対応（英語）：</strong>5,500円 / 月<br>
+          <strong>予約・問合せフォーム：</strong>2,200円 / 月<br>
+          <strong>Google広告連携設定：</strong>11,000円 / 初回<br>
+          <strong>月次レポート強化版：</strong>3,300円 / 月<br>
+          <strong>デザインリニューアル：</strong>22,000円 / 回
+        </td>
+      </tr>
+      <tr>
+        <th>商品代金以外の<br>必要料金</th>
+        <td>
+          なし。<br>
+          サーバー費用・ドメイン取得費・SSL証明書費はすべて月額プランに含まれます。<br>
+          別途費用が発生する場合は、事前にお客様へご説明・ご同意を得てから請求いたします。
+        </td>
+      </tr>
+      <tr>
+        <th>支払方法</th>
+        <td>
+          クレジットカード（Visa・Mastercard・JCB・American Express）<br>
+          銀行振込（振込手数料はお客様負担となります）
+        </td>
+      </tr>
+      <tr>
+        <th>支払時期</th>
+        <td>
+          月額プランは毎月自動更新（初回お申し込み日を起算日として翌月以降引き落とし）。<br>
+          追加オプション・スポット対応は、請求書発行後15日以内にお支払いください。
+        </td>
+      </tr>
+      <tr>
+        <th>サービス提供時期</th>
+        <td>
+          ご入金確認後、最短即日〜7営業日以内にサービスを開始いたします。<br>
+          デモサイト提案：最短即日<br>
+          本番公開：ご承認後、最短1〜3営業日
+        </td>
+      </tr>
+      <tr>
+        <th>契約期間</th>
+        <td>
+          月単位の自動更新制です。最低契約期間はございません。<br>
+          いつでも解約・プラン変更が可能です。
+        </td>
+      </tr>
+      <tr>
+        <th>解約・解除について</th>
+        <td>
+          翌月分の請求が発生する前日（更新日の前日）までにお申し出いただいた場合、翌月からの請求は発生しません。<br>
+          解約のお申し出はLINEまたはメールにてご連絡ください。<br><br>
+          <span style="font-size:.82rem;color:var(--brl)">※ 既にお支払いいただいた月額料金の日割り返金は承っておりません（月途中解約の場合も同様）。</span>
+        </td>
+      </tr>
+      <tr>
+        <th>返品・返金について</th>
+        <td>
+          デジタルコンテンツ・Webサービスの性質上、サービス提供開始後の返品・返金はお断りしております。<br>
+          ただし、当社の重大な過失によりサービスが提供できない場合はこの限りではありません。<br>
+          お気づきの点がございましたら、まずはお気軽にご相談ください。
+        </td>
+      </tr>
+      <tr>
+        <th>キャンセルについて</th>
+        <td>
+          無料オンライン面談のキャンセルは、前日18時までにLINEまたはメールにてご連絡ください。<br>
+          サービスお申し込み後のキャンセルについては、制作着手前であればお申し出から3営業日以内にキャンセル手続きが可能です。
+        </td>
+      </tr>
+      <tr>
+        <th>動作環境</th>
+        <td>
+          制作するWebサイトは以下のブラウザ・環境に対応しています：<br>
+          Google Chrome（最新版）、Safari（最新版）、Microsoft Edge（最新版）、Firefox（最新版）<br>
+          スマートフォン：iOS / Android 最新バージョン<br><br>
+          <span style="font-size:.82rem;color:var(--brl)">※ Internet Explorer はサポート対象外です。</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>広告・マーケティングについて</h2>
+  <p>サービスに関するご案内・重要なお知らせは、ご登録のメールアドレスまたはLINEにてお送りする場合があります。配信停止をご希望の場合はいつでもお申し出ください。</p>
+
+  <h2>免責事項</h2>
+  <p>当社が制作するWebサイトは、集客・売上の増加を保証するものではありません。検索順位・アクセス数・売上等については、外部要因（競合状況・検索エンジンのアルゴリズム変更等）も影響するため、特定の成果を約束することはできません。</p>
+  <p>天災・通信障害・サードパーティサービスの障害等、当社の責に帰さない事由によるサービス中断については、当社は責任を負いかねます。</p>
+
+  <h2>お問い合わせ窓口</h2>
+  <div class="note-box">
+    <p>
+      <strong>Fewron（フューロン）</strong><br>
+      受付方法：LINE または メール（fewron.site@gmail.com）<br>
+      受付時間：平日 10:00〜18:00（土日祝・年末年始除く）<br>
+      ※ お問い合わせ内容により、回答に数日いただく場合がございます。
+    </p>
+  </div>
+</div>
+
+<footer>
+  <div class="fg">
+    <a href="index.html" class="fba">
+      <div class="nm">f</div>フューロン
+    </a>
+    <ul class="fli">
+      <li><a href="index.html">ホーム</a></li>
+      <li><a href="index.html#pricing">料金プラン</a></li>
+      <li><a href="index.html#addons">追加オプション</a></li>
+      <li><a href="tokusho.html">特定商取引法</a></li>
+      <li><a href="privacy.html">プライバシーポリシー</a></li>
+    </ul>
+  </div>
+  <div class="fb2">© 2025 Fewron（フューロン）. All rights reserved. ／ fewron.jp</div>
+</footer>
+
+</body>
+</html>
