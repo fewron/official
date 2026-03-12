@@ -5,590 +5,425 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fewron（フューロン）| 地元の商売を、もっと強く。</title>
-<meta name="description" content="地域の飲食店・整体・小売店のWebサイト制作。月額4,980円。LINEで修正依頼OK。AIが集客課題を分析します。">
+<meta name="description" content="地域の飲食店・整体・小売店のWebサイト制作。月額1,980円〜。LINEで修正依頼OK。AIが集客課題を分析します。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { font-family: "DM Sans", sans-serif; background: #FAF7F2; color: #2D2620; overflow-x: hidden; }
-
-/* NOISE CANVAS - positioned by JS */
-#noise-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 900; opacity: 0.04; }
-
-/* CURSOR */
-.cursor {
-width: 12px; height: 12px; background: #2D4A3E; border-radius: 50%;
-position: fixed; pointer-events: none; z-index: 9999;
-transform: translate(-50%,-50%);
-transition: width .3s, height .3s, background .3s;
-display: none;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:#FAF7F2;color:#2D2620;overflow-x:hidden}
+:root{
+  --forest:#2D4A3E;--fl:#3D6B5A;
+  --gold:#C9A84C;--gl:#E8C97A;
+  --cream:#FAF7F2;--sand:#F5F0E8;--bdr:#E8DDD0;
+  --br:#5C4430;--brl:#8B6F47;
+  --ink:#1E1A16;
 }
-.cursor-ring {
-width: 36px; height: 36px; border: 1.5px solid #8B6F47; border-radius: 50%;
-position: fixed; pointer-events: none; z-index: 9998;
-transform: translate(-50%,-50%);
-transition: width .2s ease, height .2s ease, border-color .2s ease;
-opacity: 0.6; display: none;
-}
-@media (pointer: fine) { .cursor, .cursor-ring { display: block; } body { cursor: none; } }
-.cursor.hov { width: 20px; height: 20px; background: #C9A84C; }
-.cursor-ring.hov { width: 52px; height: 52px; border-color: #C9A84C; opacity: 0.4; }
+#nc{position:fixed;inset:0;pointer-events:none;z-index:900;opacity:.032}
+.cur{width:10px;height:10px;background:var(--forest);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s,background .3s;display:none}
+.cur-r{width:34px;height:34px;border:1.5px solid var(--brl);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s;opacity:.5;display:none}
+@media(pointer:fine){.cur,.cur-r{display:block}body{cursor:none}}
+.cur.hv{width:18px;height:18px;background:var(--gold)}
+.cur-r.hv{width:50px;height:50px;border-color:var(--gold);opacity:.35}
 
 /* NAV */
-nav {
-position: fixed; top: 0; left: 0; right: 0; z-index: 500;
-padding: 0 48px; height: 72px;
-display: flex; align-items: center; justify-content: space-between;
-transition: background .4s, box-shadow .4s, height .4s, border-color .4s;
-border-bottom: 1px solid transparent;
-}
-nav.scrolled {
-background: #FAF7F2;
-box-shadow: 0 2px 24px rgba(92,68,48,.08);
-height: 60px; border-bottom-color: #E8DDD0;
-}
-.nav-logo {
-font-family: “Noto Serif JP”, serif; font-size: 1.4rem; font-weight: 700;
-color: #1E1A16; text-decoration: none; letter-spacing: .02em;
-display: flex; align-items: center; gap: 10px;
-}
-.nav-logo-mark {
-width: 32px; height: 32px; background: #2D4A3E; border-radius: 8px;
-display: flex; align-items: center; justify-content: center;
-color: #E8C97A; font-size: .9rem; font-weight: 700; font-family: “DM Sans”, sans-serif; flex-shrink: 0;
-}
-.nav-links { display: none; gap: 36px; list-style: none; }
-@media(min-width:768px){ .nav-links { display: flex; } }
-.nav-links a {
-font-size: .85rem; color: #5C4430; text-decoration: none;
-letter-spacing: .04em; transition: color .2s; position: relative; padding-bottom: 2px;
-}
-.nav-links a::after {
-content: “”; position: absolute; bottom: -2px; left: 0;
-width: 0; height: 1px; background: #2D4A3E; transition: width .3s ease;
-}
-.nav-links a:hover { color: #2D4A3E; }
-.nav-links a:hover::after { width: 100%; }
-.nav-btn {
-background: #2D4A3E; color: #FAF7F2; padding: 10px 24px; border-radius: 100px;
-font-size: .82rem; font-weight: 500; letter-spacing: .05em; text-decoration: none;
-transition: background .25s, transform .2s; border: none; cursor: pointer; font-family: “DM Sans”, sans-serif;
-display: inline-block;
-}
-.nav-btn:hover { background: #3D6B5A; transform: translateY(-1px); }
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 48px;height:72px;display:flex;align-items:center;justify-content:space-between;transition:background .4s,box-shadow .4s,height .4s,border-color .4s;border-bottom:1px solid transparent}
+nav.sc{background:rgba(250,247,242,.96);backdrop-filter:blur(12px);box-shadow:0 2px 24px rgba(92,68,48,.08);height:60px;border-bottom-color:var(–bdr)}
+.nl{font-family:“Noto Serif JP”,serif;font-size:1.4rem;font-weight:700;color:var(–ink);text-decoration:none;display:flex;align-items:center;gap:10px}
+.nm{width:32px;height:32px;background:var(–forest);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(–gl);font-size:.9rem;font-weight:700;flex-shrink:0}
+.nli{display:none;gap:26px;list-style:none}
+@media(min-width:768px){.nli{display:flex}}
+.nli a{font-size:.84rem;color:var(–br);text-decoration:none;transition:color .2s;position:relative;padding-bottom:2px}
+.nli a::after{content:””;position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(–forest);transition:width .3s}
+.nli a:hover{color:var(–forest)}.nli a:hover::after{width:100%}
+.nb{background:var(–forest);color:var(–cream);padding:10px 22px;border-radius:100px;font-size:.82rem;font-weight:500;text-decoration:none;transition:background .25s,transform .2s;display:inline-block}
+.nb:hover{background:var(–fl);transform:translateY(-1px)}
 
 /* HERO */
-#hero {
-background: #FAF7F2; min-height: 100vh;
-display: grid; grid-template-columns: 1fr; align-items: center;
-position: relative; overflow: hidden; padding: 100px 48px 60px; gap: 60px;
-}
-@media(min-width:900px){ #hero { grid-template-columns: 1fr 1fr; } }
+#hero{background:var(–cream);min-height:100vh;display:grid;grid-template-columns:1fr;align-items:center;position:relative;overflow:hidden;padding:108px 48px 64px;gap:60px}
+@media(min-width:900px){#hero{grid-template-columns:1fr 1fr}}
+.hd{position:absolute;top:0;right:0;width:60%;height:100%;pointer-events:none;z-index:0;display:none}
+@media(min-width:900px){.hd{display:block}}
+.ht{position:relative;z-index:2;max-width:520px}
+.he{display:flex;align-items:center;gap:10px;margin-bottom:28px;font-size:.74rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(–forest);opacity:0;animation:sR .8s .2s ease forwards}
+.hel{display:block;width:28px;height:1px;background:var(–forest);flex-shrink:0}
+.hk{font-family:“Noto Serif JP”,serif;font-size:clamp(2.4rem,5.5vw,4.2rem);font-weight:900;line-height:1.18;color:var(–ink);margin-bottom:24px;opacity:0;animation:sR .8s .35s ease forwards}
+.hka{color:var(–forest);position:relative;display:inline-block}
+.hka svg{position:absolute;bottom:2px;left:0;width:100%;height:10px;overflow:visible;pointer-events:none}
+.hs{font-size:1.05rem;line-height:1.9;color:var(–br);margin-bottom:44px;font-weight:300;opacity:0;animation:sR .8s .5s ease forwards}
+.ha{display:flex;flex-direction:column;gap:14px;align-items:flex-start;opacity:0;animation:sR .8s .65s ease forwards}
+@media(min-width:480px){.ha{flex-direction:row;align-items:center}}
+.htr{margin-top:52px;opacity:0;animation:sR .8s .8s ease forwards}
+.htl{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#C4A882;margin-bottom:12px}
+.htt{display:flex;flex-wrap:wrap;gap:8px}
+.tt{padding:5px 12px;background:var(–sand);border:1px solid var(–bdr);border-radius:100px;font-size:.78rem;color:var(–br)}
+.hv{position:relative;z-index:2;display:none}
+@media(min-width:900px){.hv{display:block}}
 
-/* Diagonal panel — SVG positioned absolutely, no clip-path */
-.hero-diagonal {
-position: absolute; top: 0; right: 0; width: 60%; height: 100%;
-pointer-events: none; z-index: 0;
-display: none;
-}
-@media(min-width:900px){ .hero-diagonal { display: block; } }
-
-.hero-text { position: relative; z-index: 2; max-width: 520px; }
-.hero-eyebrow {
-display: flex; align-items: center; gap: 10px; margin-bottom: 28px;
-font-size: .75rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
-color: #2D4A3E; opacity: 0; animation: slideRight .8s .2s ease forwards;
-}
-.hero-eyebrow-line { display: block; width: 28px; height: 1px; background: #2D4A3E; flex-shrink: 0; }
-.hero-kicker {
-font-family: “Noto Serif JP”, serif;
-font-size: clamp(2.4rem,5.5vw,4.2rem); font-weight: 900;
-line-height: 1.18; letter-spacing: -.01em; color: #1E1A16;
-margin-bottom: 24px; opacity: 0; animation: slideRight .8s .35s ease forwards;
-}
-.hero-kicker-accent {
-color: #2D4A3E; position: relative; display: inline-block;
-}
-/* Gold underline via SVG */
-.hero-kicker-accent svg {
-position: absolute; bottom: 2px; left: 0; width: 100%; height: 10px; overflow: visible;
-pointer-events: none;
-}
-.hero-sub {
-font-size: 1.05rem; line-height: 1.9; color: #5C4430;
-margin-bottom: 44px; font-weight: 300; opacity: 0; animation: slideRight .8s .5s ease forwards;
-}
-.hero-actions {
-display: flex; flex-direction: column; gap: 14px; align-items: flex-start;
-opacity: 0; animation: slideRight .8s .65s ease forwards;
-}
-@media(min-width:480px){ .hero-actions { flex-direction: row; align-items: center; } }
-
-.btn-forest {
-display: inline-flex; align-items: center; gap: 10px;
-background: #2D4A3E; color: #FAF7F2; padding: 16px 32px; border-radius: 6px;
-font-family: “DM Sans”, sans-serif; font-size: .9rem; font-weight: 500; letter-spacing: .04em;
-text-decoration: none; white-space: nowrap; border: none; cursor: pointer;
-transition: background .25s, transform .2s, box-shadow .25s;
-}
-.btn-forest:hover { background: #3D6B5A; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(45,74,62,.25); }
-.btn-forest svg { transition: transform .3s; flex-shrink: 0; }
-.btn-forest:hover svg { transform: translateX(4px); }
-.btn-outline {
-display: inline-flex; align-items: center; gap: 10px;
-background: transparent; color: #5C4430; padding: 16px 28px; border-radius: 6px;
-font-family: “DM Sans”, sans-serif; font-size: .9rem; font-weight: 400; letter-spacing: .04em;
-text-decoration: none; white-space: nowrap; cursor: pointer;
-border: 1.5px solid #E8DDD0; transition: border-color .25s, background .25s;
-}
-.btn-outline:hover { border-color: #8B6F47; background: #F5F0E8; }
-
-.hero-trust { margin-top: 52px; opacity: 0; animation: slideRight .8s .8s ease forwards; }
-.hero-trust-label { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: #C4A882; margin-bottom: 12px; }
-.hero-trust-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.trust-tag { padding: 5px 12px; background: #F5F0E8; border: 1px solid #E8DDD0; border-radius: 100px; font-size: .78rem; color: #5C4430; }
-
-.hero-visual { position: relative; z-index: 2; display: none; }
-@media(min-width:900px){ .hero-visual { display: block; } }
+/* Buttons */
+.bf{display:inline-flex;align-items:center;gap:10px;background:var(–forest);color:var(–cream);padding:16px 32px;border-radius:6px;font-family:“DM Sans”,sans-serif;font-size:.9rem;font-weight:500;text-decoration:none;white-space:nowrap;border:none;cursor:pointer;transition:background .25s,transform .2s,box-shadow .25s}
+.bf:hover{background:var(–fl);transform:translateY(-2px);box-shadow:0 8px 32px rgba(45,74,62,.25)}
+.bf svg{transition:transform .3s;flex-shrink:0}
+.bf:hover svg{transform:translateX(4px)}
+.bo{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(–br);padding:16px 28px;border-radius:6px;font-family:“DM Sans”,sans-serif;font-size:.9rem;font-weight:400;text-decoration:none;white-space:nowrap;cursor:pointer;border:1.5px solid var(–bdr);transition:border-color .25s,background .25s}
+.bo:hover{border-color:var(–brl);background:var(–sand)}
+.bg{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:transparent;color:rgba(250,247,242,.8);padding:16px 32px;border-radius:6px;font-family:“DM Sans”,sans-serif;font-size:.9rem;font-weight:400;text-decoration:none;border:1.5px solid rgba(250,247,242,.2);cursor:pointer;transition:border-color .25s,color .25s,background .25s;white-space:nowrap}
+.bg:hover{border-color:rgba(250,247,242,.5);color:var(–cream);background:rgba(255,255,255,.05)}
+.bgold{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(–gold);color:var(–ink);padding:16px 32px;border-radius:6px;font-family:“DM Sans”,sans-serif;font-size:.9rem;font-weight:600;text-decoration:none;transition:background .25s,transform .2s;white-space:nowrap;border:none;cursor:pointer}
+.bgold:hover{background:var(–gl);transform:translateY(-2px)}
 
 /* Browser mockup */
-.mockup-browser {
-background: #FFFEF9; border: 1.5px solid #E8DDD0; border-radius: 12px; overflow: hidden;
-box-shadow: 0 24px 80px rgba(92,68,48,.12), 0 4px 16px rgba(92,68,48,.06);
-opacity: 0; animation: slideUp 1s .4s ease forwards;
-}
-.browser-bar { background: #F5F0E8; border-bottom: 1px solid #E8DDD0; padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
-.browser-dots { display: flex; gap: 6px; }
-.browser-dot { width: 10px; height: 10px; border-radius: 50%; }
-.dot-r { background: #FF5F57; } .dot-y { background: #FEBC2E; } .dot-g { background: #28C840; }
-.browser-url { flex: 1; background: #FAF7F2; border: 1px solid #E8DDD0; border-radius: 4px; padding: 4px 12px; font-size: .72rem; color: #8B6F47; }
-.browser-body { padding: 24px; }
-.mini-header { background: #2D4A3E; border-radius: 6px; padding: 16px 20px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
-.mini-logo { font-size: .8rem; font-weight: 700; color: #E8C97A; font-family: “Noto Serif JP”, serif; }
-.mini-nav { display: flex; gap: 12px; }
-.mini-nav span { font-size: .6rem; color: rgba(255,255,255,.6); }
-.mini-hero-blk { background: #F5F0E8; border-radius: 6px; padding: 20px; margin-bottom: 12px; }
-.mini-tag { font-size: .55rem; color: #2D4A3E; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
-.mini-h1 { font-family: “Noto Serif JP”, serif; font-size: .85rem; font-weight: 700; color: #1E1A16; line-height: 1.4; margin-bottom: 8px; }
-.mini-p { font-size: .6rem; color: #5C4430; line-height: 1.6; margin-bottom: 12px; }
-.mini-btn { display: inline-block; padding: 5px 14px; background: #2D4A3E; color: white; border-radius: 4px; font-size: .6rem; }
-.mini-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
-.mini-card { background: #FFFEF9; border: 1px solid #E8DDD0; border-radius: 6px; padding: 10px 8px; text-align: center; }
-.mini-card-icon { font-size: 1rem; margin-bottom: 4px; }
-.mini-card-t { font-size: .55rem; font-weight: 600; color: #1E1A16; margin-bottom: 2px; }
-.mini-card-d { font-size: .5rem; color: #C4A882; }
-
-.mockup-badge {
-position: absolute; bottom: -16px; left: -20px;
-background: #C9A84C; color: #1E1A16; border-radius: 12px; padding: 14px 20px;
-font-size: .78rem; font-weight: 600; white-space: nowrap;
-box-shadow: 0 8px 32px rgba(201,168,76,.3);
-opacity: 0; animation: slideUp .8s .8s ease forwards;
-}
-.mockup-badge strong { display: block; font-size: 1.2rem; font-family: “Noto Serif JP”, serif; }
-
-@keyframes slideRight { from{opacity:0;transform:translateX(-24px)} to{opacity:1;transform:translateX(0)} }
-@keyframes slideUp    { from{opacity:0;transform:translateY(24px)}  to{opacity:1;transform:translateY(0)} }
+.mb{background:#FFFEF9;border:1.5px solid var(–bdr);border-radius:12px;overflow:hidden;box-shadow:0 24px 80px rgba(92,68,48,.12),0 4px 16px rgba(92,68,48,.06);opacity:0;animation:sU 1s .4s ease forwards}
+.bb{background:var(–sand);border-bottom:1px solid var(–bdr);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.bds{display:flex;gap:6px}
+.bd{width:10px;height:10px;border-radius:50%}
+.dr{background:#FF5F57}.dy{background:#FEBC2E}.dg{background:#28C840}
+.bu{flex:1;background:var(–cream);border:1px solid var(–bdr);border-radius:4px;padding:4px 12px;font-size:.72rem;color:var(–brl)}
+.bby{padding:24px}
+.mh{background:var(–forest);border-radius:6px;padding:16px 20px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.ml{font-size:.8rem;font-weight:700;color:var(–gl);font-family:“Noto Serif JP”,serif}
+.mn{display:flex;gap:12px}
+.mn span{font-size:.6rem;color:rgba(255,255,255,.6)}
+.mhb{background:var(–sand);border-radius:6px;padding:20px;margin-bottom:12px}
+.mt{font-size:.55rem;color:var(–forest);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.mh1{font-family:“Noto Serif JP”,serif;font-size:.85rem;font-weight:700;color:var(–ink);line-height:1.4;margin-bottom:8px}
+.mp{font-size:.6rem;color:var(–br);line-height:1.6;margin-bottom:12px}
+.mbt{display:inline-block;padding:5px 14px;background:var(–forest);color:white;border-radius:4px;font-size:.6rem}
+.mcs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mc{background:#FFFEF9;border:1px solid var(–bdr);border-radius:6px;padding:10px 8px;text-align:center}
+.mci{font-size:1rem;margin-bottom:4px}
+.mct{font-size:.55rem;font-weight:600;color:var(–ink);margin-bottom:2px}
+.mcd{font-size:.5rem;color:#C4A882}
+.mbadge{position:absolute;bottom:-16px;left:-20px;background:var(–gold);color:var(–ink);border-radius:12px;padding:14px 20px;font-size:.78rem;font-weight:600;white-space:nowrap;box-shadow:0 8px 32px rgba(201,168,76,.3);opacity:0;animation:sU .8s .8s ease forwards}
+.mbadge strong{display:block;font-size:1.2rem;font-family:“Noto Serif JP”,serif}
 
 /* MARQUEE */
-.marquee-strip { background: #2D4A3E; overflow: hidden; padding: 14px 0; }
-.marquee-track { display: flex; animation: marquee 22s linear infinite; width: max-content; }
-.marquee-item {
-display: flex; align-items: center; gap: 20px; padding: 0 32px; white-space: nowrap;
-font-size: .78rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.7);
-}
-.marquee-dot { width: 4px; height: 4px; background: #C9A84C; border-radius: 50%; flex-shrink: 0; }
-@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.mqs{background:var(–forest);overflow:hidden;padding:14px 0}
+.mqt{display:flex;animation:mq 26s linear infinite;width:max-content}
+.mqi{display:flex;align-items:center;gap:20px;padding:0 32px;white-space:nowrap;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.mqd{width:4px;height:4px;background:var(–gold);border-radius:50%;flex-shrink:0}
 
-/* SECTIONS */
-section { padding: 100px 48px; }
-.container { max-width: 1080px; margin: 0 auto; }
-.sec-label {
-display: inline-flex; align-items: center; gap: 8px;
-font-size: .72rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
-color: #2D4A3E; margin-bottom: 18px;
+/* SECTION COMMON */
+section{padding:100px 48px}
+.con{max-width:1080px;margin:0 auto}
+.sl{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(–forest);margin-bottom:18px}
+.sl::before{content:””;width:20px;height:1px;background:var(–forest)}
+.ts{font-family:“Noto Serif JP”,serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;line-height:1.35;color:var(–ink);margin-bottom:20px}
+.bt{font-size:1rem;line-height:1.9;color:var(–br);font-weight:300;max-width:540px}
+
+/* PAIN / SLIDER */
+#pain{background:var(–ink);padding:80px 0;overflow:hidden;position:relative}
+.pi{max-width:1080px;margin:0 auto;padding:0 48px}
+@media(max-width:600px){.pi{padding:0 20px}}
+.plb{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(–gold);margin-bottom:20px}
+.plb::before{content:””;width:20px;height:1px;background:var(–gold)}
+.ph{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:40px;flex-wrap:wrap}
+.ptl{font-family:“Noto Serif JP”,serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;color:var(–cream);line-height:1.4}
+.snv{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.snb{width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s;color:rgba(255,255,255,.5);flex-shrink:0}
+.snb:hover{border-color:var(–gold);background:rgba(201,168,76,.1);color:var(–gold)}
+.snb:disabled{opacity:.25;cursor:not-allowed}
+.sc2{font-size:.8rem;color:rgba(255,255,255,.3);min-width:48px;text-align:center;letter-spacing:.06em}
+.svp{overflow:hidden;position:relative;cursor:grab}
+.svp:active{cursor:grabbing}
+.stt{display:flex;gap:20px;transition:transform .5s cubic-bezier(.4,0,.2,1);will-change:transform}
+.bub{
+min-width:320px;max-width:320px;position:relative;
+background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+border-radius:16px;padding:28px 28px 36px;
+transition:background .3s,border-color .3s,transform .3s;flex-shrink:0;
 }
-.sec-label::before { content: “”; width: 20px; height: 1px; background: #2D4A3E; }
-.title-serif { font-family: “Noto Serif JP”, serif; font-size: clamp(1.8rem,3.5vw,2.8rem); font-weight: 700; line-height: 1.35; color: #1E1A16; letter-spacing: -.01em; margin-bottom: 20px; }
-.body-text { font-size: 1rem; line-height: 1.9; color: #5C4430; font-weight: 300; max-width: 540px; }
+@media(min-width:640px){.bub{min-width:360px;max-width:360px}}
+.bub:hover{background:rgba(255,255,255,.09);border-color:rgba(201,168,76,.3);transform:translateY(-3px)}
+.btail{position:absolute;bottom:-18px;left:32px;width:24px;height:18px}
+.bav{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.bac{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;border:1px solid rgba(255,255,255,.08)}
+.ban{font-size:.82rem;font-weight:600;color:var(–cream)}
+.bar2{font-size:.72rem;color:rgba(250,247,242,.4)}
+.btx{font-size:.9rem;line-height:1.78;color:rgba(250,247,242,.72);font-weight:300}
+.btx strong{color:var(–gl);font-weight:500}
+.sdots{display:flex;justify-content:center;gap:8px;margin-top:32px}
+.sdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15);border:none;cursor:pointer;padding:0;transition:background .2s,width .3s}
+.sdot.on{background:var(–gold);width:20px;border-radius:3px}
+.presv{text-align:center;padding:48px 0 0}
+.presi{display:inline-flex;flex-direction:column;align-items:center;gap:12px}
+.prest{font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(250,247,242,.4)}
+.presa{animation:bd 1.6s ease-in-out infinite}
 
 /* STRENGTHS */
-#strengths { background: #F5F0E8; }
-.s-header { margin-bottom: 56px; }
-.strengths-layout { display: grid; gap: 16px; }
-@media(min-width:700px)  { .strengths-layout { grid-template-columns: 1fr 1fr; } }
-@media(min-width:1000px) { .strengths-layout { grid-template-columns: repeat(3,1fr); } }
-.str-card {
-background: #FFFEF9; border: 1px solid #E8DDD0; border-radius: 12px; padding: 36px 32px;
-position: relative; overflow: hidden; transition: transform .35s, box-shadow .35s;
-}
-.str-card::after {
-content: “”; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-background: #2D4A3E; transform: scaleX(0); transform-origin: left; transition: transform .4s ease;
-}
-.str-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(92,68,48,.1); }
-.str-card:hover::after { transform: scaleX(1); }
-.str-num { font-family: “Noto Serif JP”, serif; font-size: 3.5rem; font-weight: 900; color: #E8DDD0; line-height: 1; margin-bottom: 20px; }
-.str-title { font-family: “Noto Serif JP”, serif; font-size: 1.2rem; font-weight: 700; color: #1E1A16; margin-bottom: 12px; }
-.str-desc { font-size: .9rem; line-height: 1.85; color: #5C4430; font-weight: 300; margin-bottom: 20px; }
-.str-pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(45,74,62,.08); color: #2D4A3E; padding: 5px 12px; border-radius: 100px; font-size: .75rem; font-weight: 500; }
+#strengths{background:var(–sand)}
+.sh{margin-bottom:56px}
+.sl2{display:grid;gap:16px}
+@media(min-width:700px){.sl2{grid-template-columns:1fr 1fr}}
+@media(min-width:1000px){.sl2{grid-template-columns:repeat(3,1fr)}}
+.sc3{background:#FFFEF9;border:1px solid var(–bdr);border-radius:12px;padding:36px 32px;position:relative;overflow:hidden;transition:transform .35s,box-shadow .35s}
+.sc3::after{content:””;position:absolute;bottom:0;left:0;right:0;height:3px;background:var(–forest);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.sc3:hover{transform:translateY(-5px);box-shadow:0 16px 48px rgba(92,68,48,.1)}
+.sc3:hover::after{transform:scaleX(1)}
+.siw{width:56px;height:56px;margin-bottom:20px}
+.sn2{font-family:“Noto Serif JP”,serif;font-size:3.5rem;font-weight:900;color:var(–bdr);line-height:1;margin-bottom:20px}
+.sti{font-family:“Noto Serif JP”,serif;font-size:1.2rem;font-weight:700;color:var(–ink);margin-bottom:12px}
+.sd{font-size:.9rem;line-height:1.85;color:var(–br);font-weight:300;margin-bottom:20px}
+.sp{display:inline-flex;align-items:center;gap:6px;background:rgba(45,74,62,.08);color:var(–forest);padding:5px 12px;border-radius:100px;font-size:.75rem;font-weight:500}
 
 /* WORKFLOW */
-#workflow { background: #FAF7F2; }
-.workflow-grid { display: grid; gap: 60px; align-items: center; }
-@media(min-width:860px){ .workflow-grid { grid-template-columns: 1fr 1fr; } }
-.steps-list { display: flex; flex-direction: column; margin-top: 40px; position: relative; }
-.steps-list::before { content: “”; position: absolute; left: 20px; top: 40px; bottom: 40px; width: 1px; background: #E8DDD0; }
-.step { display: flex; gap: 24px; padding: 24px 0; }
-.step-num {
-width: 40px; height: 40px; background: #FFFEF9; border: 1.5px solid #E8DDD0; border-radius: 50%;
-display: flex; align-items: center; justify-content: center;
-font-family: “Noto Serif JP”, serif; font-size: .85rem; font-weight: 700; color: #2D4A3E;
-flex-shrink: 0; position: relative; z-index: 1;
-transition: background .3s, border-color .3s, color .3s;
-}
-.step:hover .step-num { background: #2D4A3E; border-color: #2D4A3E; color: #FAF7F2; }
-.step-body { padding-top: 8px; }
-.step-body h4 { font-family: “Noto Serif JP”, serif; font-size: 1.05rem; font-weight: 700; color: #1E1A16; margin-bottom: 6px; }
-.step-body p  { font-size: .88rem; color: #5C4430; line-height: 1.75; font-weight: 300; }
-
-/* Phone */
-.phone-wrap { display: flex; justify-content: center; }
-.phone { width: 240px; background: #1E1A16; border-radius: 36px; padding: 16px 12px; box-shadow: 0 32px 80px rgba(30,26,22,.25), 0 0 0 1px rgba(255,255,255,.05); }
-.phone-notch { width: 80px; height: 24px; background: #1E1A16; border-radius: 12px; margin: 0 auto 12px; border: 2px solid rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center; gap: 6px; }
-.notch-cam { width: 8px; height: 8px; background: #2a2a2a; border-radius: 50%; border: 1px solid #444; }
-.notch-speaker { width: 32px; height: 3px; background: #2a2a2a; border-radius: 2px; }
-.phone-screen { background: #E9F3EF; border-radius: 24px; overflow: hidden; min-height: 420px; }
-.line-header { background: #06C755; padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
-.line-avatar { width: 28px; height: 28px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .6rem; font-weight: 700; color: #06C755; flex-shrink: 0; }
-.line-name { font-size: .7rem; font-weight: 600; color: white; }
-.line-status { font-size: .55rem; color: rgba(255,255,255,.8); }
-.line-body { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
-.lmsg { max-width: 80%; }
-.lmsg-bubble { padding: 8px 12px; border-radius: 12px; font-size: .68rem; line-height: 1.55; }
-.lmsg.from-user { align-self: flex-end; }
-.lmsg.from-user .lmsg-bubble { background: #06C755; color: white; border-radius: 12px 12px 2px 12px; }
-.lmsg.from-bot  .lmsg-bubble { background: white; color: #333; border-radius: 12px 12px 12px 2px; }
-.lmsg-time { font-size: .5rem; color: #aaa; margin-top: 3px; text-align: right; }
-.lmsg.from-bot .lmsg-time { text-align: left; }
-.lmsg-bubble strong { color: #06C755; }
+#workflow{background:var(–cream)}
+.wg{display:grid;gap:60px;align-items:center}
+@media(min-width:860px){.wg{grid-template-columns:1fr 1fr}}
+.stl{display:flex;flex-direction:column;margin-top:40px;position:relative}
+.stl::before{content:””;position:absolute;left:20px;top:40px;bottom:40px;width:1px;background:var(–bdr)}
+.stp{display:flex;gap:24px;padding:24px 0}
+.stn{width:40px;height:40px;background:#FFFEF9;border:1.5px solid var(–bdr);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:“Noto Serif JP”,serif;font-size:.85rem;font-weight:700;color:var(–forest);flex-shrink:0;position:relative;z-index:1;transition:background .3s,border-color .3s,color .3s}
+.stp:hover .stn{background:var(–forest);border-color:var(–forest);color:var(–cream)}
+.stb{padding-top:8px}
+.stb h4{font-family:“Noto Serif JP”,serif;font-size:1.05rem;font-weight:700;color:var(–ink);margin-bottom:6px}
+.stb p{font-size:.88rem;color:var(–br);line-height:1.75;font-weight:300}
+.pw{display:flex;justify-content:center}
+.ph2{width:240px;background:#1E1A16;border-radius:36px;padding:16px 12px;box-shadow:0 32px 80px rgba(30,26,22,.25),0 0 0 1px rgba(255,255,255,.05)}
+.phn{width:80px;height:24px;background:#1E1A16;border-radius:12px;margin:0 auto 12px;border:2px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;gap:6px}
+.nc{width:8px;height:8px;background:#2a2a2a;border-radius:50%;border:1px solid #444}
+.ns{width:32px;height:3px;background:#2a2a2a;border-radius:2px}
+.phs{background:#E9F3EF;border-radius:24px;overflow:hidden;min-height:420px}
+.lh{background:#06C755;padding:10px 14px;display:flex;align-items:center;gap:8px}
+.la{width:28px;height:28px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:#06C755;flex-shrink:0}
+.ln{font-size:.7rem;font-weight:600;color:white}
+.ls{font-size:.55rem;color:rgba(255,255,255,.8)}
+.lb{padding:12px;display:flex;flex-direction:column;gap:10px}
+.lm{max-width:80%}
+.lmb{padding:8px 12px;border-radius:12px;font-size:.68rem;line-height:1.55}
+.lm.fu{align-self:flex-end}
+.lm.fu .lmb{background:#06C755;color:white;border-radius:12px 12px 2px 12px}
+.lm.fb .lmb{background:white;color:#333;border-radius:12px 12px 12px 2px}
+.lt{font-size:.5rem;color:#aaa;margin-top:3px;text-align:right}
+.lm.fb .lt{text-align:left}
+.lmb strong{color:#06C755}
 
 /* PRICING */
-#pricing { background: #2D4A3E; }
-.pricing-inner { text-align: center; max-width: 700px; margin: 0 auto; }
-.pricing-label {
-display: inline-flex; align-items: center; gap: 8px; justify-content: center;
-font-size: .72rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
-color: #E8C97A; margin-bottom: 18px;
-}
-.pricing-label::before { content: “”; width: 20px; height: 1px; background: #E8C97A; }
-.pricing-title { font-family: “Noto Serif JP”, serif; font-size: clamp(1.8rem,3.5vw,2.8rem); font-weight: 700; line-height: 1.35; color: #FAF7F2; margin-bottom: 20px; }
-.pricing-sub { font-size: 1rem; color: rgba(250,247,242,.65); line-height: 1.85; font-weight: 300; margin-bottom: 56px; }
+#pricing{background:var(–forest);padding:100px 48px}
+.pri{max-width:1080px;margin:0 auto}
+.prl{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(–gl);margin-bottom:18px}
+.prl::before{content:””;width:20px;height:1px;background:var(–gl)}
+.prt{font-family:“Noto Serif JP”,serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;line-height:1.35;color:var(–cream);margin-bottom:16px}
+.prs{font-size:1rem;color:rgba(250,247,242,.6);line-height:1.85;font-weight:300;margin-bottom:48px;max-width:560px}
+.pvr{display:flex;align-items:center;gap:10px;margin-bottom:36px;flex-wrap:wrap}
+.pvd{width:10px;height:10px;border-radius:50%}
+.pvlb{font-size:.74rem;color:rgba(250,247,242,.5);letter-spacing:.06em}
+.pvsp{width:20px;height:1px;background:rgba(255,255,255,.15)}
+.prg{display:grid;gap:20px;align-items:end}
+@media(min-width:780px){.prg{grid-template-columns:repeat(3,1fr)}}
+.pc{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:40px 32px;position:relative;overflow:hidden;transition:transform .35s,box-shadow .35s,border-color .35s,background .35s;display:flex;flex-direction:column}
+.pc:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.3);border-color:rgba(201,168,76,.4);background:rgba(255,255,255,.1)}
+.pc.ft{background:var(–cream);border-color:var(–cream);box-shadow:0 32px 80px rgba(0,0,0,.3);transform:translateY(-8px)}
+.pc.ft:hover{transform:translateY(-14px)}
+.fbd{position:absolute;top:0;right:0}
+.psym{width:72px;height:72px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center}
+.pk{font-family:“Noto Serif JP”,serif;font-size:1.4rem;font-weight:900;text-align:center;margin-bottom:4px}
+.pk-u{color:rgba(250,247,242,.45)} .pk-t{color:var(–forest)} .pk-m{color:rgba(250,247,242,.45)}
+.pc.ft .pk{color:var(–gold)}
+.ppn{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(250,247,242,.45);text-align:center;margin-bottom:24px}
+.pc.ft .ppn{color:var(–brl)}
+.par{text-align:center;margin-bottom:6px;line-height:1}
+.py{font-family:“Noto Serif JP”,serif;font-size:1.5rem;font-weight:700;vertical-align:top;margin-top:10px;display:inline-block;color:rgba(250,247,242,.9)}
+.pc.ft .py{color:var(–ink)}
+.pam{font-family:“Noto Serif JP”,serif;font-size:3.6rem;font-weight:900;line-height:1;color:rgba(250,247,242,.9)}
+.pc.ft .pam{color:var(–ink)}
+.pper{font-size:.9rem;color:rgba(250,247,242,.4);vertical-align:bottom;display:inline-block;margin-bottom:8px;margin-left:2px}
+.pc.ft .pper{color:var(–brl)}
+.ptx{font-size:.72rem;color:rgba(250,247,242,.35);text-align:center;margin-bottom:16px}
+.pc.ft .ptx{color:var(–brl)}
+.ptg{font-size:.82rem;line-height:1.6;color:rgba(250,247,242,.45);text-align:center;margin-bottom:24px;font-weight:300;min-height:48px}
+.pc.ft .ptg{color:var(–br)}
+.pdv{height:1px;background:rgba(255,255,255,.1);margin-bottom:22px}
+.pc.ft .pdv{background:var(–bdr)}
+.pfl{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:28px;flex:1}
+.pfl li{display:flex;gap:11px;align-items:flex-start}
+.fck{width:18px;height:18px;background:rgba(255,255,255,.15);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.fck svg{width:9px;height:9px}
+.pc.ft .fck{background:var(–forest)}
+.fof{background:rgba(255,255,255,.05)!important;border:1px solid rgba(255,255,255,.08)}
+.ftx{font-size:.84rem;color:rgba(250,247,242,.65);line-height:1.5;font-weight:300}
+.ftx strong{font-weight:600;color:rgba(250,247,242,.9)}
+.pc.ft .ftx{color:var(–ink)}
+.pc.ft .ftx strong{color:var(–ink)}
+.fdm{opacity:.3}
+.pca{display:block;text-align:center;padding:15px;border-radius:6px;font-size:.9rem;font-weight:500;text-decoration:none;transition:background .25s,transform .2s;border:none;cursor:pointer;font-family:“DM Sans”,sans-serif;margin-top:auto}
+.pcg{background:transparent;color:rgba(250,247,242,.6);border:1.5px solid rgba(255,255,255,.18)}
+.pcg:hover{background:rgba(255,255,255,.07);color:var(–cream);border-color:rgba(255,255,255,.4)}
+.pcm{background:var(–forest);color:var(–cream)}
+.pcm:hover{background:var(–fl);transform:translateY(-2px)}
+.pcgo{background:var(–gold);color:var(–ink)}
+.pcgo:hover{background:var(–gl);transform:translateY(-2px)}
+.prn{text-align:center;margin-top:36px;font-size:.8rem;color:rgba(250,247,242,.3)}
+.fbs{max-width:580px;margin:52px auto 0}
+.fbh{font-size:.72rem;color:rgba(250,247,242,.35);text-align:center;margin-bottom:22px;letter-spacing:.1em;text-transform:uppercase}
+.fbr{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.fbk{font-family:“Noto Serif JP”,serif;font-size:.9rem;min-width:24px}
+.fbt{flex:1;height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
+.fbf{height:100%;border-radius:3px;width:0;transition:width 1.3s ease}
+.fbp{font-size:.76rem;min-width:52px;text-align:right}
 
-.price-box { background: #FAF7F2; border-radius: 24px; padding: 52px 48px; position: relative; overflow: hidden; text-align: left; box-shadow: 0 32px 80px rgba(0,0,0,.2); }
-/* Ribbon via SVG — no CSS transform/rotation issues */
-.price-ribbon { position: absolute; top: 0; right: 0; width: 100px; height: 100px; pointer-events: none; }
-.price-plan-lbl { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: #8B6F47; margin-bottom: 12px; }
-.price-display { display: flex; align-items: flex-start; gap: 4px; margin-bottom: 8px; line-height: 1; }
-.price-yen { font-family: “Noto Serif JP”, serif; font-size: 2rem; font-weight: 700; color: #1E1A16; margin-top: 8px; }
-.price-num  { font-family: “Noto Serif JP”, serif; font-size: 5rem; font-weight: 900; color: #1E1A16; }
-.price-per  { font-size: 1rem; color: #8B6F47; align-self: flex-end; margin-bottom: 12px; }
-.price-tax  { font-size: .8rem; color: #8B6F47; margin-bottom: 36px; }
-.price-divider { height: 1px; background: #E8DDD0; margin-bottom: 32px; }
-.price-feats { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px; }
-.price-feats li { display: flex; gap: 14px; align-items: flex-start; font-size: .9rem; color: #2D2620; line-height: 1.55; }
-.feat-check { width: 20px; height: 20px; background: #2D4A3E; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
-.feat-check svg { width: 10px; height: 10px; }
-.price-cta {
-display: block; text-align: center; padding: 18px;
-background: #2D4A3E; color: #FAF7F2; border-radius: 6px;
-font-size: 1rem; font-weight: 500; letter-spacing: .04em; text-decoration: none;
-transition: background .25s, transform .2s; border: none; cursor: pointer; font-family: “DM Sans”, sans-serif;
-}
-.price-cta:hover { background: #3D6B5A; transform: translateY(-2px); }
-.price-fine { text-align: center; margin-top: 18px; font-size: .78rem; color: #8B6F47; }
+/* ADD-ONS */
+#addons{background:var(–sand);padding:80px 48px}
+.adg{display:grid;gap:14px;margin-top:40px}
+@media(min-width:640px){.adg{grid-template-columns:1fr 1fr}}
+@media(min-width:960px){.adg{grid-template-columns:repeat(3,1fr)}}
+.adc{background:#FFFEF9;border:1px solid var(–bdr);border-radius:12px;padding:28px 24px;display:flex;flex-direction:column;gap:10px;transition:transform .3s,box-shadow .3s}
+.adc:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(92,68,48,.09)}
+.adi{width:44px;height:44px;margin-bottom:4px}
+.adn{font-family:“Noto Serif JP”,serif;font-size:1rem;font-weight:700;color:var(–ink)}
+.add{font-size:.85rem;line-height:1.7;color:var(–br);font-weight:300;flex:1}
+.adp{font-family:“Noto Serif JP”,serif;font-size:1.1rem;font-weight:700;color:var(–forest)}
+.adp span{font-family:“DM Sans”,sans-serif;font-size:.78rem;font-weight:400;color:var(–brl)}
+.adnt{font-size:.72rem;color:var(–brl);line-height:1.5}
 
 /* CTA */
-#cta { background: #F5F0E8; padding: 100px 48px; }
-.cta-card {
-background: #1E1A16; border-radius: 24px; padding: 72px 56px;
-display: grid; gap: 48px; align-items: center; overflow: hidden; position: relative;
-max-width: 1080px; margin: 0 auto;
-}
-@media(min-width:760px){ .cta-card { grid-template-columns: 1fr auto; } }
-/* Glow blobs via SVG inside .cta-card */
-.cta-glows { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: 24px; }
-.cta-text { position: relative; z-index: 1; }
-.cta-eyebrow { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: #E8C97A; margin-bottom: 16px; }
-.cta-title { font-family: “Noto Serif JP”, serif; font-size: clamp(1.6rem,3vw,2.4rem); font-weight: 700; color: #FAF7F2; line-height: 1.4; margin-bottom: 16px; }
-.cta-desc { font-size: .95rem; color: rgba(250,247,242,.6); line-height: 1.8; font-weight: 300; margin-bottom: 32px; }
-.cta-assure { display: flex; flex-wrap: wrap; gap: 16px; }
-.assure-item { font-size: .78rem; color: rgba(250,247,242,.45); display: flex; align-items: center; gap: 6px; }
-.assure-chk { color: #C9A84C; }
-.cta-buttons { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; }
-.btn-gold {
-display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-background: #C9A84C; color: #1E1A16; padding: 16px 32px; border-radius: 6px;
-font-size: .9rem; font-weight: 600; letter-spacing: .04em; text-decoration: none;
-transition: background .25s, transform .2s; white-space: nowrap; border: none; cursor: pointer; font-family: “DM Sans”, sans-serif;
-}
-.btn-gold:hover { background: #E8C97A; transform: translateY(-2px); }
-.btn-ghost {
-display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-background: transparent; color: rgba(250,247,242,.8); padding: 16px 32px; border-radius: 6px;
-font-size: .9rem; font-weight: 400; letter-spacing: .04em; text-decoration: none;
-transition: border-color .25s, color .25s, background .25s; border: 1.5px solid rgba(250,247,242,.2);
-white-space: nowrap; cursor: pointer; font-family: “DM Sans”, sans-serif;
-}
-.btn-ghost:hover { border-color: rgba(250,247,242,.5); color: #FAF7F2; background: rgba(255,255,255,.05); }
+#cta{background:var(–sand);padding:100px 48px}
+.ctac{background:var(–ink);border-radius:24px;padding:72px 56px;display:grid;gap:48px;align-items:center;overflow:hidden;position:relative;max-width:1080px;margin:0 auto}
+@media(min-width:760px){.ctac{grid-template-columns:1fr auto}}
+.ctag{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:24px}
+.ctatx{position:relative;z-index:1}
+.ctaey{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(–gl);margin-bottom:16px}
+.ctat{font-family:“Noto Serif JP”,serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;color:var(–cream);line-height:1.4;margin-bottom:16px}
+.ctad{font-size:.95rem;color:rgba(250,247,242,.6);line-height:1.8;font-weight:300;margin-bottom:32px}
+.ctaa{display:flex;flex-wrap:wrap;gap:16px}
+.ai{font-size:.78rem;color:rgba(250,247,242,.4);display:flex;align-items:center;gap:6px}
+.ac{color:var(–gold)}
+.ctab{position:relative;z-index:1;display:flex;flex-direction:column;gap:12px;flex-shrink:0}
 
 /* FOOTER */
-footer { background: #F5F0E8; border-top: 1px solid #E8DDD0; padding: 56px 48px 32px; }
-.footer-grid { max-width: 1080px; margin: 0 auto 48px; display: grid; gap: 40px; }
-@media(min-width:640px){ .footer-grid { grid-template-columns: 1fr 1fr; } }
-.footer-brand-a { font-family: “Noto Serif JP”, serif; font-size: 1.3rem; font-weight: 700; color: #1E1A16; text-decoration: none; display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-.footer-tagline { font-size: .85rem; color: #8B6F47; line-height: 1.7; font-weight: 300; }
-.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.footer-links a { font-size: .85rem; color: #8B6F47; text-decoration: none; transition: color .2s; }
-.footer-links a:hover { color: #2D4A3E; }
-.footer-bottom { max-width: 1080px; margin: 0 auto; padding-top: 28px; border-top: 1px solid #E8DDD0; display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center; }
-@media(min-width:600px){ .footer-bottom { flex-direction: row; justify-content: space-between; } }
-.footer-copy   { font-size: .75rem; color: #C4A882; }
-.footer-domain { font-family: “Noto Serif JP”, serif; font-size: .75rem; color: #C4A882; letter-spacing: .06em; }
+footer{background:var(–sand);border-top:1px solid var(–bdr);padding:56px 48px 32px}
+.fg{max-width:1080px;margin:0 auto 48px;display:grid;gap:40px}
+@media(min-width:640px){.fg{grid-template-columns:1fr 1fr}}
+.fba{font-family:“Noto Serif JP”,serif;font-size:1.3rem;font-weight:700;color:var(–ink);text-decoration:none;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.ftg{font-size:.85rem;color:var(–brl);line-height:1.7;font-weight:300}
+.fli{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fli a{font-size:.85rem;color:var(–brl);text-decoration:none;transition:color .2s}
+.fli a:hover{color:var(–forest)}
+.fb2{max-width:1080px;margin:0 auto;padding-top:28px;border-top:1px solid var(–bdr);display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center}
+@media(min-width:600px){.fb2{flex-direction:row;justify-content:space-between}}
+.fc{font-size:.75rem;color:#C4A882}
+.fd{font-family:“Noto Serif JP”,serif;font-size:.75rem;color:#C4A882;letter-spacing:.06em}
 
 /* LINE FLOAT */
-.float-line {
-position: fixed; bottom: 24px; right: 24px; z-index: 400;
-background: #06C755; width: 56px; height: 56px; border-radius: 50%;
-display: flex; align-items: center; justify-content: center;
-box-shadow: 0 6px 24px rgba(6,199,85,.4); text-decoration: none;
-transition: transform .2s, box-shadow .2s;
-}
-.float-line:hover { transform: scale(1.1); box-shadow: 0 10px 32px rgba(6,199,85,.5); }
+.fl{position:fixed;bottom:24px;right:24px;z-index:400;background:#06C755;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(6,199,85,.4);text-decoration:none;transition:transform .2s,box-shadow .2s}
+.fl:hover{transform:scale(1.1);box-shadow:0 10px 32px rgba(6,199,85,.5)}
 
-/* SCROLL REVEAL */
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity .75s ease, transform .75s ease; }
-.reveal.on { opacity: 1; transform: translateY(0); }
-.delay1 { transition-delay: .1s; }
-.delay2 { transition-delay: .2s; }
-.delay3 { transition-delay: .3s; }
+/* REVEAL */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease}
+.rv.on{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+@keyframes sR{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
+@keyframes sU{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes bd{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
 @media(max-width:600px){
-nav, footer { padding-left: 20px; padding-right: 20px; }
-section, #cta { padding: 72px 20px; }
-#hero { padding: 100px 20px 60px; }
-.cta-card { padding: 36px 24px; }
-.price-box { padding: 36px 24px; }
+nav,footer{padding-left:20px;padding-right:20px}
+section,#cta,#pricing,#addons{padding-top:64px;padding-bottom:64px;padding-left:20px;padding-right:20px}
+.ctac{padding:36px 24px}
+.pc{padding:28px 20px}
 }
 </style>
 
 </head>
 <body>
+<canvas id="nc" aria-hidden="true"></canvas>
+<div class="cur" id="cur"></div>
+<div class="cur-r" id="cur-r"></div>
 
-<canvas id="noise-canvas" aria-hidden="true"></canvas>
-
-<div class="cursor" id="cur"></div>
-<div class="cursor-ring" id="cur-ring"></div>
-
-<!-- LINE FLOAT -->
-
-<a href="#" class="float-line" title="LINEでお問い合わせ">
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="white" aria-hidden="true">
-    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
-  </svg>
+<a href="#cta" class="fl" title="LINEでお問い合わせ">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
 </a>
 
-<!-- NAV -->
-
 <nav id="nav">
-  <a href="#" class="nav-logo">
-    <div class="nav-logo-mark">f</div>fewron
-  </a>
-  <ul class="nav-links">
+  <a href="index.html" class="nl"><div class="nm">f</div>fewron</a>
+  <ul class="nli">
+    <li><a href="#pricing">料金</a></li>
+    <li><a href="#addons">追加オプション</a></li>
     <li><a href="#strengths">強み</a></li>
     <li><a href="#workflow">サービス</a></li>
-    <li><a href="#pricing">料金</a></li>
     <li><a href="#cta">相談する</a></li>
   </ul>
-  <a href="#cta" class="nav-btn">無料相談</a>
+  <a href="#cta" class="nb">無料相談</a>
 </nav>
 
 <!-- HERO -->
 
 <section id="hero">
-  <!-- SVG diagonal panel replaces clip-path pseudo-element -->
-  <svg class="hero-diagonal" viewBox="0 0 600 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <polygon points="90,0 600,0 600,900 0,900" fill="#F5F0E8"/>
-  </svg>
-
-  <div class="hero-text">
-    <div class="hero-eyebrow">
-      <span class="hero-eyebrow-line"></span>
-      地域密着型 Web制作サービス
+  <svg class="hd" viewBox="0 0 600 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><polygon points="90,0 600,0 600,900 0,900" fill="#F5F0E8"/></svg>
+  <div class="ht">
+    <div class="he"><span class="hel"></span>地域密着型 Web制作サービス</div>
+    <h1 class="hk">地元の商売を、<br><span class="hka">もっと強く。<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="0" y="2" width="200" height="6" rx="3" fill="#E8C97A" opacity="0.55"/></svg></span></h1>
+    <p class="hs">Webサイトがあれば、お店は24時間営業できます。<br>フューロンが制作から運用・集客分析まで<br>すべてサポートします。月額<strong>1,980円〜</strong>。</p>
+    <div class="ha">
+      <a href="#cta" class="bf">無料でオンライン面談を予約<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a href="#pricing" class="bo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>料金を見る</a>
     </div>
-    <h1 class="hero-kicker">
-      地元の商売を、<br>
-      <span class="hero-kicker-accent">もっと強く。
-        <svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <rect x="0" y="2" width="200" height="6" rx="3" fill="#E8C97A" opacity="0.55"/>
-        </svg>
-      </span>
-    </h1>
-    <p class="hero-sub">
-      Webサイトがあれば、お店は24時間営業できます。<br>
-      フューロンが制作から運用・集客分析まで<br>すべてサポートします。
-    </p>
-    <div class="hero-actions">
-      <a href="#cta" class="btn-forest">
-        無料でオンライン面談を予約
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </a>
-      <a href="#" class="btn-outline">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        資料を請求する
-      </a>
-    </div>
-    <div class="hero-trust">
-      <div class="hero-trust-label">こんなお店に選ばれています</div>
-      <div class="hero-trust-tags">
-        <span class="trust-tag">飲食店・カフェ</span>
-        <span class="trust-tag">整体・サロン</span>
-        <span class="trust-tag">小売店</span>
-        <span class="trust-tag">美容室</span>
-        <span class="trust-tag">クリニック</span>
-        <span class="trust-tag">工務店</span>
-      </div>
+    <div class="htr">
+      <div class="htl">こんなお店に選ばれています</div>
+      <div class="htt"><span class="tt">飲食店・カフェ</span><span class="tt">整体・サロン</span><span class="tt">小売店</span><span class="tt">美容室</span><span class="tt">クリニック</span><span class="tt">工務店</span></div>
     </div>
   </div>
-
-  <div class="hero-visual">
-    <div style="position:relative;">
-      <div class="mockup-browser">
-        <div class="browser-bar">
-          <div class="browser-dots">
-            <div class="browser-dot dot-r"></div>
-            <div class="browser-dot dot-y"></div>
-            <div class="browser-dot dot-g"></div>
-          </div>
-          <div class="browser-url">fewron.jp/demo/sakura-bistro</div>
-        </div>
-        <div class="browser-body">
-          <div class="mini-header">
-            <div class="mini-logo">さくらビストロ</div>
-            <div class="mini-nav"><span>メニュー</span><span>アクセス</span><span>予約</span></div>
-          </div>
-          <div class="mini-hero-blk">
-            <div class="mini-tag">地元で愛される味</div>
-            <div class="mini-h1">旬の食材を使った<br>こだわりのランチ</div>
-            <div class="mini-p">毎日仕入れる新鮮な地元野菜と、シェフ自慢の自家製ソース。</div>
-            <div class="mini-btn">今すぐ予約する</div>
-          </div>
-          <div class="mini-cards">
-            <div class="mini-card"><div class="mini-card-icon">&#127869;</div><div class="mini-card-t">ランチ</div><div class="mini-card-d">11:00-14:30</div></div>
-            <div class="mini-card"><div class="mini-card-icon">&#127863;</div><div class="mini-card-t">ディナー</div><div class="mini-card-d">17:00-22:00</div></div>
-            <div class="mini-card"><div class="mini-card-icon">&#128205;</div><div class="mini-card-t">アクセス</div><div class="mini-card-d">駅から3分</div></div>
-          </div>
+  <div class="hv">
+    <div style="position:relative">
+      <div class="mb">
+        <div class="bb"><div class="bds"><div class="bd dr"></div><div class="bd dy"></div><div class="bd dg"></div></div><div class="bu">fewron.jp/demo/sakura-bistro</div></div>
+        <div class="bby">
+          <div class="mh"><div class="ml">さくらビストロ</div><div class="mn"><span>メニュー</span><span>アクセス</span><span>予約</span></div></div>
+          <div class="mhb"><div class="mt">地元で愛される味</div><div class="mh1">旬の食材を使った<br>こだわりのランチ</div><div class="mp">毎日仕入れる新鮮な地元野菜と、シェフ自慢の自家製ソース。</div><div class="mbt">今すぐ予約する</div></div>
+          <div class="mcs"><div class="mc"><div class="mci">🍽</div><div class="mct">ランチ</div><div class="mcd">11:00-14:30</div></div><div class="mc"><div class="mci">🍷</div><div class="mct">ディナー</div><div class="mcd">17:00-22:00</div></div><div class="mc"><div class="mci">📍</div><div class="mct">アクセス</div><div class="mcd">駅から3分</div></div></div>
         </div>
       </div>
-      <div class="mockup-badge"><strong>即日</strong>でデモ提案</div>
+      <div class="mbadge"><strong>即日</strong>でデモ提案</div>
     </div>
   </div>
 </section>
 
 <!-- MARQUEE -->
 
-<div class="marquee-strip" aria-hidden="true">
-  <div class="marquee-track">
-    <div class="marquee-item">最短即日でデモサイト提案<div class="marquee-dot"></div></div>
-    <div class="marquee-item">月額 ¥4,980（税込）<div class="marquee-dot"></div></div>
-    <div class="marquee-item">LINEで修正依頼OK<div class="marquee-dot"></div></div>
-    <div class="marquee-item">AIが集客課題を分析<div class="marquee-dot"></div></div>
-    <div class="marquee-item">初期費用・契約縛りなし<div class="marquee-dot"></div></div>
-    <div class="marquee-item">24時間サポート<div class="marquee-dot"></div></div>
-    <div class="marquee-item">最短即日でデモサイト提案<div class="marquee-dot"></div></div>
-    <div class="marquee-item">月額 ¥4,980（税込）<div class="marquee-dot"></div></div>
-    <div class="marquee-item">LINEで修正依頼OK<div class="marquee-dot"></div></div>
-    <div class="marquee-item">AIが集客課題を分析<div class="marquee-dot"></div></div>
-    <div class="marquee-item">初期費用・契約縛りなし<div class="marquee-dot"></div></div>
-    <div class="marquee-item">24時間サポート<div class="marquee-dot"></div></div>
+<div class="mqs" aria-hidden="true">
+  <div class="mqt">
+    <div class="mqi">最短即日でデモサイト提案<div class="mqd"></div></div><div class="mqi">月額 ¥1,980〜（税込）<div class="mqd"></div></div><div class="mqi">LINEで修正依頼OK<div class="mqd"></div></div><div class="mqi">AIが集客課題を分析<div class="mqd"></div></div><div class="mqi">初期費用・契約縛りなし<div class="mqd"></div></div><div class="mqi">梅・竹・松の3プラン<div class="mqd"></div></div>
+    <div class="mqi">最短即日でデモサイト提案<div class="mqd"></div></div><div class="mqi">月額 ¥1,980〜（税込）<div class="mqd"></div></div><div class="mqi">LINEで修正依頼OK<div class="mqd"></div></div><div class="mqi">AIが集客課題を分析<div class="mqd"></div></div><div class="mqi">初期費用・契約縛りなし<div class="mqd"></div></div><div class="mqi">梅・竹・松の3プラン<div class="mqd"></div></div>
   </div>
 </div>
 
-<!-- STRENGTHS -->
+<!-- PAIN / SLIDER -->
 
-<section id="strengths">
-  <div class="container">
-    <div class="s-header reveal">
-      <div class="sec-label">Our Strengths</div>
-      <h2 class="title-serif">選ばれる、3つの理由。</h2>
-      <p class="body-text">難しい操作も専門知識も要りません。全てお任せください。</p>
-    </div>
-    <div class="strengths-layout">
-      <div class="str-card reveal delay1">
-        <div class="str-num">01</div>
-        <h3 class="str-title">圧倒的スピード</h3>
-        <p class="str-desc">AIを活用することで、最短即日でデモサイトをご提案。「どんなサイトになるか」を今すぐ確認できます。承認後、最短1日で本番公開。</p>
-        <span class="str-pill">&#9889; 最短即日提案</span>
-      </div>
-      <div class="str-card reveal delay2">
-        <div class="str-num">02</div>
-        <h3 class="str-title">驚きの低コスト</h3>
-        <p class="str-desc">月額4,980円（税込）のみ。複雑な初期費用は一切なし。制作費・サーバー代・ドメイン代・修正対応、すべて含まれています。</p>
-        <span class="str-pill">&#128176; 初期費用ゼロ</span>
-      </div>
-      <div class="str-card reveal delay3">
-        <div class="str-num">03</div>
-        <h3 class="str-title">LINEで完結</h3>
-        <p class="str-desc">文章の変更・写真の差し替え・営業時間の更新——すべてLINEに送るだけ。面倒なメールも専用システムへのログインも不要。</p>
-        <span class="str-pill">&#128172; LINE対応</span>
+<section id="pain" style="padding:80px 0">
+  <div class="pi">
+    <div class="plb">Customer Voices</div>
+    <div class="ph rv">
+      <h2 class="ptl">こんな不安、<br>ありませんでしたか？</h2>
+      <div class="snv">
+        <button class="snb" id="sprev" aria-label="前へ"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <span class="sc2" id="scount">1 / 6</span>
+        <button class="snb" id="snext" aria-label="次へ"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- WORKFLOW -->
-
-<section id="workflow">
-  <div class="container">
-    <div class="workflow-grid">
-      <div class="reveal">
-        <div class="sec-label">How It Works</div>
-        <h2 class="title-serif">「引き算」の<br>Web運用</h2>
-        <p class="body-text">難しい解析ツールは不要。AIが課題を特定しわかりやすい言葉で改善案を届けます。</p>
-        <div class="steps-list">
-          <div class="step">
-            <div class="step-num">1</div>
-            <div class="step-body"><h4>LINEで気になることを送る</h4><p>「最近お客さんが減った」「メニューを変えたい」普段の言葉でOK。</p></div>
-          </div>
-          <div class="step">
-            <div class="step-num">2</div>
-            <div class="step-body"><h4>AIが課題を分析・言語化</h4><p>アクセスデータと照合し、問題の本質を整理。専門用語は使いません。</p></div>
-          </div>
-          <div class="step">
-            <div class="step-num">3</div>
-            <div class="step-body"><h4>改善案レポートをお届け</h4><p>毎月、あなたの店舗に合わせた具体的なアクションプランをお送りします。</p></div>
-          </div>
-        </div>
+    <div class="svp" id="svp">
+      <div class="stt" id="stt">
+        <div class="bub"><div class="bav"><div class="bac" style="background:rgba(201,168,76,.12)">🍜</div><div><div class="ban">ラーメン店オーナー・田中さん</div><div class="bar2">50代・千葉県</div></div></div><p class="btx">「ホームページを作るのに<strong>50万円</strong>って見積もりを出されて。うちみたいな個人店には絶対無理だと思ってたんですが…」</p><svg class="btail" viewBox="0 0 24 18" fill="none"><path d="M0 0 L12 18 L24 0" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg></div>
+        <div class="bub"><div class="bav"><div class="bac" style="background:rgba(45,74,62,.22)">💆</div><div><div class="ban">整体院オーナー・鈴木さん</div><div class="bar2">40代・埼玉県</div></div></div><p class="btx">「<strong>管理が大変そう</strong>で。WordPressって触ったことないし、パソコンも苦手で…結局ずっと放置してました。」</p><svg class="btail" viewBox="0 0 24 18" fill="none"><path d="M0 0 L12 18 L24 0" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg></div>
+        <div class="bub"><div class="bav"><div class="bac" style="background:rgba(201,168,76,.1)">✂️</div><div><div class="ban">美容室オーナー・山本さん</div><div class="bar2">30代・神奈川県</div></div></div><p class="btx">「Instagramだけやってたけど、<strong>検索で見つけてもらえない</strong>のが課題で。ちゃんとしたサイトが欲しかった。」</p><svg class="btail" viewBox="0 0 24 18" fill="none"><path d="M0 0 L12 18 L24 0" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg></div>
+        <div class="bub"><div class="bav"><div class="bac" style="background:rgba(45,74,62,.18)">🌿</div><div><div class="ban">雑貨店オーナー・佐藤さん</div><div class="bar2">40代・東京都</div></div></div><p class="btx">「更新のたびに業者に<strong>追加料金</strong>を取られて。写真一枚変えるのに1万円はおかしいと思ってました。」</p><svg class="btail" viewBox="0 0 24 18" fill="none"><path d="M0 0 L12 18 L24 0" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg></div>
+        <div class="bub"><div class="bav"><div class="bac" style="background:rgba(201,168,76,.12)">🏥</div><div><div class="ban">クリニック院長・中村さん</div><div class="bar2">50代・大阪府</div></div></div><p class="btx">「<strong>効果があるのかわからない</strong>まま月額を払い続けるのが不安で。数字で見えないと判断できない…」</p><svg class="btail" viewBox="0 0 24 18" fill="none"><path d="M0 0 L12 18 L24 0" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg></div>
+        <div class="bub"><div class="bav"><div class="bac" style="background:rgba(45,74,62,.18)">🔨</div><div><div class="ban">工務店オーナー・高橋さん</div><div class="bar2">60代・愛知県</div></div></div><p class="btx">「<strong>スマホで見たら崩れてる</strong>サイトを長年使ってた。どこに頼めばいいかわからなくて、ずっと放置…。」</p><svg class="btail" viewBox="0 0 24 18" fill="none"><path d="M0 0 L12 18 L24 0" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg></div>
       </div>
-      <div class="phone-wrap reveal delay2">
-        <div class="phone">
-          <div class="phone-notch"><div class="notch-cam"></div><div class="notch-speaker"></div></div>
-          <div class="phone-screen">
-            <div class="line-header">
-              <div class="line-avatar">F</div>
-              <div><div class="line-name">Fewron サポート</div><div class="line-status">オンライン</div></div>
-            </div>
-            <div class="line-body">
-              <div class="lmsg from-user"><div class="lmsg-bubble">最近ランチのお客さんが減った気がします…</div><div class="lmsg-time">14:23</div></div>
-              <div class="lmsg from-bot"><div class="lmsg-bubble">ご連絡ありがとうございます！サイトを確認したところ、<strong>ランチページへの流入が-23%</strong>になっていました&#128202;</div><div class="lmsg-time">14:24</div></div>
-              <div class="lmsg from-bot"><div class="lmsg-bubble">Googleマップの口コミ返信と、メニュー写真の更新が効果的です。文章もご用意しますね&#10024;</div><div class="lmsg-time">14:24</div></div>
-              <div class="lmsg from-user"><div class="lmsg-bubble">ありがとうございます！お願いします&#128591;</div><div class="lmsg-time">14:26</div></div>
-              <div class="lmsg from-bot"><div class="lmsg-bubble">承りました！本日中に修正してサイトに反映します。</div><div class="lmsg-time">14:26</div></div>
-            </div>
-          </div>
-        </div>
+    </div>
+    <div class="sdots" id="sdots">
+      <button class="sdot on" data-i="0"></button>
+      <button class="sdot" data-i="1"></button>
+      <button class="sdot" data-i="2"></button>
+      <button class="sdot" data-i="3"></button>
+      <button class="sdot" data-i="4"></button>
+      <button class="sdot" data-i="5"></button>
+    </div>
+    <div class="presv rv">
+      <div class="presi"><span class="prest">フューロンが解決します</span>
+        <svg class="presa" width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="rgba(201,168,76,.4)" stroke-width="1.5"/><path d="M14 9 L14 19 M9 15 L14 20 L19 15" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
     </div>
   </div>
@@ -597,34 +432,178 @@ section, #cta { padding: 72px 20px; }
 <!-- PRICING -->
 
 <section id="pricing">
-  <div class="container">
-    <div class="pricing-inner">
-      <div class="pricing-label">Pricing</div>
-      <h2 class="pricing-title">シンプルな料金、<br>すべて込みの安心。</h2>
-      <p class="pricing-sub">初期費用なし。隠れた費用なし。月々の定額だけで、プロのWeb運用が続きます。</p>
-      <div class="price-box reveal">
-        <!-- SVG ribbon replaces CSS ::after rotation -->
-        <svg class="price-ribbon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <polygon points="50,0 100,0 100,50" fill="#C9A84C"/>
-          <text x="88" y="16" font-size="7" font-weight="700" fill="#1E1A16" text-anchor="middle" transform="rotate(45,75,12)" font-family="DM Sans,sans-serif" letter-spacing="0.5">POPULAR</text>
-        </svg>
-        <div class="price-plan-lbl">シンプルプラン</div>
-        <div class="price-display">
-          <span class="price-yen">¥</span>
-          <span class="price-num">4,980</span>
-          <span class="price-per">/ 月</span>
-        </div>
-        <div class="price-tax">税込価格 · 月々お支払い</div>
-        <div class="price-divider"></div>
-        <ul class="price-feats">
-          <li><span class="feat-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span><strong>Webサイト制作</strong>：プロ品質のサイトをゼロから。デザインはあなたの店舗に合わせて提案。</span></li>
-          <li><span class="feat-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span><strong>サーバー・ドメイン維持</strong>：技術的な管理はすべてフューロンが担当。</span></li>
-          <li><span class="feat-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span><strong>LINE修正対応</strong>：文章・写真・メニューの変更をLINEで即対応。</span></li>
-          <li><span class="feat-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span><strong>月次AIレポート</strong>：集客課題を分析し、改善案をわかりやすく提案。</span></li>
-          <li><span class="feat-check"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span><strong>24時間サポート</strong>：いつでも安心してLINEでご相談いただけます。</span></li>
+  <div class="pri">
+    <div class="rv"><div class="prl">Pricing</div><h2 class="prt">梅・竹・松、<br>あなたに合ったプランを。</h2><p class="prs">初期費用なし。隠れた費用なし。いつでも解約可能。<br>まずは「梅」から始めて、必要に応じてアップグレードできます。</p></div>
+    <div class="pvr rv">
+      <div class="pvd" style="background:rgba(255,255,255,.25)"></div><span class="pvlb">梅 — 看板を出す</span>
+      <div class="pvsp"></div>
+      <div class="pvd" style="background:#C9A84C"></div><span class="pvlb" style="color:rgba(250,247,242,.75)">竹 — 効果を測る</span>
+      <div class="pvsp"></div>
+      <div class="pvd" style="background:#E8C97A"></div><span class="pvlb">松 — 丸投げする</span>
+    </div>
+    <div class="prg">
+      <!-- 梅 -->
+      <div class="pc rv d1">
+        <div class="psym"><svg viewBox="0 0 72 72" fill="none"><circle cx="36" cy="22" r="8" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><circle cx="52" cy="32" r="8" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><circle cx="46" cy="50" r="8" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><circle cx="26" cy="50" r="8" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><circle cx="20" cy="32" r="8" fill="rgba(255,255,255,.07)" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/><circle cx="36" cy="36" r="5" fill="rgba(255,255,255,.12)"/></svg></div>
+        <div class="pk pk-u">梅</div><div class="ppn">維持プラン</div>
+        <div class="par"><span class="py">¥</span><span class="pam">1,980</span><span class="pper">/ 月</span></div>
+        <div class="ptx">税込 · 月額</div>
+        <p class="ptg">まずは低コストで<br>デジタル看板を出したい方に。</p>
+        <div class="pdv"></div>
+        <ul class="pfl">
+          <li><span class="fck"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span class="ftx"><strong>Webサイト制作・公開</strong></span></li>
+          <li><span class="fck"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span class="ftx"><strong>サーバー・ドメイン維持</strong></span></li>
+          <li><span class="fck"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span class="ftx">自動セキュリティ更新</span></li>
+          <li><span class="fck fof"><svg viewBox="0 0 10 10" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2"><line x1="2" y1="5" x2="8" y2="5"/></svg></span><span class="ftx fdm">LINE修正対応</span></li>
+          <li><span class="fck fof"><svg viewBox="0 0 10 10" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2"><line x1="2" y1="5" x2="8" y2="5"/></svg></span><span class="ftx fdm">月次AIレポート</span></li>
         </ul>
-        <a href="#cta" class="price-cta">まずは無料オンライン面談を予約する →</a>
-        <div class="price-fine">初期費用なし ・ 契約縛りなし ・ いつでも解約可能</div>
+        <a href="#cta" class="pca pcg">このプランで始める</a>
+      </div>
+      <!-- 竹 -->
+      <div class="pc ft rv d2">
+        <svg class="fbd" width="92" height="92" viewBox="0 0 92 92"><polygon points="46,0 92,0 92,46" fill="#C9A84C"/><text x="80" y="16" font-size="7" font-weight="700" fill="#1E1A16" text-anchor="middle" transform="rotate(45,70,12)" font-family="DM Sans,sans-serif">人気</text></svg>
+        <div class="psym"><svg viewBox="0 0 72 72" fill="none"><rect x="26" y="8" width="8" height="56" rx="4" fill="rgba(45,74,62,.12)" stroke="rgba(45,74,62,.35)" stroke-width="1.5"/><rect x="38" y="12" width="8" height="52" rx="4" fill="rgba(45,74,62,.12)" stroke="rgba(45,74,62,.35)" stroke-width="1.5"/><line x1="26" y1="24" x2="34" y2="24" stroke="rgba(45,74,62,.4)" stroke-width="1.5"/><line x1="38" y1="32" x2="46" y2="32" stroke="rgba(45,74,62,.4)" stroke-width="1.5"/><line x1="26" y1="44" x2="34" y2="44" stroke="rgba(45,74,62,.4)" stroke-width="1.5"/><line x1="38" y1="52" x2="46" y2="52" stroke="rgba(45,74,62,.4)" stroke-width="1.5"/></svg></div>
+        <div class="pk pk-t">竹</div><div class="ppn">集客レポート付</div>
+        <div class="par"><span class="py" style="color:#1E1A16">¥</span><span class="pam" style="color:#1E1A16">4,980</span><span class="pper" style="color:#8B6F47">/ 月</span></div>
+        <div class="ptx" style="color:#8B6F47">税込 · 月額</div>
+        <p class="ptg" style="color:#5C4430">効果を数字で確認しながら<br>じっくり育てたい方に。</p>
+        <div class="pdv"></div>
+        <ul class="pfl">
+          <li><span class="fck"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span class="ftx"><strong>梅プランすべて含む</strong></span></li>
+          <li><span class="fck"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span class="ftx"><strong>LINE修正対応</strong>（文章・写真・メニュー）</span></li>
+          <li><span class="fck"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span class="ftx"><strong>月次AIアクセス解析レポート</strong></span></li>
+          <li><span class="fck"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span class="ftx">改善アクションプランの提案</span></li>
+          <li><span class="fck"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span class="ftx">24時間LINEサポート</span></li>
+        </ul>
+        <a href="#cta" class="pca pcm">このプランで始める</a>
+      </div>
+      <!-- 松 -->
+      <div class="pc rv d3">
+        <div class="psym"><svg viewBox="0 0 72 72" fill="none"><polygon points="36,8 42,28 62,28 46,40 52,60 36,48 20,60 26,40 10,28 30,28" fill="rgba(201,168,76,.12)" stroke="rgba(201,168,76,.45)" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+        <div class="pk pk-m">松</div><div class="ppn">フルカスタム＋レポート</div>
+        <div class="par"><span class="py">¥</span><span class="pam" style="font-size:3rem">14,800</span><span class="pper">/ 月</span></div>
+        <div class="ptx">税込 · 月額</div>
+        <p class="ptg">デザインから集客まで<br>完全丸投げしたい方の最上位プラン。</p>
+        <div class="pdv"></div>
+        <ul class="pfl">
+          <li><span class="fck"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span class="ftx"><strong>竹プランすべて含む</strong></span></li>
+          <li><span class="fck"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span class="ftx"><strong>フルオーダーメイドデザイン</strong></span></li>
+          <li><span class="fck"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span class="ftx">SEO最適化・Googleマップ対策</span></li>
+          <li><span class="fck"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span class="ftx">専任担当者によるサポート</span></li>
+          <li><span class="fck"><svg viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2"><polyline points="2,5 4,8 8,2"/></svg></span><span class="ftx">月次オンライン戦略MTG（30分）</span></li>
+        </ul>
+        <a href="#cta" class="pca pcgo">このプランで始める</a>
+      </div>
+    </div>
+    <!-- Bars -->
+    <div class="fbs rv">
+      <div class="fbh">各プランの機能充実度</div>
+      <div class="fbr"><span class="fbk" style="color:rgba(250,247,242,.4)">梅</span><div class="fbt"><div class="bani" data-w="28" style="height:100%;border-radius:3px;background:rgba(255,255,255,.25);width:0;transition:width 1.2s ease"></div></div><span class="fbp" style="color:rgba(250,247,242,.35)">¥1,980</span></div>
+      <div class="fbr"><span class="fbk" style="color:#C9A84C">竹</span><div class="fbt"><div class="bani" data-w="58" style="height:100%;border-radius:3px;background:#C9A84C;width:0;transition:width 1.2s ease .15s"></div></div><span class="fbp" style="color:rgba(250,247,242,.5)">¥4,980</span></div>
+      <div class="fbr"><span class="fbk" style="color:#E8C97A">松</span><div class="fbt"><div class="bani" data-w="100" style="height:100%;border-radius:3px;background:linear-gradient(90deg,#C9A84C,#E8C97A);width:0;transition:width 1.2s ease .3s"></div></div><span class="fbp" style="color:rgba(250,247,242,.55)">¥14,800</span></div>
+    </div>
+    <div class="prn rv">初期費用なし ・ 契約縛りなし ・ いつでもプラン変更・解約可能</div>
+  </div>
+</section>
+
+<!-- ADD-ONS -->
+
+<section id="addons">
+  <div class="con">
+    <div class="sh rv">
+      <div class="sl">Add-ons</div>
+      <h2 class="ts">追加オプション<br>（ページ2枚目以降）</h2>
+      <p class="bt">月額プランには基本ページ（1〜3枚）が含まれます。<br>ページ追加・特殊機能はオプションでご要望に応じてカスタマイズできます。</p>
+    </div>
+    <div class="adg">
+      <div class="adc rv d1">
+        <div class="adi"><svg viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="10" fill="#EAF2EF"/><rect x="10" y="10" width="11" height="14" rx="2" fill="#2D4A3E" opacity=".4"/><rect x="23" y="10" width="11" height="14" rx="2" fill="#2D4A3E"/><rect x="10" y="26" width="11" height="8" rx="2" fill="#2D4A3E" opacity=".6"/><rect x="23" y="26" width="11" height="8" rx="2" fill="#2D4A3E" opacity=".25"/></svg></div>
+        <div class="adn">追加ページ作成</div>
+        <div class="add">4ページ目以降の制作。会社概要、スタッフ紹介、ギャラリー、FAQ など追加ページを随時制作します。</div>
+        <div class="adp">¥3,300 <span>/ ページ（税込）</span></div>
+        <div class="adnt">※ 初回3ページはプランに含まれます</div>
+      </div>
+      <div class="adc rv d2">
+        <div class="adi"><svg viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="10" fill="#FBF5E6"/><rect x="8" y="14" width="28" height="4" rx="2" fill="#C9A84C" opacity=".3"/><rect x="8" y="20" width="20" height="4" rx="2" fill="#C9A84C" opacity=".6"/><rect x="8" y="26" width="24" height="4" rx="2" fill="#C9A84C" opacity=".45"/><circle cx="36" cy="32" r="6" fill="#C9A84C"/><path d="M33 32 L35 34 L39 30" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="adn">多言語対応（英語）</div>
+        <div class="add">インバウンド・外国人観光客向けに英語版ページを追加。既存ページの翻訳・レイアウト最適化込み。</div>
+        <div class="adp">¥5,500 <span>/ 月（税込）</span></div>
+        <div class="adnt">※ 竹・松プランに追加可能</div>
+      </div>
+      <div class="adc rv d3">
+        <div class="adi"><svg viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="10" fill="#E6F7ED"/><rect x="10" y="18" width="24" height="16" rx="3" fill="#06C755" opacity=".2" stroke="#06C755" stroke-width="1.5"/><path d="M22 10 L22 18" stroke="#06C755" stroke-width="1.5" stroke-dasharray="2 2"/><circle cx="22" cy="10" r="3" fill="#06C755"/><line x1="14" y1="26" x2="30" y2="26" stroke="#06C755" stroke-width="1.2" opacity=".5"/><line x1="14" y1="30" x2="24" y2="30" stroke="#06C755" stroke-width="1.2" opacity=".3"/></svg></div>
+        <div class="adn">予約・問合せフォーム</div>
+        <div class="add">LINEと連携した予約フォームを設置。送信された予約内容がLINEに即通知されます。</div>
+        <div class="adp">¥2,200 <span>/ 月（税込）</span></div>
+        <div class="adnt">※ 全プランに追加可能</div>
+      </div>
+      <div class="adc rv d1">
+        <div class="adi"><svg viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="10" fill="#F0EAF5"/><circle cx="22" cy="22" r="10" stroke="#8B5CF6" stroke-width="1.5" fill="none"/><path d="M18 22 L22 14 L26 22" stroke="#8B5CF6" stroke-width="1.5" stroke-linejoin="round"/><line x1="22" y1="22" x2="22" y2="30" stroke="#8B5CF6" stroke-width="1.5"/></svg></div>
+        <div class="adn">Google広告連携設定</div>
+        <div class="add">Google広告のコンバージョンタグ設置・Googleアナリティクス4の初期設定を代行します。</div>
+        <div class="adp">¥11,000 <span>/ 初回（税込）</span></div>
+        <div class="adnt">※ 竹・松プラン推奨</div>
+      </div>
+      <div class="adc rv d2">
+        <div class="adi"><svg viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="10" fill="#FFF0F0"/><rect x="8" y="28" width="6" height="8" rx="1" fill="#EF4444" opacity=".5"/><rect x="16" y="22" width="6" height="14" rx="1" fill="#EF4444" opacity=".7"/><rect x="24" y="16" width="6" height="20" rx="1" fill="#EF4444"/><rect x="32" y="10" width="6" height="26" rx="1" fill="#EF4444" opacity=".8"/></svg></div>
+        <div class="adn">月次レポート強化版</div>
+        <div class="add">競合比較・検索キーワード分析・改善提案を含む詳細版レポートを毎月提供します。</div>
+        <div class="adp">¥3,300 <span>/ 月（税込）</span></div>
+        <div class="adnt">※ 竹プランに追加可能</div>
+      </div>
+      <div class="adc rv d3">
+        <div class="adi"><svg viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="10" fill="#EFF6FF"/><rect x="8" y="12" width="28" height="20" rx="3" stroke="#3B82F6" stroke-width="1.5" fill="rgba(59,130,246,.08)"/><line x1="8" y1="18" x2="36" y2="18" stroke="#3B82F6" stroke-width="1" opacity=".4"/><circle cx="12" cy="15" r="1.5" fill="#3B82F6" opacity=".5"/><circle cx="16" cy="15" r="1.5" fill="#3B82F6" opacity=".5"/><circle cx="20" cy="15" r="1.5" fill="#3B82F6" opacity=".5"/><rect x="12" y="22" width="20" height="3" rx="1" fill="#3B82F6" opacity=".2"/><rect x="12" y="27" width="14" height="3" rx="1" fill="#3B82F6" opacity=".15"/><circle cx="34" cy="36" r="6" fill="#3B82F6"/><path d="M31 36 L33 38 L37 34" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="adn">デザインリニューアル</div>
+        <div class="add">既存サイトのデザインを全面リニューアル。写真・コピーのアップデートも同時対応します。</div>
+        <div class="adp">¥22,000 <span>/ 回（税込）</span></div>
+        <div class="adnt">※ 全プランに追加可能</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRENGTHS -->
+
+<section id="strengths">
+  <div class="con">
+    <div class="sh rv"><div class="sl">Our Strengths</div><h2 class="ts">選ばれる、3つの理由。</h2><p class="bt">難しい操作も専門知識も要りません。全てお任せください。</p></div>
+    <div class="sl2">
+      <div class="sc3 rv d1"><div class="siw"><svg viewBox="0 0 56 56" fill="none"><rect width="56" height="56" rx="14" fill="#EAF2EF"/><path d="M32 10 L18 30 H27 L24 46 L38 26 H29 L32 10Z" fill="#2D4A3E" stroke="#2D4A3E" stroke-width="1" stroke-linejoin="round"/></svg></div><div class="sn2">01</div><h3 class="sti">圧倒的スピード</h3><p class="sd">AIを活用することで、最短即日でデモサイトをご提案。「どんなサイトになるか」を今すぐ確認できます。承認後、最短1日で本番公開。</p><span class="sp">⚡ 最短即日提案</span></div>
+      <div class="sc3 rv d2"><div class="siw"><svg viewBox="0 0 56 56" fill="none"><rect width="56" height="56" rx="14" fill="#FBF5E6"/><circle cx="28" cy="28" r="14" stroke="#C9A84C" stroke-width="2"/><text x="28" y="33" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="14" font-weight="700" fill="#C9A84C">¥</text></svg></div><div class="sn2">02</div><h3 class="sti">驚きの低コスト</h3><p class="sd">月額1,980円〜のシンプル料金体系。複雑な初期費用は一切なし。制作費・サーバー代・ドメイン代、すべて含まれています。</p><span class="sp">💰 初期費用ゼロ</span></div>
+      <div class="sc3 rv d3"><div class="siw"><svg viewBox="0 0 56 56" fill="none"><rect width="56" height="56" rx="14" fill="#E6F7ED"/><rect x="12" y="15" width="32" height="20" rx="6" fill="#06C755"/><path d="M20 38 L16 44 L28 38" fill="#06C755"/><circle cx="21" cy="25" r="2" fill="white"/><circle cx="28" cy="25" r="2" fill="white"/><circle cx="35" cy="25" r="2" fill="white"/></svg></div><div class="sn2">03</div><h3 class="sti">LINEで完結</h3><p class="sd">文章の変更・写真の差し替え・営業時間の更新——すべてLINEに送るだけ。面倒なメールも専用システムへのログインも不要です。</p><span class="sp">💬 LINE対応</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+
+<section id="workflow">
+  <div class="con">
+    <div class="wg">
+      <div class="rv">
+        <div class="sl">How It Works</div>
+        <h2 class="ts">「引き算」の<br>Web運用</h2>
+        <p class="bt">難しい解析ツールは不要。AIが課題を特定しわかりやすい言葉で改善案を届けます。</p>
+        <div class="stl">
+          <div class="stp"><div class="stn">1</div><div class="stb"><h4>LINEで気になることを送る</h4><p>「最近お客さんが減った」「メニューを変えたい」普段の言葉でOK。</p></div></div>
+          <div class="stp"><div class="stn">2</div><div class="stb"><h4>AIが課題を分析・言語化</h4><p>アクセスデータと照合し、問題の本質を整理。専門用語は使いません。</p></div></div>
+          <div class="stp"><div class="stn">3</div><div class="stb"><h4>改善案レポートをお届け</h4><p>毎月、あなたの店舗に合わせた具体的なアクションプランをお送りします。（竹・松プラン）</p></div></div>
+        </div>
+      </div>
+      <div class="pw rv d2">
+        <div class="ph2">
+          <div class="phn"><div class="nc"></div><div class="ns"></div></div>
+          <div class="phs">
+            <div class="lh"><div class="la">F</div><div><div class="ln">Fewron サポート</div><div class="ls">オンライン</div></div></div>
+            <div class="lb">
+              <div class="lm fu"><div class="lmb">最近ランチのお客さんが減った気がします…</div><div class="lt">14:23</div></div>
+              <div class="lm fb"><div class="lmb">ご連絡ありがとうございます！サイトを確認したところ、<strong>ランチページへの流入が-23%</strong>になっていました📊</div><div class="lt">14:24</div></div>
+              <div class="lm fb"><div class="lmb">Googleマップの口コミ返信と、メニュー写真の更新が効果的です。文章もご用意しますね✨</div><div class="lt">14:24</div></div>
+              <div class="lm fu"><div class="lmb">ありがとうございます！お願いします🙏</div><div class="lt">14:26</div></div>
+              <div class="lm fb"><div class="lmb">承りました！本日中に修正してサイトに反映します。</div><div class="lt">14:26</div></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -633,38 +612,22 @@ section, #cta { padding: 72px 20px; }
 <!-- CTA -->
 
 <section id="cta">
-  <div class="cta-card reveal">
-    <!-- SVG glow blobs replaces radial-gradient pseudo-elements -->
-    <div class="cta-glows" aria-hidden="true">
-      <svg width="100%" height="100%" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <filter id="blur1"><feGaussianBlur stdDeviation="60"/></filter>
-          <filter id="blur2"><feGaussianBlur stdDeviation="50"/></filter>
-        </defs>
-        <circle cx="160" cy="320" r="200" fill="#2D4A3E" opacity="0.5" filter="url(#blur1)"/>
-        <circle cx="640" cy="80"  r="160" fill="#C9A84C" opacity="0.12" filter="url(#blur2)"/>
-      </svg>
-    </div>
-    <div class="cta-text">
-      <div class="cta-eyebrow">Get Started</div>
-      <h2 class="cta-title">まず、話しましょう。<br>30分、完全無料。</h2>
-      <p class="cta-desc">「うちにWebサイトが必要かわからない」<br>そんな素朴な疑問でも大丈夫。<br>費用も、準備も、一切要りません。</p>
-      <div class="cta-assure">
-        <div class="assure-item"><span class="assure-chk">✓</span> 完全無料</div>
-        <div class="assure-item"><span class="assure-chk">✓</span> 強引な勧誘なし</div>
-        <div class="assure-item"><span class="assure-chk">✓</span> 即日対応</div>
-        <div class="assure-item"><span class="assure-chk">✓</span> スマホだけでOK</div>
+  <div class="ctac rv">
+    <div class="ctag" aria-hidden="true"><svg width="100%" height="100%" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"><defs><filter id="b1"><feGaussianBlur stdDeviation="60"/></filter><filter id="b2"><feGaussianBlur stdDeviation="50"/></filter></defs><circle cx="160" cy="320" r="200" fill="#2D4A3E" opacity=".5" filter="url(#b1)"/><circle cx="640" cy="80" r="160" fill="#C9A84C" opacity=".12" filter="url(#b2)"/></svg></div>
+    <div class="ctatx">
+      <div class="ctaey">Get Started</div>
+      <h2 class="ctat">まず、話しましょう。<br>30分、完全無料。</h2>
+      <p class="ctad">「うちにWebサイトが必要かわからない」<br>そんな素朴な疑問でも大丈夫。<br>費用も、準備も、一切要りません。</p>
+      <div class="ctaa">
+        <div class="ai"><span class="ac">✓</span> 完全無料</div>
+        <div class="ai"><span class="ac">✓</span> 強引な勧誘なし</div>
+        <div class="ai"><span class="ac">✓</span> 即日対応</div>
+        <div class="ai"><span class="ac">✓</span> スマホだけでOK</div>
       </div>
     </div>
-    <div class="cta-buttons">
-      <a href="#" class="btn-gold">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        オンライン面談を予約
-      </a>
-      <a href="#" class="btn-ghost">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        資料を請求する（PDF）
-      </a>
+    <div class="ctab">
+      <a href="#" class="bgold"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>オンライン面談を予約</a>
+      <a href="#" class="bg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>資料を請求する（PDF）</a>
     </div>
   </div>
 </section>
@@ -672,95 +635,120 @@ section, #cta { padding: 72px 20px; }
 <!-- FOOTER -->
 
 <footer>
-  <div class="footer-grid">
+  <div class="fg">
     <div>
-      <a href="#" class="footer-brand-a">
-        <div class="nav-logo-mark">F</div>フューロン
-      </a>
-      <p class="footer-tagline">地元の商売を、もっと強く。<br>Webサイト制作から集客分析まで、<br>フューロンがまるごとサポートします。<br><br>fewron.jp</p>
+      <a href="index.html" class="fba"><div class="nm">F</div>フューロン</a>
+      <p class="ftg">地元の商売を、もっと強く。<br>Webサイト制作から集客分析まで、<br>フューロンがまるごとサポートします。<br><br>fewron.jp</p>
     </div>
     <div>
-      <ul class="footer-links">
+      <ul class="fli">
         <li><a href="#strengths">私たちの強み</a></li>
         <li><a href="#workflow">サービス内容</a></li>
-        <li><a href="#pricing">料金プラン</a></li>
+        <li><a href="#pricing">料金プラン（梅・竹・松）</a></li>
+        <li><a href="#addons">追加オプション</a></li>
         <li><a href="#cta">お問い合わせ</a></li>
-        <li><a href="#">特定商取引法に基づく表記</a></li>
-        <li><a href="#">プライバシーポリシー</a></li>
+        <li><a href="tokusho.html">特定商取引法に基づく表記</a></li>
+        <li><a href="privacy.html">プライバシーポリシー</a></li>
       </ul>
     </div>
   </div>
-  <div class="footer-bottom">
-    <div class="footer-copy">&#169; 2025 Fewron（フューロン）. All rights reserved.</div>
-    <div class="footer-domain">fewron.jp</div>
+  <div class="fb2">
+    <div class="fc">© 2025 Fewron（フューロン）. All rights reserved.</div>
+    <div class="fd">fewron.jp</div>
   </div>
 </footer>
 
 <script>
-(function() {
-  // ── Noise canvas ──
-  var canvas = document.getElementById("noise-canvas");
-  function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; drawNoise(); }
-  function drawNoise() {
-    var ctx = canvas.getContext("2d");
-    var w = canvas.width, h = canvas.height;
-    var img = ctx.createImageData(w, h);
-    var d = img.data;
-    for (var i = 0; i < d.length; i += 4) {
-      var v = (Math.random() * 255) | 0;
-      d[i] = v; d[i+1] = v; d[i+2] = v; d[i+3] = 255;
-    }
-    ctx.putImageData(img, 0, 0);
-  }
-  resizeCanvas();
-  window.addEventListener("resize", resizeCanvas);
+(function(){
+'use strict';
 
-  // ── Custom cursor ──
-  var cur = document.getElementById("cur");
-  var curRing = document.getElementById("cur-ring");
-  if (cur && window.matchMedia("(pointer: fine)").matches) {
-    var mx = 0, my = 0, rx = 0, ry = 0;
-    document.addEventListener("mousemove", function(e) { mx = e.clientX; my = e.clientY; });
-    function animateCursor() {
-      cur.style.left = mx + "px"; cur.style.top = my + "px";
-      rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-      curRing.style.left = rx + "px"; curRing.style.top = ry + "px";
-      requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
-    document.addEventListener("mouseleave", function() { cur.style.opacity = "0"; curRing.style.opacity = "0"; });
-    document.addEventListener("mouseenter", function() { cur.style.opacity = "1"; curRing.style.opacity = "0.6"; });
-    // Hover state via JS (no :has() needed)
-    var interactives = document.querySelectorAll("a, button");
-    interactives.forEach(function(el) {
-      el.addEventListener("mouseenter", function() { cur.classList.add("hov"); curRing.classList.add("hov"); });
-      el.addEventListener("mouseleave", function() { cur.classList.remove("hov"); curRing.classList.remove("hov"); });
-    });
-  }
+// Noise
+var c=document.getElementById('nc');
+function rsz(){c.width=innerWidth;c.height=innerHeight;drw();}
+function drw(){var x=c.getContext('2d'),w=c.width,h=c.height,im=x.createImageData(w,h),d=im.data;for(var i=0;i<d.length;i+=4){var v=(Math.random()*255)|0;d[i]=v;d[i+1]=v;d[i+2]=v;d[i+3]=255;}x.putImageData(im,0,0);}
+rsz();addEventListener('resize',rsz);
 
-  // ── Navbar scroll ──
-  var nav = document.getElementById("nav");
-  window.addEventListener("scroll", function() {
-    if (window.scrollY > 60) nav.classList.add("scrolled");
-    else nav.classList.remove("scrolled");
+// Cursor
+var cur=document.getElementById('cur'),cr=document.getElementById('cur-r');
+if(cur&&matchMedia('(pointer:fine)').matches){
+  var mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});
+  (function lp(){cur.style.left=mx+'px';cur.style.top=my+'px';rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(lp);})();
+  document.addEventListener('mouseleave',function(){cur.style.opacity=0;cr.style.opacity=0;});
+  document.addEventListener('mouseenter',function(){cur.style.opacity=1;cr.style.opacity=.5;});
+  document.querySelectorAll('a,button').forEach(function(el){
+    el.addEventListener('mouseenter',function(){cur.classList.add('hv');cr.classList.add('hv');});
+    el.addEventListener('mouseleave',function(){cur.classList.remove('hv');cr.classList.remove('hv');});
   });
+}
 
-  // ── Scroll reveal ──
-  var revealEls = document.querySelectorAll(".reveal");
-  var obs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add("on"); });
-  }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
-  revealEls.forEach(function(el) { obs.observe(el); });
+// Nav
+var nav=document.getElementById('nav');
+addEventListener('scroll',function(){nav.classList.toggle('sc',scrollY>60);},{passive:true});
 
-  // ── Smooth scroll ──
-  document.querySelectorAll("a[href^='#']").forEach(function(a) {
-    a.addEventListener("click", function(e) {
-      var href = this.getAttribute("href");
-      if (href === "#") return;
-      var t = document.querySelector(href);
-      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: "smooth", block: "start" }); }
-    });
+// Reveal
+var obs=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting)e.target.classList.add('on');});},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(function(el){obs.observe(el);});
+
+// Bars
+var bf=false;
+var bo2=new IntersectionObserver(function(en){
+  if(en[0].isIntersecting&&!bf){bf=true;
+    document.querySelectorAll('.bani').forEach(function(b){b.style.width=b.getAttribute('data-w')+'%';});}
+},{threshold:.4});
+var fb=document.querySelector('.fbs');
+if(fb)bo2.observe(fb);
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var t=document.querySelector(this.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
   });
+});
+
+// ── SLIDER ──
+var track=document.getElementById('stt');
+var vp=document.getElementById('svp');
+var cards=track.querySelectorAll('.bub');
+var dots=document.querySelectorAll('.sdot');
+var prev=document.getElementById('sprev');
+var next=document.getElementById('snext');
+var cnt=document.getElementById('scount');
+var total=cards.length, cur2=0;
+var GAP=20;
+
+function cw(){return cards[0].getBoundingClientRect().width+GAP;}
+function vis(){var w=vp.getBoundingClientRect().width;return Math.max(1,Math.floor(w/cw()));}
+function maxI(){return Math.max(0,total-vis());}
+
+function go(i){
+  i=Math.max(0,Math.min(i,maxI()));
+  cur2=i;
+  track.style.transform='translateX(-'+(i*cw())+'px)';
+  dots.forEach(function(d,j){d.classList.toggle('on',j===i);});
+  cnt.textContent=(i+1)+' / '+total;
+  prev.disabled=i===0;
+  next.disabled=i>=maxI();
+}
+
+prev.addEventListener('click',function(){go(cur2-1);});
+next.addEventListener('click',function(){go(cur2+1);});
+dots.forEach(function(d){d.addEventListener('click',function(){go(parseInt(d.getAttribute('data-i')));});});
+
+// Drag/swipe
+var sx=0,drag=false,off=0;
+vp.addEventListener('pointerdown',function(e){drag=true;sx=e.clientX;off=cur2*cw();track.style.transition='none';vp.setPointerCapture(e.pointerId);clearInterval(tmr);});
+vp.addEventListener('pointermove',function(e){if(!drag)return;track.style.transform='translateX(-'+(off-(e.clientX-sx))+'px)';});
+function ed(e){if(!drag)return;drag=false;track.style.transition='transform .5s cubic-bezier(.4,0,.2,1)';var dx=e.clientX-sx;if(Math.abs(dx)>50)go(dx<0?cur2+1:cur2-1);else go(cur2);}
+vp.addEventListener('pointerup',ed);
+vp.addEventListener('pointercancel',ed);
+
+// Auto
+var tmr=setInterval(function(){go(cur2>=maxI()?0:cur2+1);},4500);
+addEventListener('resize',function(){go(cur2);});
+go(0);
+
 })();
 </script>
 
